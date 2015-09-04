@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CommonMapper" >
+    <sql id="doQueryParams">
+        <include refid="commonQueryParams" />
+        <if test="isCount=='N'.toString()">
+            <if test="limit != null and limit&gt;0">
+                limit #{start} , #{limit}
+            </if>
+        </if>
+    </sql>
+</mapper>

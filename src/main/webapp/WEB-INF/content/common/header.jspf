@@ -1,0 +1,38 @@
+<%@ page import="com.aomei.util.DateUtil" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%
+    String contextPath = request.getContextPath().equals("/")?"":request.getContextPath();
+%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
+<html>
+<title>智慧社区</title>
+<head>
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/jquery-easyui-1.4.2/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/jquery-easyui-1.4.2/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/jquery-easyui-1.4.2/demo/demo.css" />
+    <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/js/aomei.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/js/template.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=contextPath %>/My97DatePicker/WdatePicker.js"></script>
+</head>
+<script>
+    //获取服务器当前系统日期
+    var sysCurrentDateStr='<%=DateUtil.getUserDate("yyyy-MM-dd")%>';
+    $(function(){
+        $('input[class*="Wdate"]').each(function(){
+            var val=$(this).attr('value');
+            if(val==undefined||val=='undefined'){
+                $(this).val(sysCurrentDateStr);
+            }
+        });
+    });
+    function formatterdate(val, row) {
+        var date = new Date(val);
+        var month=(date.getMonth() + 1)>9?(date.getMonth() + 1):'0'+(date.getMonth() + 1);
+        return date.getFullYear() + '-' + month + '-' + date.getDate();
+    }
+</script>

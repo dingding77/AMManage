@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RoleMapper">
+  <resultMap id="BaseResultMap" type="com.aomei.model.Role">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="is_enable" jdbcType="CHAR" property="isEnable" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="modify" jdbcType="VARCHAR" property="modify" />
+  </resultMap>
+
+  <sql id="commonQueryParams">
+      WHERE 1=1
+      <trim suffixOverrides="AND | OR">
+      <if test="id != null">
+              AND id=#{id,jdbcType=INTEGER}
+          </if>
+          <if test="roleName != null and roleName != ''">
+              AND role_name=#{roleName,jdbcType=VARCHAR}
+          </if>
+          <if test="description != null and description != ''">
+              AND description=#{description,jdbcType=VARCHAR}
+          </if>
+          <if test="createtime != null">
+              AND createtime=#{createtime,jdbcType=TIMESTAMP}
+          </if>
+          <if test="isDelete != null and isDelete != ''">
+              AND is_delete=#{isDelete,jdbcType=CHAR}
+          </if>
+          <if test="isEnable != null and isEnable != ''">
+              AND is_Enable=#{isEnable,jdbcType=CHAR}
+          </if>
+          <if test="creator != null">
+              AND creator=#{creator,jdbcType=VARCHAR}
+          </if>
+          <if test="modify != null">
+              AND modify=#{modify,jdbcType=VARCHAR}
+          </if>
+      </trim>
+  </sql>
+  <sql id="Base_Column_List">
+    id, role_name, description, createTime, is_delete, is_enable, creator, modify
+  </sql>
+  <select id="selectByExample" parameterType="com.aomei.query.RoleQuery" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_role
+    <include refid="CommonMapper.doQueryParams"/>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  t_role set is_delete='Y'
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <update id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">
+        update  t_role set is_delete='Y'
+        where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+  <insert id="insert" parameterType="com.aomei.model.Role">
+    insert into t_role (id, role_name, description, 
+      createTime, is_delete, is_enable, 
+      creator, modify)
+    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=CHAR}, #{isEnable,jdbcType=CHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{modify,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.Role">
+    insert into t_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="modify != null">
+        modify,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=CHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modify != null">
+        #{modify,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.aomei.query.RoleQuery" resultType="java.lang.Integer">
+    select count(*) from t_role
+    <include refid="commonQueryParams" />
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.Role">
+    update t_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=CHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="modify != null">
+        modify = #{modify,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.Role">
+    update t_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      is_enable = #{isEnable,jdbcType=CHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      modify = #{modify,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getRolesByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_role T
+        where exists(
+            select 1 from t_user_role ur where ur.userId=#{userId} and T.id=ur.roleId and
+            exists (
+                select 1 from t_role ro where ro.id=ur.roleId and ro.is_delete='N'
+            )
+        )
+    </select>
+</mapper>

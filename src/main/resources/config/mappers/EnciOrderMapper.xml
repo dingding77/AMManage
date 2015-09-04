@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="EnciOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.EnciOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ORDER_NO" property="orderNo" jdbcType="VARCHAR" />
+    <result column="GOODS_DESC" property="goodsDesc" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+    <result column="PSC" property="psc" jdbcType="VARCHAR" />
+    <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="VARCHAR" />
+    <result column="ENCI_ID" property="enciId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ORDER_NO, GOODS_DESC, PRICE, PSC, TOTAL_AMOUNT, ENCI_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_enci_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectEnciOrdersByEnciId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_enci_order
+        where ENCI_ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_enci_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aomei.model.EnciOrder" >
+    insert into t_enci_order ORDER_NO, GOODS_DESC,
+      PRICE, PSC, TOTAL_AMOUNT, 
+      ENCI_ID)
+    values (#{orderNo,jdbcType=VARCHAR}, #{goodsDesc,jdbcType=VARCHAR},
+      #{price,jdbcType=DECIMAL}, #{psc,jdbcType=VARCHAR}, #{totalAmount,jdbcType=VARCHAR}, 
+      #{enciId,jdbcType=INTEGER})
+  </insert>
+    <insert id="addEnciOrderBatch" parameterType="java.util.List">
+        insert into t_enci_order (ORDER_NO, GOODS_DESC,
+        PRICE, PSC, TOTAL_AMOUNT,
+        ENCI_ID)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+        (#{item.orderNo,jdbcType=VARCHAR}, #{item.goodsDesc,jdbcType=VARCHAR},
+        #{item.price,jdbcType=DECIMAL}, #{item.psc,jdbcType=VARCHAR}, #{item.totalAmount,jdbcType=VARCHAR},
+        #{item.enciId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.EnciOrder" >
+    insert into t_enci_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNo != null" >
+        ORDER_NO,
+      </if>
+      <if test="goodsDesc != null" >
+        GOODS_DESC,
+      </if>
+      <if test="price != null" >
+        PRICE,
+      </if>
+      <if test="psc != null" >
+        PSC,
+      </if>
+      <if test="totalAmount != null" >
+        TOTAL_AMOUNT,
+      </if>
+      <if test="enciId != null" >
+        ENCI_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="psc != null" >
+        #{psc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="enciId != null" >
+        #{enciId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.EnciOrder" >
+    update t_enci_order
+    <set >
+      <if test="orderNo != null" >
+        ORDER_NO = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        GOODS_DESC = #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        PRICE = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="psc != null" >
+        PSC = #{psc,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="enciId != null" >
+        ENCI_ID = #{enciId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="batchUpdate"  parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update t_enci_order
+            <set >
+                <if test="item.orderNo != null" >
+                    ORDER_NO = #{item.orderNo,jdbcType=VARCHAR},
+                </if>
+                <if test="item.goodsDesc != null" >
+                    GOODS_DESC = #{item.goodsDesc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.price != null" >
+                    PRICE = #{item.price,jdbcType=DECIMAL},
+                </if>
+                <if test="item.psc != null" >
+                    PSC = #{item.psc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.totalAmount != null" >
+                    TOTAL_AMOUNT = #{item.totalAmount,jdbcType=VARCHAR},
+                </if>
+            </set>
+            where ENCI_ID = #{item.enciId,jdbcType=INTEGER} and id = #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.EnciOrder" >
+    update t_enci_order
+    set ORDER_NO = #{orderNo,jdbcType=VARCHAR},
+      GOODS_DESC = #{goodsDesc,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=DECIMAL},
+      PSC = #{psc,jdbcType=VARCHAR},
+      TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
+      ENCI_ID = #{enciId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

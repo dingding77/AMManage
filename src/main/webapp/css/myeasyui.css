@@ -1,0 +1,12 @@
+#footer {
+    overflow: hidden;
+    background-color: #F1F4F8;
+}
+
+#footer-inner {
+    text-align: center;
+    line-height: 40px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+}

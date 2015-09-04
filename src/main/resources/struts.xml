@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.custom.i18n.resources" value="resources/messageResource"/>
+	<constant name="struts.locale" value="zh_CN"/>
+	<constant name="struts.i18n.encoding" value="UTF-8"/> 
+	<constant name="struts.action.extension" value="htm,action,do"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+    <!-- 指定jsp文件所在的目录地址 -->
+    <constant name="struts.convention.result.path" value="/WEB-INF/content/" />
+    <!-- struts2的默认上传大小是2M,改为10M -->
+    <constant name="struts.multipart.maxSize" value="10097152"/>
+    <!-- 提供友好url struts.enable.SlashesInActionNames=true
+    <constant name="struts.mapper.class" value="org.apache.struts2.dispatcher.mapper.Restful2ActionMapper"/>
+    <constant name="struts.enable.SlashesInActionNames" value="false"/>-->
+	<!-- true时显示更多的错误提示 相当于把i18n.reload ,configuration.xml.reload都设置true -->
+    <constant name="struts.devMode" value="true"/>
+    <!-- 国际化资源重新加载  -->
+	<constant name="struts.i18n.reload" value="true"/>
+	<!-- 配置文件重新加载 -->
+	<constant name="struts.configuration.xml.reload" value="true"/>
+	<!-- convention类重新加载 
+	<constant name="struts.convention.classes.reload" value="true"/>-->
+	<!-- 设置为false时,禁用缓存 -->
+	<constant name="struts.serve.static.browserCache" value="false"/>   
+	<!-- 由spring来管理action -->
+	<!-- <constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />  -->
+	<constant name="struts.objectFactory.spring.autoWire" value="name"/>
+	<constant name="struts.ui.theme" value="simple"/>
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true"/>
+	<!-- 默认日期格式 -->
+	<constant name="struts.date.format" value="yyyy-MM-dd"/>
+	 <constant name="struts.convention.default.parent.package" value="global"/>
+	 <!--
+	  确定搜索包的路径。只要是包含action的包都要搜索。basePackage按照默认不用配置，
+	  如果配置，只会找以此配置开头的包。locators及locators.basePackage都是一组以逗号分割的字符串。
+	 -->
+	  <!--<constant name="struts.convention.package.locators" value="com.aomei.struts2.*,com.aomei.action.*"/>-->
+	 <!-- 禁用包搜索 -->
+	 <constant name="struts.convention.package.locators.disable" value="false"/>
+	 <!-- 只会搜索以该配置开头的包  -->
+	 <constant name="struts.convention.package.locators.basePackage" value="com.aomei.struts2"/>
+	 <!--  排除的包。排除哪些包不搜索。按默认配置即可。逗号分割字符串。  -->
+	 <constant name="struts.convention.exclude.packages" value="org.apache.struts.*,org.apache.struts2.*,org.springframework.web.struts.*,org.springframework.web.struts2.*,org.hibernate.*"/>
+	 <!-- 包含的包 -->
+	 <!-- 包括的jar,一般用于大型项目，其action一般打包成jar。逗号分割字符串。 -->
+	 <constant name="struts.convention.action.includeJars" value=""/>
+	 <!-- 结果类型 。按顺序先找相关的dispatcher的jsp文件是否存在。然后再找freemarker 。-->
+	 <constant name="struts.convention.relative.result.types" value="dispatcher,freemarker"/>
+
+
+    <package name="global" namespace="/global" extends="strust-default,json-default">
+        <interceptors>
+            <interceptor name="authority" class="com.aomei.intercept.AuthorityInterceptor"/>
+            <interceptor-stack name="loginCheck">
+                <!--配置内建默认拦截器-->
+                <interceptor-ref name="defaultStack"/>
+                <!--配置自定义的拦截器-->
+                <interceptor-ref name="authority"/>
+            </interceptor-stack>
+        </interceptors>
+        <global-results>
+            <result name="login">/WEB-INF/content/common/login-form.jsp</result>
+        </global-results>
+    </package>
+
+    <package name="common" namespace="/common" extends="global">
+        <default-interceptor-ref name="loginCheck"></default-interceptor-ref>
+    </package>
+
+</struts>

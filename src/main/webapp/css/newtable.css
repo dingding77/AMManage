@@ -1,0 +1,39 @@
+/* login */
+.login-word{ color: #FFF; font-size: 16px; font-weight: bolder; line-height: 32px; font-family: ����; letter-spacing: 1px;}
+.login-yzm{ color: #FFF; font-size: 12px; font-weight: bold; line-height: 18px; font-family: ����;}
+.login-yzm a{ color: #FFF;}
+.login-yzm a:hover{ color: #FFF;}
+.form05a { border: 1px solid #29496d; color:#1069a1; background-color: #cfdeec; width: 250px; height:23px;}
+.form05b { border: 1px solid #29496d; color:#1069a1; background-color: #cfdeec; width: 110px; height:23px;}
+
+/* table */
+#box{ width: 100%; height:auto;margin: 0 auto;}
+#fujian{ width: 850px; margin: 0 auto; text-align: left;}
+#biaoti{ width: 800px; margin: 0 auto; text-align: center;}
+#riqi{ width: 800px; margin: 0 auto; text-align: left;}
+#riqi-left { width: 500px; text-align: left; float: left;}
+#riqi-right{ width: 300px; text-align: left; float: right; }
+#table-main{ width: 98%; margin: 0 auto; padding:5px 0 5px 10px;}
+#yaoqiu{ width: 820px; margin: 0 auto; text-align: left;}
+#button{ width:800px; margin: 0 auto; text-align: center;}
+
+.title {font-size: 16px; font-weight: bold; font-family: "??"; line-height:32px; color:#808080;}
+.word-01 {font-size: 12px; font-weight: normal; line-height: 24px; color:#000; text-align: center;}
+.word-01a {font-size: 12px; font-weight: normal; line-height: 24px; color:#000; text-align: right; padding-right:30px;}
+.word-01b {font-size: 12px; font-weight: normal; line-height: 24px; color:#000; text-align: left;  padding-left:10px;}
+.word-02 {font-size: 12px; font-weight: bold; line-height: 24px; color:#000;}
+.form01{ border:0px solid #ccc; background-color:#fff;}
+.form02{ border:0px solid #ccc; background-color:#fff; width: 97%;}
+.form03{ border-bottom:1px solid #000; border-top:0px;border-left:0px; border-right:0px; background-color:#fff;}
+
+.form_blue_01 { border: 2px solid #2183c0; font-size: 14px; color: #000; background:url(../images/btn_blue_01.gif);
+    width:76px; height:25px; letter-spacing: 3px; line-height:22px;}
+.form_blue_02 { border: 2px solid #2183c0; font-size: 14px; color: #000; background:url(../images/btn_blue_02.gif);
+    width:96px; height:25px; letter-spacing: 3px; line-height:22px;}
+
+table{ font-size:12px; color:#000; border-collapse:collapse; margin: 0 auto; }
+th{ border-top:1px solid #99bbe8; border-bottom:1px solid #99bbe8;border-left:1px solid #99bbe8; border-right:1px solid #99bbe8; background-color: #f2f6fd; font-weight: normal;}
+td{ border-top:1px solid #99bbe8; border-bottom:1px solid #99bbe8;border-left:1px solid #99bbe8; border-right:1px solid #99bbe8; background-color: #fff; padding:0 0px 0 0px;}
+.form-title{font-size: 20px; text-align: center; font-weight: bolder; line-height: 24px; font-family: 黑体;}
+
+

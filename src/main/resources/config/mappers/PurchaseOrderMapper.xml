@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="PurchaseOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.PurchaseOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="supplier_contract" property="supplierContract" jdbcType="VARCHAR" />
+    <result column="supplier_phone" property="supplierPhone" jdbcType="VARCHAR" />
+    <result column="purchase_date" property="purchaseDate" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, buyer_id, supplier_name, supplier_contract, supplier_phone, purchase_date, is_delete, 
+    creator, create_time
+  </sql>
+    <sql id="doQueryParams">
+        <if test="purchaseOrder.buyerId != null" >
+            and buyer_id = #{purchaseOrder.buyerId,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseOrder.supplierName != null" >
+            and supplier_name = #{purchaseOrder.supplierName,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseOrder.supplierContract != null" >
+            and supplier_contract = #{purchaseOrder.supplierContract,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseOrder.supplierPhone != null" >
+            and supplier_phone = #{purchaseOrder.supplierPhone,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseOrder.purchaseDate != null" >
+            and purchase_date = #{purchaseOrder.purchaseDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="purchaseOrder.isDelete != null" >
+            and is_delete = #{purchaseOrder.isDelete,jdbcType=CHAR}
+        </if>
+        <if test="purchaseOrder.creator != null" >
+            and creator = #{purchaseOrder.creator,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseOrder.createTime != null" >
+            and create_time = #{purchaseOrder.createTime,jdbcType=TIMESTAMP}
+        </if>
+    </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_purchase_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <!--分页查询-->
+    <select id="selectPages" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        from t_purchase_order
+        where 1=1
+        <include refid="doQueryParams"/>
+        limit #{limitStart},#{limitEnd}
+    </select>
+    <!--记录数查询-->
+    <select id="selectCount">
+        select count(0) from t_purchase_order
+        where 1=1
+        <include refid="doQueryParams"/>
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_purchase_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aomei.model.PurchaseOrder" >
+      <selectKey    keyProperty="id" resultType="int" order="AFTER">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
+    insert into t_purchase_order (buyer_id, supplier_name,
+      supplier_contract, supplier_phone, purchase_date, 
+      is_delete, creator, create_time
+      )
+    values (#{buyerId,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR},
+      #{supplierContract,jdbcType=VARCHAR}, #{supplierPhone,jdbcType=VARCHAR}, #{purchaseDate,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=CHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.PurchaseOrder" >
+      <selectKey    keyProperty="id" resultType="int" order="AFTER">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
+    insert into t_purchase_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="buyerId != null" >
+        buyer_id,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="supplierContract != null" >
+        supplier_contract,
+      </if>
+      <if test="supplierPhone != null" >
+        supplier_phone,
+      </if>
+      <if test="purchaseDate != null" >
+        purchase_date,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierContract != null" >
+        #{supplierContract,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierPhone != null" >
+        #{supplierPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseDate != null" >
+        #{purchaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.PurchaseOrder" >
+    update t_purchase_order
+    <set >
+      <if test="buyerId != null" >
+        buyer_id = #{buyerId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierContract != null" >
+        supplier_contract = #{supplierContract,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierPhone != null" >
+        supplier_phone = #{supplierPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseDate != null" >
+        purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.PurchaseOrder" >
+    update t_purchase_order
+    set buyer_id = #{buyerId,jdbcType=VARCHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_contract = #{supplierContract,jdbcType=VARCHAR},
+      supplier_phone = #{supplierPhone,jdbcType=VARCHAR},
+      purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <delete id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">
+        delete from t_purchase_order
+        where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

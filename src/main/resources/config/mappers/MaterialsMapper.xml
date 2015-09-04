@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aomei.dao.MaterialsDao" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.Materials" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mate_name" property="mateName" jdbcType="VARCHAR" />
+    <result column="mate_code" property="mateCode" jdbcType="VARCHAR" />
+    <result column="mate_type" property="mateType" jdbcType="VARCHAR" />
+    <result column="mate_size" property="mateSize" jdbcType="VARCHAR" />
+    <result column="stock_num" property="stockNum" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="lastupdate_time" property="lastupdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mate_name, mate_code, mate_type, mate_size, stock_num, create_time, lastupdate_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_materials
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_materials
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aomei.model.Materials" >
+    insert into t_materials (id, mate_name, mate_code, 
+      mate_type, mate_size, stock_num, 
+      create_time, lastupdate_time)
+    values (#{id,jdbcType=INTEGER}, #{mateName,jdbcType=VARCHAR}, #{mateCode,jdbcType=VARCHAR}, 
+      #{mateType,jdbcType=VARCHAR}, #{mateSize,jdbcType=VARCHAR}, #{stockNum,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastupdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.Materials" >
+    insert into t_materials
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mateName != null" >
+        mate_name,
+      </if>
+      <if test="mateCode != null" >
+        mate_code,
+      </if>
+      <if test="mateType != null" >
+        mate_type,
+      </if>
+      <if test="mateSize != null" >
+        mate_size,
+      </if>
+      <if test="stockNum != null" >
+        stock_num,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastupdateTime != null" >
+        lastupdate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mateName != null" >
+        #{mateName,jdbcType=VARCHAR},
+      </if>
+      <if test="mateCode != null" >
+        #{mateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mateType != null" >
+        #{mateType,jdbcType=VARCHAR},
+      </if>
+      <if test="mateSize != null" >
+        #{mateSize,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNum != null" >
+        #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastupdateTime != null" >
+        #{lastupdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.Materials" >
+    update t_materials
+    <set >
+      <if test="mateName != null" >
+        mate_name = #{mateName,jdbcType=VARCHAR},
+      </if>
+      <if test="mateCode != null" >
+        mate_code = #{mateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mateType != null" >
+        mate_type = #{mateType,jdbcType=VARCHAR},
+      </if>
+      <if test="mateSize != null" >
+        mate_size = #{mateSize,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNum != null" >
+        stock_num = #{stockNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastupdateTime != null" >
+        lastupdate_time = #{lastupdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.Materials" >
+    update t_materials
+    set mate_name = #{mateName,jdbcType=VARCHAR},
+      mate_code = #{mateCode,jdbcType=VARCHAR},
+      mate_type = #{mateType,jdbcType=VARCHAR},
+      mate_size = #{mateSize,jdbcType=VARCHAR},
+      stock_num = #{stockNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      lastupdate_time = #{lastupdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

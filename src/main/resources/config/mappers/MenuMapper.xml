@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.Menu" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="parentId" property="parentid" jdbcType="INTEGER" />
+    <result column="resources" property="resources" jdbcType="VARCHAR" />
+    <result column="icon_img" property="iconImg" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="menu_type" property="menuType" jdbcType="CHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="CHAR" />
+    <result column="method_name" property="methodName" jdbcType="VARCHAR" />
+  </resultMap>
+    <!--查询字段信息-->
+  <sql id="Base_Column_List" >
+    id, name, level, parentId, resources, icon_img, createTime, menu_type,is_delete,method_name
+  </sql>
+    <!--查询条件-->
+  <sql id="doQueryParams">
+      <where>
+          <if test="isDelete !=null">
+              is_delete=#{isDelete,jdbcType=CHAR}
+          </if>
+          <if test="name != null" >
+              AND NAME=#{name,jdbcType=VARCHAR}
+          </if>
+          <if test="level != null" >
+              AND LEVEL=#{level,jdbcType=INTEGER}
+          </if>
+          <if test="parentid != null" >
+              AND PARENTID=#{parentid,jdbcType=INTEGER}
+          </if>
+          <if test="resources != null" >
+              AND RESOURCES=#{resources,jdbcType=VARCHAR}
+          </if>
+          <if test="iconImg != null" >
+              AND ICON_IMG=#{iconImg,jdbcType=VARCHAR}
+          </if>
+          <if test="createtime != null" >
+              AND CREATETIME=#{createtime,jdbcType=TIMESTAMP}
+          </if>
+          <if test="menuType != null" >
+              AND MENU_TYPE=#{menuType,jdbcType=CHAR}
+          </if>
+          <if test="isCount=='N'.toString()">
+              <if test="limit != null and limit>0">
+                  limit #{start} , #{limit}
+              </if>
+          </if>
+
+      </where>
+  </sql>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aomei.query.MenuQuery" >
+    select
+    <include refid="Base_Column_List"/>
+      FROM T_MENU
+      <include refid="doQueryParams"/>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_menu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    update t_menu set is_delete='Y'
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.aomei.model.Menu" >
+    insert into t_menu (id, name, level, 
+      parentId, resources, icon_img, 
+      createTime, menu_type,is_delete,method_name)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
+      #{parentid,jdbcType=INTEGER}, #{resources,jdbcType=VARCHAR}, #{iconImg,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{menuType,jdbcType=CHAR},#{isDelete,jdbcType=CHAR},#{methodName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.Menu" >
+    insert into t_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="parentid != null" >
+        parentId,
+      </if>
+      <if test="resources != null" >
+        resources,
+      </if>
+      <if test="iconImg != null" >
+        icon_img,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="menuType != null" >
+        menu_type,
+      </if>
+      <if test="isDelete != null" >
+            is_delete,
+      </if>
+      <if test="methodName != null" >
+            method_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="resources != null" >
+        #{resources,jdbcType=VARCHAR},
+      </if>
+      <if test="iconImg != null" >
+        #{iconImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="menuType != null" >
+        #{menuType,jdbcType=CHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="methodName != null" >
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.aomei.query.MenuQuery" resultType="java.lang.Integer" >
+    select count(*) from t_menu
+      <where>
+          is_delete='N'
+          <if test="name != null" >
+              AND NAME=#{name,jdbcType=VARCHAR},
+          </if>
+          <if test="level != null" >
+              AND LEVEL=#{level,jdbcType=INTEGER},
+          </if>
+          <if test="parentid != null" >
+              AND PARENTID=#{parentid,jdbcType=INTEGER},
+          </if>
+          <if test="resources != null" >
+              AND RESOURCES=#{resources,jdbcType=VARCHAR},
+          </if>
+          <if test="iconImg != null" >
+              AND ICON_IMG=#{iconImg,jdbcType=VARCHAR},
+          </if>
+          <if test="createtime != null" >
+              AND CREATETIME=#{createtime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="menuType != null" >
+              AND MENU_TYPE=#{menuType,jdbcType=CHAR},
+          </if>
+      </where>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.Menu" >
+    update t_menu
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        parentId = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="resources != null" >
+        resources = #{resources,jdbcType=VARCHAR},
+      </if>
+      <if test="iconImg != null" >
+        icon_img = #{iconImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="menuType != null" >
+        menu_type = #{menuType,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.Menu" >
+    update t_menu
+    set name = #{name,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      parentId = #{parentid,jdbcType=INTEGER},
+      resources = #{resources,jdbcType=VARCHAR},
+      icon_img = #{iconImg,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      menu_type = #{menuType,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_MENU where is_delete='N'
+    </select>
+    <select id="getMenusByRoles" resultMap="BaseResultMap" parameterType="java.util.List">
+        select
+        <include refid="Base_Column_List"/>
+        from T_MENU M where is_delete='N' and exists(
+        select 1 from t_role_resources rs where rs.menuId=M.id
+        and rs.roleId in
+        <foreach collection="list" item="role" index="index"
+                 open="(" close=")" separator=",">
+            #{role.id}
+        </foreach>
+        )
+    </select>
+</mapper>

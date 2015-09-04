@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+	<!-- 给实体Bean一个别名-->
+	    <typeAlias type="com.aomei.model.Order" alias="Order"/>
+        <typeAlias type="com.aomei.model.Menu" alias="Menu"/>
+        <typeAlias type="com.aomei.model.Role" alias="Role"/>
+        <typeAlias type="com.aomei.model.User" alias="User"/>
+	</typeAliases>
+	<mappers>
+        <mapper resource="config/mappers/OrderMapper.xml"/>
+        <mapper resource="config/mappers/MenuMapper.xml"/>
+        <mapper resource="config/mappers/UserMapper.xml"/>
+        <mapper resource="config/mappers/RoleMapper.xml"/>
+        <mapper resource="config/mappers/CustomerMapper.xml"/>
+        <mapper resource="config/mappers/ManufactureOrderMapper.xml"/>
+        <mapper resource="config/mappers/EnCommercialInvoiceMapper.xml"/>
+        <mapper resource="config/mappers/EnciOrderMapper.xml"/>
+        <mapper resource="config/mappers/DeliveryNoteMapper.xml"/>
+        <mapper resource="config/mappers/DeliveryGoodsMapper.xml"/>
+        <mapper resource="config/mappers/DataDictionaryMapper.xml"/>
+        <mapper resource="config/mappers/PurchaseDetailMapper.xml"/>
+        <mapper resource="config/mappers/PurchaseOrderMapper.xml"/>
+        <mapper resource="config/mappers/CompanyInfoMapper.xml"/>
+        <mapper resource="config/mappers/CommonMapper.xml"/>
+    </mappers>
+</configuration>

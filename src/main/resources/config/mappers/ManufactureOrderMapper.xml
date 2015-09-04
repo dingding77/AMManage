@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ManufactureOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.ManufactureOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cstm_Code" property="cstmCode" jdbcType="VARCHAR" />
+    <result column="pro_No" property="proNo" jdbcType="VARCHAR" />
+    <result column="order_Date" property="orderDate" jdbcType="DATE" />
+    <result column="delivery_Date" property="deliveryDate" jdbcType="DATE" />
+    <result column="houdao_Requests" property="houdaoRequests" jdbcType="VARCHAR" />
+    <result column="board" property="board" jdbcType="VARCHAR" />
+    <result column="pro_Num" property="proNum" jdbcType="INTEGER" />
+    <result column="pro_Desc" property="proDesc" jdbcType="VARCHAR" />
+    <result column="style_No" property="styleNo" jdbcType="VARCHAR" />
+    <result column="callslip_Date" property="callslipDate" jdbcType="DATE" />
+    <result column="material_No" property="materialNo" jdbcType="VARCHAR" />
+    <result column="need_Num" property="needNum" jdbcType="INTEGER" />
+    <result column="real_Num" property="realNum" jdbcType="INTEGER" />
+    <result column="revert_Date" property="revertDate" jdbcType="DATE" />
+    <result column="revert_Num" property="revertNum" jdbcType="INTEGER" />
+    <result column="repeat_Order" property="repeatOrder" jdbcType="VARCHAR" />
+    <result column="new_Edition" property="newEdition" jdbcType="VARCHAR" />
+    <result column="pro_Operator" property="proOperator" jdbcType="VARCHAR" />
+    <result column="pro_Paste_Like" property="proPasteLike" jdbcType="VARCHAR" />
+    <result column="pro_Time_Consuming" property="proTimeConsuming" jdbcType="VARCHAR" />
+    <result column="pro_Date" property="proDate" jdbcType="DATE" />
+    <result column="fss_Operator" property="fssOperator" jdbcType="VARCHAR" />
+    <result column="fss_Date" property="fssDate" jdbcType="DATE" />
+    <result column="QC_Operator" property="qcOperator" jdbcType="VARCHAR" />
+    <result column="QC_Time_Consuming" property="qcTimeConsuming" jdbcType="VARCHAR" />
+    <result column="goods_Paste_Like" property="goodsPasteLike" jdbcType="VARCHAR" />
+    <result column="pack_Detail" property="packDetail" jdbcType="VARCHAR" />
+    <result column="QC_Date" property="qcDate" jdbcType="DATE" />
+    <result column="pro_Planning" property="proPlanning" jdbcType="VARCHAR" />
+    <result column="pro_Documentary" property="proDocumentary" jdbcType="VARCHAR" />
+    <result column="fss_Time_Consuming" property="fssTimeConsuming" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aomei.model.ManufactureOrder" extends="BaseResultMap" >
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, cstm_Code, pro_No, order_Date, delivery_Date, houdao_Requests, board, pro_Num, 
+    pro_Desc, style_No, callslip_Date, material_No, need_Num, real_Num, revert_Date, 
+    revert_Num, repeat_Order, new_Edition, pro_Operator, pro_Paste_Like, pro_Time_Consuming, 
+    pro_Date, fss_Operator, fss_Date, QC_Operator, QC_Time_Consuming, goods_Paste_Like, 
+    pack_Detail, QC_Date, pro_Planning, pro_Documentary,fss_Time_Consuming
+  </sql>
+  <sql id="Blob_Column_List" >
+    remark
+  </sql>
+    <!--根据主键获取对象-->
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_manufacture_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectPages" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from t_manufacture_order
+        where 1=1
+
+        limit #{limitStart},#{limitEnd}
+
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_manufacture_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">
+    delete from t_manufacture_order
+    where id in
+    <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.aomei.model.ManufactureOrder" >
+    insert into t_manufacture_order (id, cstm_Code, pro_No, 
+      order_Date, delivery_Date, houdao_Requests, 
+      board, pro_Num, pro_Desc, 
+      style_No, callslip_Date, material_No, 
+      need_Num, real_Num, revert_Date, 
+      revert_Num, repeat_Order, new_Edition, 
+      pro_Operator, pro_Paste_Like, pro_Time_Consuming, 
+      pro_Date, fss_Operator, fss_Date, fss_Time_Consuming,
+      QC_Operator, QC_Time_Consuming, goods_Paste_Like, 
+      pack_Detail, QC_Date, pro_Planning, 
+      pro_Documentary, remark)
+    values (#{id,jdbcType=INTEGER}, #{cstmCode,jdbcType=VARCHAR}, #{proNo,jdbcType=VARCHAR}, 
+      #{orderDate,jdbcType=DATE}, #{deliveryDate,jdbcType=DATE}, #{houdaoRequests,jdbcType=VARCHAR}, 
+      #{board,jdbcType=VARCHAR}, #{proNum,jdbcType=INTEGER}, #{proDesc,jdbcType=VARCHAR}, 
+      #{styleNo,jdbcType=VARCHAR}, #{callslipDate,jdbcType=DATE}, #{materialNo,jdbcType=VARCHAR}, 
+      #{needNum,jdbcType=INTEGER}, #{realNum,jdbcType=INTEGER}, #{revertDate,jdbcType=DATE}, 
+      #{revertNum,jdbcType=INTEGER}, #{repeatOrder,jdbcType=VARCHAR}, #{newEdition,jdbcType=VARCHAR}, 
+      #{proOperator,jdbcType=VARCHAR}, #{proPasteLike,jdbcType=VARCHAR}, #{proTimeConsuming,jdbcType=VARCHAR}, 
+      #{proDate,jdbcType=DATE}, #{fssOperator,jdbcType=VARCHAR}, #{fssDate,jdbcType=DATE}, #{fssTimeConsuming,jdbcType=VARCHAR},
+      #{qcOperator,jdbcType=VARCHAR}, #{qcTimeConsuming,jdbcType=VARCHAR}, #{goodsPasteLike,jdbcType=VARCHAR}, 
+      #{packDetail,jdbcType=VARCHAR}, #{qcDate,jdbcType=DATE}, #{proPlanning,jdbcType=VARCHAR}, 
+      #{proDocumentary,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.ManufactureOrder" >
+    insert into t_manufacture_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cstmCode != null" >
+        cstm_Code,
+      </if>
+      <if test="proNo != null" >
+        pro_No,
+      </if>
+      <if test="orderDate != null" >
+        order_Date,
+      </if>
+      <if test="deliveryDate != null" >
+        delivery_Date,
+      </if>
+      <if test="houdaoRequests != null" >
+        houdao_Requests,
+      </if>
+      <if test="board != null" >
+        board,
+      </if>
+      <if test="proNum != null" >
+        pro_Num,
+      </if>
+      <if test="proDesc != null" >
+        pro_Desc,
+      </if>
+      <if test="styleNo != null" >
+        style_No,
+      </if>
+      <if test="callslipDate != null" >
+        callslip_Date,
+      </if>
+      <if test="materialNo != null" >
+        material_No,
+      </if>
+      <if test="needNum != null" >
+        need_Num,
+      </if>
+      <if test="realNum != null" >
+        real_Num,
+      </if>
+      <if test="revertDate != null" >
+        revert_Date,
+      </if>
+      <if test="revertNum != null" >
+        revert_Num,
+      </if>
+      <if test="repeatOrder != null" >
+        repeat_Order,
+      </if>
+      <if test="newEdition != null" >
+        new_Edition,
+      </if>
+      <if test="proOperator != null" >
+        pro_Operator,
+      </if>
+      <if test="proPasteLike != null" >
+        pro_Paste_Like,
+      </if>
+      <if test="proTimeConsuming != null" >
+        pro_Time_Consuming,
+      </if>
+      <if test="proDate != null" >
+        pro_Date,
+      </if>
+      <if test="fssOperator != null" >
+        fss_Operator,
+      </if>
+      <if test="fssDate != null" >
+        fss_Date,
+      </if>
+      <if test="fssTimeConsuming != null" >
+          fss_Time_Consuming,
+      </if>
+      <if test="qcOperator != null" >
+        QC_Operator,
+      </if>
+      <if test="qcTimeConsuming != null" >
+        QC_Time_Consuming,
+      </if>
+      <if test="goodsPasteLike != null" >
+        goods_Paste_Like,
+      </if>
+      <if test="packDetail != null" >
+        pack_Detail,
+      </if>
+      <if test="qcDate != null" >
+        QC_Date,
+      </if>
+      <if test="proPlanning != null" >
+        pro_Planning,
+      </if>
+      <if test="proDocumentary != null" >
+        pro_Documentary,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cstmCode != null" >
+        #{cstmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="proNo != null" >
+        #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null" >
+        #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="deliveryDate != null" >
+        #{deliveryDate,jdbcType=DATE},
+      </if>
+      <if test="houdaoRequests != null" >
+        #{houdaoRequests,jdbcType=VARCHAR},
+      </if>
+      <if test="board != null" >
+        #{board,jdbcType=VARCHAR},
+      </if>
+      <if test="proNum != null" >
+        #{proNum,jdbcType=INTEGER},
+      </if>
+      <if test="proDesc != null" >
+        #{proDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="styleNo != null" >
+        #{styleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="callslipDate != null" >
+        #{callslipDate,jdbcType=DATE},
+      </if>
+      <if test="materialNo != null" >
+        #{materialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="needNum != null" >
+        #{needNum,jdbcType=INTEGER},
+      </if>
+      <if test="realNum != null" >
+        #{realNum,jdbcType=INTEGER},
+      </if>
+      <if test="revertDate != null" >
+        #{revertDate,jdbcType=DATE},
+      </if>
+      <if test="revertNum != null" >
+        #{revertNum,jdbcType=INTEGER},
+      </if>
+      <if test="repeatOrder != null" >
+        #{repeatOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="newEdition != null" >
+        #{newEdition,jdbcType=VARCHAR},
+      </if>
+      <if test="proOperator != null" >
+        #{proOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="proPasteLike != null" >
+        #{proPasteLike,jdbcType=VARCHAR},
+      </if>
+      <if test="proTimeConsuming != null" >
+        #{proTimeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="proDate != null" >
+        #{proDate,jdbcType=DATE},
+      </if>
+      <if test="fssOperator != null" >
+        #{fssOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="fssDate != null" >
+        #{fssDate,jdbcType=DATE},
+      </if>
+      <if test="fssTimeConsuming != null" >
+        #{fssTimeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="qcOperator != null" >
+        #{qcOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="qcTimeConsuming != null" >
+        #{qcTimeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPasteLike != null" >
+        #{goodsPasteLike,jdbcType=VARCHAR},
+      </if>
+      <if test="packDetail != null" >
+        #{packDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="qcDate != null" >
+        #{qcDate,jdbcType=DATE},
+      </if>
+      <if test="proPlanning != null" >
+        #{proPlanning,jdbcType=VARCHAR},
+      </if>
+      <if test="proDocumentary != null" >
+        #{proDocumentary,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.ManufactureOrder" >
+    update t_manufacture_order
+    <set >
+      <if test="cstmCode != null" >
+        cstm_Code = #{cstmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="proNo != null" >
+        pro_No = #{proNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null" >
+        order_Date = #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="deliveryDate != null" >
+        delivery_Date = #{deliveryDate,jdbcType=DATE},
+      </if>
+      <if test="houdaoRequests != null" >
+        houdao_Requests = #{houdaoRequests,jdbcType=VARCHAR},
+      </if>
+      <if test="board != null" >
+        board = #{board,jdbcType=VARCHAR},
+      </if>
+      <if test="proNum != null" >
+        pro_Num = #{proNum,jdbcType=INTEGER},
+      </if>
+      <if test="proDesc != null" >
+        pro_Desc = #{proDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="styleNo != null" >
+        style_No = #{styleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="callslipDate != null" >
+        callslip_Date = #{callslipDate,jdbcType=DATE},
+      </if>
+      <if test="materialNo != null" >
+        material_No = #{materialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="needNum != null" >
+        need_Num = #{needNum,jdbcType=INTEGER},
+      </if>
+      <if test="realNum != null" >
+        real_Num = #{realNum,jdbcType=INTEGER},
+      </if>
+      <if test="revertDate != null" >
+        revert_Date = #{revertDate,jdbcType=DATE},
+      </if>
+      <if test="revertNum != null" >
+        revert_Num = #{revertNum,jdbcType=INTEGER},
+      </if>
+      <if test="repeatOrder != null" >
+        repeat_Order = #{repeatOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="newEdition != null" >
+        new_Edition = #{newEdition,jdbcType=VARCHAR},
+      </if>
+      <if test="proOperator != null" >
+        pro_Operator = #{proOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="proPasteLike != null" >
+        pro_Paste_Like = #{proPasteLike,jdbcType=VARCHAR},
+      </if>
+      <if test="proTimeConsuming != null" >
+        pro_Time_Consuming = #{proTimeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="proDate != null" >
+        pro_Date = #{proDate,jdbcType=DATE},
+      </if>
+      <if test="fssOperator != null" >
+        fss_Operator = #{fssOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="fssDate != null" >
+        fss_Date = #{fssDate,jdbcType=DATE},
+      </if>
+      <if test="fssTimeConsuming != null">
+          fss_Time_Consuming=#{fssTimeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="qcOperator != null" >
+        QC_Operator = #{qcOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="qcTimeConsuming != null" >
+        QC_Time_Consuming = #{qcTimeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPasteLike != null" >
+        goods_Paste_Like = #{goodsPasteLike,jdbcType=VARCHAR},
+      </if>
+      <if test="packDetail != null" >
+        pack_Detail = #{packDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="qcDate != null" >
+        QC_Date = #{qcDate,jdbcType=DATE},
+      </if>
+      <if test="proPlanning != null" >
+        pro_Planning = #{proPlanning,jdbcType=VARCHAR},
+      </if>
+      <if test="proDocumentary != null" >
+        pro_Documentary = #{proDocumentary,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aomei.model.ManufactureOrder" >
+    update t_manufacture_order
+    set cstm_Code = #{cstmCode,jdbcType=VARCHAR},
+      pro_No = #{proNo,jdbcType=VARCHAR},
+      order_Date = #{orderDate,jdbcType=DATE},
+      delivery_Date = #{deliveryDate,jdbcType=DATE},
+      houdao_Requests = #{houdaoRequests,jdbcType=VARCHAR},
+      board = #{board,jdbcType=VARCHAR},
+      pro_Num = #{proNum,jdbcType=INTEGER},
+      pro_Desc = #{proDesc,jdbcType=VARCHAR},
+      style_No = #{styleNo,jdbcType=VARCHAR},
+      callslip_Date = #{callslipDate,jdbcType=DATE},
+      material_No = #{materialNo,jdbcType=VARCHAR},
+      need_Num = #{needNum,jdbcType=INTEGER},
+      real_Num = #{realNum,jdbcType=INTEGER},
+      revert_Date = #{revertDate,jdbcType=DATE},
+      revert_Num = #{revertNum,jdbcType=INTEGER},
+      repeat_Order = #{repeatOrder,jdbcType=VARCHAR},
+      new_Edition = #{newEdition,jdbcType=VARCHAR},
+      pro_Operator = #{proOperator,jdbcType=VARCHAR},
+      pro_Paste_Like = #{proPasteLike,jdbcType=VARCHAR},
+      pro_Time_Consuming = #{proTimeConsuming,jdbcType=VARCHAR},
+      pro_Date = #{proDate,jdbcType=DATE},
+      fss_Operator = #{fssOperator,jdbcType=VARCHAR},
+      fss_Date = #{fssDate,jdbcType=DATE},
+      fss_Time_Consuming=#{fssTimeConsuming,jdbcType=VARCHAR},
+      QC_Operator = #{qcOperator,jdbcType=VARCHAR},
+      QC_Time_Consuming = #{qcTimeConsuming,jdbcType=VARCHAR},
+      goods_Paste_Like = #{goodsPasteLike,jdbcType=VARCHAR},
+      pack_Detail = #{packDetail,jdbcType=VARCHAR},
+      QC_Date = #{qcDate,jdbcType=DATE},
+      pro_Planning = #{proPlanning,jdbcType=VARCHAR},
+      pro_Documentary = #{proDocumentary,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.ManufactureOrder" >
+    update t_manufacture_order
+    set cstm_Code = #{cstmCode,jdbcType=VARCHAR},
+      pro_No = #{proNo,jdbcType=VARCHAR},
+      order_Date = #{orderDate,jdbcType=DATE},
+      delivery_Date = #{deliveryDate,jdbcType=DATE},
+      houdao_Requests = #{houdaoRequests,jdbcType=VARCHAR},
+      board = #{board,jdbcType=VARCHAR},
+      pro_Num = #{proNum,jdbcType=INTEGER},
+      pro_Desc = #{proDesc,jdbcType=VARCHAR},
+      style_No = #{styleNo,jdbcType=VARCHAR},
+      callslip_Date = #{callslipDate,jdbcType=DATE},
+      material_No = #{materialNo,jdbcType=VARCHAR},
+      need_Num = #{needNum,jdbcType=INTEGER},
+      real_Num = #{realNum,jdbcType=INTEGER},
+      revert_Date = #{revertDate,jdbcType=DATE},
+      revert_Num = #{revertNum,jdbcType=INTEGER},
+      repeat_Order = #{repeatOrder,jdbcType=VARCHAR},
+      new_Edition = #{newEdition,jdbcType=VARCHAR},
+      pro_Operator = #{proOperator,jdbcType=VARCHAR},
+      pro_Paste_Like = #{proPasteLike,jdbcType=VARCHAR},
+      pro_Time_Consuming = #{proTimeConsuming,jdbcType=VARCHAR},
+      pro_Date = #{proDate,jdbcType=DATE},
+      fss_Operator = #{fssOperator,jdbcType=VARCHAR},
+      fss_Date = #{fssDate,jdbcType=DATE},
+      fss_Time_Consuming=#{fssTimeConsuming,jdbcType=VARCHAR},
+      QC_Operator = #{qcOperator,jdbcType=VARCHAR},
+      QC_Time_Consuming = #{qcTimeConsuming,jdbcType=VARCHAR},
+      goods_Paste_Like = #{goodsPasteLike,jdbcType=VARCHAR},
+      pack_Detail = #{packDetail,jdbcType=VARCHAR},
+      QC_Date = #{qcDate,jdbcType=DATE},
+      pro_Planning = #{proPlanning,jdbcType=VARCHAR},
+      pro_Documentary = #{proDocumentary,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+  <resultMap id="BaseResultMap" type="com.aomei.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="enable" jdbcType="VARCHAR" property="enable" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+  </resultMap>
+
+  <sql id="commonQueryParams">
+      WHERE 1=1
+      <if test="id != null">
+          and id=#{id,jdbcType=INTEGER}
+      </if>
+      <if test="username != null and username != ''">
+          and username=#{username,jdbcType=VARCHAR}
+      </if>
+      <if test="pwd != null">
+          and pwd=#{pwd,jdbcType=VARCHAR}
+      </if>
+      <if test="loginIp != null">
+          and login_Ip=#{loginIp,jdbcType=VARCHAR}
+      </if>
+      <if test="enable != null and enable != ''">
+          and enable=#{enable,jdbcType=VARCHAR}
+      </if>
+      <if test="phone != null and phone != ''">
+          and phone=#{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="email != null">
+          and email=#{email,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null">
+          and remark=#{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="createtime != null">
+          and createtime=#{createtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isDelete != null">
+          and is_Delete=#{isDelete,jdbcType=CHAR}
+      </if>
+  </sql>
+  <sql id="doQueryParams">
+        <include refid="commonQueryParams" />
+        <if test="isCount=='N'.toString()">
+            <if test="limit != null and limit&gt;0">
+                limit #{start} , #{limit}
+            </if>
+        </if>
+  </sql>
+  <sql id="Base_Column_List">
+    id, username, pwd, login_ip, enable, phone, email, remark, createTime, is_delete
+  </sql>
+  <select id="selectByExample" parameterType="com.aomei.query.UserQuery" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+      from t_user
+      <include refid="doQueryParams" />
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update from t_user set is_delete='Y'
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.aomei.model.User">
+    insert into t_user (id, username, pwd, 
+      login_ip, enable, phone, 
+      email, remark, createTime, 
+      is_delete)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{loginIp,jdbcType=VARCHAR}, #{enable,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.User">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="loginIp != null">
+        login_ip,
+      </if>
+      <if test="enable != null">
+        enable,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null">
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.aomei.query.UserQuery" resultType="java.lang.Integer">
+    select count(*) from t_user
+      <include refid="commonQueryParams" />
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.User">
+    update t_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null">
+        enable = #{enable,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.User">
+    update t_user
+    set username = #{username,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      enable = #{enable,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="findUser" parameterType="User" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List" />
+    from T_USER where 1=1
+    <if test="username!=null">
+        and username=#{username}
+    </if>
+    <if test="pwd!=null">
+        and pwd=#{pwd}
+    </if>
+    <if test="enable!=null">
+        and enable=#{enable}
+    </if>
+    </select>
+</mapper>

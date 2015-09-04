@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="DeliveryNoteMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.DeliveryNote" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="deliver_no" property="deliverNo" jdbcType="INTEGER" />
+    <result column="deliver_way" property="deliverWay" jdbcType="VARCHAR" />
+    <result column="deliver_date" property="deliverDate" jdbcType="DATE" />
+    <result column="payment_way" property="paymentWay" jdbcType="VARCHAR" />
+    <result column="docTrade_user" property="doctradeUser" jdbcType="VARCHAR" />
+    <result column="docTrade_date" property="doctradeDate" jdbcType="DATE" />
+    <result column="busi_user" property="busiUser" jdbcType="VARCHAR" />
+    <result column="create_userId" property="createUserid" jdbcType="INTEGER" />
+      <collection property="deliveryGoodsList" column="id" select="DeliveryGoodsMapper.selectDeliveryGoodsByDnId"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_name, deliver_no, deliver_way, deliver_date, payment_way, docTrade_user, 
+    docTrade_date, busi_user, create_userId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_delivery_note
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectPages" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        from t_delivery_note
+        where 1=1
+        limit #{limitStart},#{limitEnd}
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_delivery_note
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">
+        delete from t_delivery_note
+        where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+  <insert id="insert" parameterType="com.aomei.model.DeliveryNote" >
+      <selectKey    keyProperty="id" resultType="int" order="AFTER">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
+    insert into t_delivery_note (customer_name, deliver_no,
+      deliver_way, deliver_date, payment_way, 
+      docTrade_user, docTrade_date, busi_user, 
+      create_userId)
+    values (#{customerName,jdbcType=VARCHAR}, #{deliverNo,jdbcType=INTEGER},
+      #{deliverWay,jdbcType=VARCHAR}, #{deliverDate,jdbcType=DATE}, #{paymentWay,jdbcType=VARCHAR}, 
+      #{doctradeUser,jdbcType=VARCHAR}, #{doctradeDate,jdbcType=DATE}, #{busiUser,jdbcType=VARCHAR}, 
+      #{createUserid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.DeliveryNote" >
+      <selectKey    keyProperty="id" resultType="int" order="AFTER">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
+    insert into t_delivery_note
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="deliverNo != null" >
+        deliver_no,
+      </if>
+      <if test="deliverWay != null" >
+        deliver_way,
+      </if>
+      <if test="deliverDate != null" >
+        deliver_date,
+      </if>
+      <if test="paymentWay != null" >
+        payment_way,
+      </if>
+      <if test="doctradeUser != null" >
+        docTrade_user,
+      </if>
+      <if test="doctradeDate != null" >
+        docTrade_date,
+      </if>
+      <if test="busiUser != null" >
+        busi_user,
+      </if>
+      <if test="createUserid != null" >
+        create_userId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverNo != null" >
+        #{deliverNo,jdbcType=INTEGER},
+      </if>
+      <if test="deliverWay != null" >
+        #{deliverWay,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverDate != null" >
+        #{deliverDate,jdbcType=DATE},
+      </if>
+      <if test="paymentWay != null" >
+        #{paymentWay,jdbcType=VARCHAR},
+      </if>
+      <if test="doctradeUser != null" >
+        #{doctradeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="doctradeDate != null" >
+        #{doctradeDate,jdbcType=DATE},
+      </if>
+      <if test="busiUser != null" >
+        #{busiUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserid != null" >
+        #{createUserid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.DeliveryNote" >
+    update t_delivery_note
+    <set >
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverNo != null" >
+        deliver_no = #{deliverNo,jdbcType=INTEGER},
+      </if>
+      <if test="deliverWay != null" >
+        deliver_way = #{deliverWay,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverDate != null" >
+        deliver_date = #{deliverDate,jdbcType=DATE},
+      </if>
+      <if test="paymentWay != null" >
+        payment_way = #{paymentWay,jdbcType=VARCHAR},
+      </if>
+      <if test="doctradeUser != null" >
+        docTrade_user = #{doctradeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="doctradeDate != null" >
+        docTrade_date = #{doctradeDate,jdbcType=DATE},
+      </if>
+      <if test="busiUser != null" >
+        busi_user = #{busiUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.DeliveryNote" >
+    update t_delivery_note
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+      deliver_no = #{deliverNo,jdbcType=INTEGER},
+      deliver_way = #{deliverWay,jdbcType=VARCHAR},
+      deliver_date = #{deliverDate,jdbcType=DATE},
+      payment_way = #{paymentWay,jdbcType=VARCHAR},
+      docTrade_user = #{doctradeUser,jdbcType=VARCHAR},
+      docTrade_date = #{doctradeDate,jdbcType=DATE},
+      busi_user = #{busiUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

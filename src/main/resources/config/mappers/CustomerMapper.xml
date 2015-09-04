@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.aomei.model.Customer">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+  </resultMap>
+    <sql id="Base_Column_List">
+        id, code, name, address, contacts, phone, fax, email
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_customer
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <!--分页查询-->
+    <select id="selectPages" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_customer
+        where 1=1
+        <if test="customer != null">
+            <if test="customer.code != null">
+                and code = #{customer.code,jdbcType=VARCHAR}
+            </if>
+            <if test="customer.name != null">
+                and name = #{customer.name,jdbcType=VARCHAR}
+            </if>
+            <if test="customer.address != null">
+                and address = #{customer.address,jdbcType=VARCHAR}
+            </if>
+            <if test="customer.contacts != null">
+                and contacts = #{customer.contacts,jdbcType=VARCHAR}
+            </if>
+            <if test="customer.phone != null">
+                and phone = #{customer.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="customer.fax != null">
+                and fax = #{customer.fax,jdbcType=VARCHAR}
+            </if>
+            <if test="customer.email != null">
+                and email = #{customer.email,jdbcType=VARCHAR}
+            </if>
+        </if>
+        limit #{limitStart},#{limitEnd}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_customer
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">
+        delete from t_customer
+        where id in
+        <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.aomei.model.Customer">
+        insert into t_customer (code, name,
+        address, contacts, phone,
+        fax, email)
+        values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        #{fax,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.aomei.model.Customer">
+        insert into t_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                code,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="contacts != null">
+                contacts,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="fax != null">
+                fax,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="contacts != null">
+                #{contacts,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.Customer">
+        update t_customer
+        <set>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="contacts != null">
+                contacts = #{contacts,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                fax = #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.aomei.model.Customer">
+    update t_customer
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
