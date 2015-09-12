@@ -12,7 +12,7 @@ public class DeliveryNote implements Serializable {
 
     private String customerName;
 
-    private Integer deliverNo;
+    private String deliverNo;
 
     private String deliverWay;
 
@@ -47,11 +47,11 @@ public class DeliveryNote implements Serializable {
         this.customerName = customerName == null ? null : customerName.trim();
     }
 
-    public Integer getDeliverNo() {
+    public String getDeliverNo() {
         return deliverNo;
     }
 
-    public void setDeliverNo(Integer deliverNo) {
+    public void setDeliverNo(String deliverNo) {
         this.deliverNo = deliverNo;
     }
 

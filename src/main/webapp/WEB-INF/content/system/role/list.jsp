@@ -43,6 +43,22 @@
         </div>
     </form>
 </div>
+<!--角色授权-->
+<%--http://kaixinmao.iteye.com/blog/1447689--%>
+<div id="w" class="easyui-window" title="角色菜单授权" data-options="iconCls:'icon-save',closed:true" style="width:500px;height:350px;padding:5px;">
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'center'" style="border: 0">
+            <div class="easyui-panel" style="padding:5px; border: 0;">
+                <ul id="menu_tree" class="easyui-tree"></ul>
+            </div>
+
+        </div>
+        <div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:saveAuthorize()" style="width:80px">Ok</a>
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:$('#w').window('close')" style="width:80px">Cancel</a>
+        </div>
+    </div>
+</div>
 </body>
 
 <script type="text/javascript">
@@ -60,21 +76,8 @@
             {field:'isEnable',title:'状态',width:50,formatter:formatterEnable}
         ]]
     });
-    $('#right_panel').panel({
-        width:'100%',
-        height:'100%',
-        title:'角色列表',
-        tools:[{
-            iconCls:'icon-reload',
-            handler:function(){
-                alert('ss');
-            }
-        }]
-    });
-    $('#dlg_add_role').dialog({
-        onClose:function(){
 
-        },
+    $('#dlg_add_role').dialog({
         closed:true,
         buttons: [{
             text:'Save',
@@ -89,6 +92,8 @@
             }
         }]
     });
+
+
     //新增
     function add(){
         //重置表单
@@ -165,7 +170,56 @@
 
     //角色授权
     function roleAuthorize(){
+        var rows= $('#dg').datagrid('getSelections');
+        if(rows.length==0 || rows.length>1){
+            $.messager.alert("操作提示", "请选择一项！","info");
+            return;
+        }
+        var roleId=rows[0]['id'];
+        $('#w').window('open');
+        $('#menu_tree').tree({
+            method:'post',
+            animate:true,
+            checkbox: true,
+            url: '../menu/menuTree.htm?query.roleid='+roleId
+        });
+    }
 
+    function saveAuthorize(){
+        var nodes = $('#menu_tree').tree('getChecked');
+        var s = '';
+        for(var i=0; i<nodes.length; i++){
+            if (s != '') s += ',';
+            s += nodes[i].id;
+        }
+
+        var nodes1 = $('#menu_tree').tree('getChecked','indeterminate');
+        for(var i=0; i<nodes1.length; i++){
+            if (s != '') s += ',';
+            s += nodes1[i].id;
+        }
+        if(s==''){
+            $.messager.alert('操作提示','请选择列表中的菜单项','info');
+            return;
+        }
+        var rows= $('#dg').datagrid('getSelections');
+        var roleId=rows[0]['id'];
+        var url='saveAuthorize.htm';
+        var data={'roleId':roleId,'menus':s};
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            dataType: 'json',
+            success: function(data){
+                if(data.errMsg){
+                    $.messager.alert('操作提示','授权失败','error');
+                }else{
+                    $.messager.alert('操作提示','授权成功','info');
+                    $('#w').window('close');
+                }
+            }
+        });
     }
 
 </script>

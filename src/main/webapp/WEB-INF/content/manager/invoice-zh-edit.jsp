@@ -40,8 +40,8 @@
                         msg: result.errorMsg
                     });
                 }else{
-                    $.messager.alert('提示','修改成功','info',function(){
-                        window.parent.refreshTab(getCurTabUrl());
+                    $.messager.alert('操作提示','修改成功','info',function(){
+                        location.reload();
                     });
 
                 }

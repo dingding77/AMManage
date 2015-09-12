@@ -23,7 +23,8 @@ public class PurchaseOrder implements Serializable {
     private String isDelete;
 
     private String creator;
-
+    /**采购单号 格式AMPO000001**/
+    private String purchaseNo;
     private String extInfo;//拓展信息
     private Date createTime;
     public List<PurchaseDetail> detailList;

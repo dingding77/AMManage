@@ -16,7 +16,7 @@
     <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/js/aomei.js"></script>
-    <script type="text/javascript" src="<%=contextPath %>/js/template.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/js/jquery.tmpl.min.js"></script>
     <script language="javascript" type="text/javascript" src="<%=contextPath %>/My97DatePicker/WdatePicker.js"></script>
 </head>
 <script>
@@ -34,5 +34,20 @@
         var date = new Date(val);
         var month=(date.getMonth() + 1)>9?(date.getMonth() + 1):'0'+(date.getMonth() + 1);
         return date.getFullYear() + '-' + month + '-' + date.getDate();
+    }
+    $.ajaxSetup({
+        "error" : myfunc
+    });
+    function myfunc(XMLHttpRequest, textStatus, errorThrown) {
+        if (XMLHttpRequest.status == 403) {
+            window.parent.location = "common/redirectLogin.html";
+        } else if (XMLHttpRequest.status == 500) {
+            window.parent.location = "common/redirectLogin.html";
+        } else if(XMLHttpRequest.status == 408){//session超时
+            $.messager.alert('警告', "登录超时！", 'warning',function(){
+                window.parent.location = "common/redirectLogin.html";
+            });
+
+        }
     }
 </script>

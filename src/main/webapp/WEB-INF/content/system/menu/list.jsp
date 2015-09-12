@@ -14,9 +14,10 @@
 <div id="toolbar" align="left" style="height: auto">
     <div id="showMenu"></div>
     <div style="line-height:1px; background:#ccc;width:100%;margin:0 auto 0 auto;">&nbsp;</div>
-    <label>订单名称:</label><input type="text" name="manufactureOrder.order.orderName"/>
-    <label>订单日期:</label><input class="Wdate" type="text"  id="beginOrderDate" style="cursor: pointer;border:1px solid #ccc" onFocus="WdatePicker()"/>到<input class="Wdate" style="cursor: pointer;border:1px solid #ccc" type="text" id="endOrderDate" onFocus="WdatePicker()"/>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+    <form id="searchForm">
+    <label>菜单名称:</label><input type="text" class="easyui-textbox" name="menuQuery.name"/>
+    <a href="javascript:void(0)" onclick="doSearch()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+    </form>
     <div>
     </div>
 </div>
@@ -32,7 +33,7 @@
             <select name="menu.parentid"  class="easyui-combobox">
                 <s:iterator value="#session['userAllMenuList']" var="menu">
                     <s:if test="#menu.menuType!=1">
-                        <option value="<s:property value="#menu.parentid"/>"><s:property value="#menu.name"/></option>
+                        <option value="<s:property value="#menu.id"/>"><s:property value="#menu.name"/></option>
                     </s:if>
                 </s:iterator>
             </select>
@@ -179,7 +180,9 @@
         onChange: function (n,o) {
             menuTypeChange();
        }});
-
+    function doSearch(){
+        $('#dg').datagrid('load',$('form[id="searchForm"]').serializeJson());
+    }
 </script>
 </body>
 </html>

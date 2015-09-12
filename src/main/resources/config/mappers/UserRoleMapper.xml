@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.UserRole" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="roleId" property="roleid" jdbcType="INTEGER" />
+    <result column="is_Delete" property="isDelete" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <!--查询条件-->
+  <sql id="doQueryParams">
+      where 1=1
+      <if test="id != null" >
+          and id=#{id,jdbcType=INTEGER}
+      </if>
+      <if test="userid != null" >
+          and userid=#{userid,jdbcType=INTEGER}
+      </if>
+      <if test="roleid != null" >
+          and roleid=#{roleid,jdbcType=INTEGER}
+      </if>
+      <if test="isDelete != null" >
+          and is_Delete=#{isDelete,jdbcType=CHAR}
+      </if>
+      <if test="createTime != null" >
+          and create_Time=#{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="modifyTime != null" >
+          and modify_Time=#{modifyTime,jdbcType=TIMESTAMP}
+      </if>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, userId, roleId, is_Delete, create_time, modify_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aomei.query.UserRoleQuery" >
+    select
+    <include refid="Base_Column_List" />
+    from t_user_role
+    <include refid="doQueryParams" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    update t_user_role set is_delete='Y'
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.aomei.model.UserRole" >
+    insert into t_user_role (id, userId, roleId, 
+      is_Delete, create_time, modify_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, 
+      'N', now(), now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aomei.model.UserRole" >
+    insert into t_user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="roleid != null" >
+        roleId,
+      </if>
+      <if test="isDelete != null" >
+        is_Delete,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.aomei.query.UserRoleQuery" resultType="java.lang.Integer" >
+    select count(*) from t_user_role
+      <include refid="doQueryParams" />
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.UserRole" >
+    update t_user_role
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null" >
+        roleId = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        is_Delete = #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.UserRole" >
+    update t_user_role
+    set userId = #{userid,jdbcType=INTEGER},
+      roleId = #{roleid,jdbcType=INTEGER},
+      is_Delete = #{isDelete,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

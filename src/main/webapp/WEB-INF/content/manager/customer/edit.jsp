@@ -18,7 +18,6 @@
         });
         function saveCustomer(){
             var url='editSave.htm';
-            alert(url);
             $('#form1').form('submit',{
                 url: url,
                 onSubmit: function(){
@@ -32,12 +31,10 @@
                             msg: result.errorMsg
                         });
                     }else{
-                        $.messager.show({
-                            title: '提示',
-                            msg:'修改成功'
+                        $.messager.alert('操作提示','修改成功','info',function(){
+                            location.reload();
                         });
                     }
-                    formReset();
                 }
             });
         }

@@ -21,7 +21,6 @@
         });
         function saveCustomer(){
             var url='addSave.htm';
-            alert(url);
             $('#form1').form('submit',{
                 url: url,
                 onSubmit: function(){
@@ -35,12 +34,10 @@
                             msg: result.errorMsg
                         });
                     }else{
-                        $.messager.show({
-                            title: '提示',
-                            msg:'添加成功'
+                        $.messager.alert('操作提示','添加成功','info',function(){
+                            location.reload();
                         });
                     }
-                    formReset();
                 }
             });
         }
@@ -102,58 +99,55 @@
             });
         });
         function addRowForDetail(){
-            var json={detailIndex:_index};
-            var html = template($('#detailList').html(),json);
-            html=html.replace('purchaseOrder.detailList[]','purchaseOrder.detailList['+json['detailIndex']+'].styleNo');
-
-            $('#PURCHASE_DETAIL tbody tr:last').before(html);
-            var objNew=$('#PURCHASE_DETAIL tbody tr:last');
-            $.parser.parse();
+            var json={'detailIndex':_index};
+            //获取表格倒数第二行
+            var targetRow=$('#PURCHASE_DETAIL tbody tr:eq(-2)');
+            targetRow.after('<tr>'+$('#detailList').tpl(json).html()+'</tr>');
+            $.parser.parse($('#PURCHASE_DETAIL tbody tr:eq(-2)'));
             _index=_index+1;
             addEventForInput();
         }
         function deleteRowForDetail(obj){
-            var _row=obj.parent().parent();
-            var _lastRow=$('#PURCHASE_DETAIL tr:last');
-            var _lastInput=_lastRow.children('td').children('input')
-            _row.children('td').children('input').each(function(_index){
-                var _curName=$(this).attr('name');
-                var lastName=_lastInput[_index].getAttribute('name')
-
-                _lastInput[_index].setAttribute('name',_curName);
-            });
-            obj.parent().parent().remove();
-            _index=_index-1;
-
+            var _row=obj.parents('tr');
+            _row.remove();
         }
     </script>
 
 </head>
-<script id="detailList" type="text/html">
+
+<script type="text/javascript">
+    (function($){
+        $.fn.tpl = function(data){
+            $.template('template', $(this).html().replace(/@/g,"$"));
+            return $.tmpl('template', data);
+        }
+    })($);
+</script>
+<script id="detailList" type="text/x-jquery-tmpl">
     <tr>
     <td>
-    <input type="text" name="purchaseOrder.detailList[${detailIndex}].name"/>
+    <input type="text" name="purchaseOrder.detailList[@{detailIndex}].name"/>
             </td>
     <td>
-    <input type="text" name="purchaseOrder.detailList[${detailIndex}].styleNo"/>
+    <input type="text" name="purchaseOrder.detailList[@{detailIndex}].styleNo"/>
             </td>
         <td>
-            <input type="text" name="purchaseOrder.detailList[${detailIndex}].colorNo"/>
+            <input type="text" name="purchaseOrder.detailList[@{detailIndex}].colorNo"/>
         </td>
     <td>
-    <input type="text" name="purchaseOrder.detailList[${detailIndex}].size"/>
+    <input type="text" name="purchaseOrder.detailList[@{detailIndex}].size"/>
             </td>
         <td>
-            <input type="text"name="purchaseOrder.detailList[${detailIndex}].price"  class="price-per-pallet easyui-numberbox"  max="20" precision="4" required="true"/>
+            <input type="text"name="purchaseOrder.detailList[@{detailIndex}].price"  class="price-per-pallet easyui-numberbox"   precision="4" required="true"/>
         </td>
         <td>
-            <input type="text" name="purchaseOrder.detailList[${detailIndex}].buyNum" class=" num-pallets-input easyui-numberbox"/>
+            <input type="text" name="purchaseOrder.detailList[@{detailIndex}].buyNum" class=" num-pallets-input easyui-numberbox" required="true"/>
         </td>
         <td>
-            <input type="text" name="purchaseOrder.detailList[${detailIndex}].totalAmt" class="row-total-input easyui-numberbox"/>
+            <input type="text" name="purchaseOrder.detailList[@{detailIndex}].totalAmt"  style="background-color:white;" class="row-total-input" disabled="disabled"/>
         </td>
     <td>
-    <input type="text"name="purchaseOrder.detailList[${detailIndex}].remark"/>
+    <input type="text"name="purchaseOrder.detailList[@{detailIndex}].remark"/>
             </td>
         <td>
             <a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteRowForDetail($(this))">删除</a>
@@ -163,6 +157,7 @@
 </script>
 <body LEFTMARGIN=0 TOPMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0
       scroll=yes>
+
 <form  id="FORM" method="post">
     <TABLE id="PURCHASE_ORDER" class="customerTab" WIDTH="100%" BORDER="0" ALIGN="CENTER" CELLPADDING="0" CELLSPACING="0" BGCOLOR="#fff">
         <tr>
@@ -210,7 +205,7 @@
             </td>
             <th>电话</th>
             <td>
-                <input name="supplierDate"/>
+                <input name="supplierPhone"/>
             </td>
         </tr>
         <tr>
@@ -253,13 +248,13 @@
                 <input type="text" name="purchaseOrder.detailList[0].size"/>
             </td>
             <td>
-                <input type="text"name="purchaseOrder.detailList[0].price"  class="price-per-pallet easyui-numberbox"  max="20" precision="4" required="true"/>
+                <input type="text"name="purchaseOrder.detailList[0].price"  class="price-per-pallet easyui-numberbox"  precision="4" required="true"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].buyNum" class=" num-pallets-input easyui-numberbox"/>
+                <input type="text" name="purchaseOrder.detailList[0].buyNum" class=" num-pallets-input easyui-numberbox" required="true"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].totalAmt" class="row-total-input easyui-numberbox"/>
+                <input type="text" name="purchaseOrder.detailList[0].totalAmt" style="background-color:white;" class="row-total-input" disabled="disabled" />
             </td>
             <td>
                 <input type="text"name="purchaseOrder.detailList[0].remark"/>
@@ -270,7 +265,7 @@
         </tr>
         <tr>
             <td colspan="9" style="text-align: right;">产品小计:
-                <input type="text" class="total-box easyui-numberbox" id="product-subtotal" disabled="disabled">
+                <input type="text" class="total-box easyui-numberbox" id="product-subtotal" style="background-color: white; width: 200px;" disabled="disabled">
             </td>
         </tr>
     </TABLE>
@@ -282,8 +277,17 @@
 </form>
 </body>
 <script type="text/javascript">
+    function calcProdSubTotal() {
+        var prodSubTotal = 0;
+        alert($("input[class='row-total-input']").length);
+        $("input[class='row-total-input']").each(function () {
+            var valString = $(this).val() || 0;
+            prodSubTotal=parseFloat(parseFloat(prodSubTotal)+parseFloat(valString)).toFixed(4);
+        });
+        $("#product-subtotal").parents('td').find('input:eq(1)').css('background-color','white').val(prodSubTotal);
+    };
     function addSave(){
-        var fields=$('form>table[id="PURCHASE_ORDER"] input').serializeArray();
+        var fields=$('form>table[id="PURCHASE_ORDER"] input[name!="purchaseOrder.extInfo"]').serializeArray();
         var data = "{";//构建的json数据
         $.each( fields, function( i, field ) {
             if(i!==fields.length-1){
@@ -294,7 +298,7 @@
 
         });
         data=data+'}';
-        $('#extInfo').val(JSON.stringify(data));
+        $('#extInfo').val((data));
         operationSave();
     }
 
@@ -303,6 +307,7 @@
         $('#FORM').form('submit',{
             url: url,
             onSubmit: function(){
+                alert($(this).form('validate'));
                 return $(this).form('validate');
             },
             success: function(result){
@@ -313,12 +318,11 @@
                         msg: result.errorMsg
                     });
                 }else{
-                    $.messager.show({
-                        title: '提示',
-                        msg:'添加成功'
+                    $.messager.alert('操作提示','添加成功','info',function(){
+                        location.reload();
                     });
                 }
-                formReset();
+
             }
         });
     }

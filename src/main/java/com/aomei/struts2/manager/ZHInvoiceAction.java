@@ -2,8 +2,11 @@ package com.aomei.struts2.manager;
 
 import com.aomei.dao.DeliveryGoodsDao;
 import com.aomei.dao.DeliveryNoteDao;
+import com.aomei.dao.NumberRecordMapper;
 import com.aomei.model.DeliveryGoods;
 import com.aomei.model.DeliveryNote;
+import com.aomei.model.NumberRecord;
+import com.aomei.util.PrefixUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +38,8 @@ public class ZHInvoiceAction extends ActionSupport {
     DeliveryNoteDao deliveryNoteDao;
     @Autowired
     DeliveryGoodsDao deliveryGoodsDao;
+    @Autowired
+    private NumberRecordMapper numberRecordMapper;
     @Getter @Setter
     private int page;
     @Getter @Setter
@@ -81,10 +86,20 @@ public class ZHInvoiceAction extends ActionSupport {
             dataMap=new HashMap<String, Object>();
         }
         try{
-            int result=deliveryNoteDao.insertSelective(deliveryNote);
-            if(result<=0){
-                dataMap.put("errorMsg","添加失败");
+            NumberRecord numberRecord=numberRecordMapper.getRecordById();
+            int result=-1;
+            if(numberRecord!=null){
+                deliveryNote.setDeliverNo(PrefixUtil.AM_PREFFIX+"00000"+numberRecord.getAm());
+                result=deliveryNoteDao.insertSelective(deliveryNote);
+                NumberRecord record=new NumberRecord();
+                record.setAm(numberRecord.getAm()+1);
+                numberRecordMapper.updateRecord(record);
+                if(result<=0){
+                    dataMap.put("errorMsg","添加失败");
+                }
             }
+
+
         }catch (Exception e){
             dataMap.put("errorMsg","添加失败");
             e.printStackTrace();

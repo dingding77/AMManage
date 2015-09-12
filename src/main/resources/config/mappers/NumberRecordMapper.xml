@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="NumberRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.NumberRecord" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="AP" property="ap" jdbcType="INTEGER" />
+    <result column="AMPO" property="ampo" jdbcType="INTEGER" />
+    <result column="AM" property="am" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    ID, AP, AMPO, AM
+  </sql>
+  <select id="getRecordById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from t_number_record
+    where id= #{id,jdbcType=INTEGER}
+  </select>
+  <update id="updateRecord" parameterType="com.aomei.model.NumberRecord" >
+  update t_number_record
+      <set>
+          <if test="ap != null" >
+              ap = #{ap,jdbcType=INTEGER},
+          </if>
+          <if test="ampo != null" >
+              ampo = #{ampo,jdbcType=INTEGER},
+          </if>
+          <if test="am != null" >
+              am = #{am,jdbcType=INTEGER},
+          </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -179,7 +179,7 @@
         <include refid="Base_Column_List"/>
         from t_role T
         where exists(
-            select 1 from t_user_role ur where ur.userId=#{userId} and T.id=ur.roleId and
+            select 1 from t_user_role ur where ur.userId=#{userId} and ur.is_delete='N' and T.id=ur.roleId and
             exists (
                 select 1 from t_role ro where ro.id=ur.roleId and ro.is_delete='N'
             )

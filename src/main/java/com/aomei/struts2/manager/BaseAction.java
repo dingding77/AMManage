@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by Administrator on 2015/7/26.
  */
 @Slf4j
-public abstract class BaseAction<T> extends ActionSupport {
+public abstract   class BaseAction<T> extends ActionSupport {
     @Getter
     @Setter
     public Map<String,Object> dataMap;     //查询条件
@@ -158,17 +158,22 @@ public abstract class BaseAction<T> extends ActionSupport {
         return SUCCESS;
     }
 
-    private String getSimpleName(){
-        //在父类中得到子类声明的父类的泛型信息
-        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
-        Class<T> clazz = (Class) pt.getActualTypeArguments()[0];
-        //clazz.getSimpleName().toString().toLowerCase(); 这里是获取实体类的简单名称，再把类名转为小写
-        String str= clazz.getSimpleName().toString().replace("Action","");
-        StringBuilder sb = new StringBuilder(str);
-        sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
-        str = sb.toString();
+    public String getSimpleName(){
+        String str=null;
+        try{
+            //在父类中得到子类声明的父类的泛型信息
+            ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
+            Class<T> clazz = (Class) pt.getActualTypeArguments()[0];
+            //clazz.getSimpleName().toString().toLowerCase(); 这里是获取实体类的简单名称，再把类名转为小写
+            str= clazz.getSimpleName().toString().replace("Action","");
+            StringBuilder sb = new StringBuilder(str);
+            sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
+            str = sb.toString();
+        }catch (Exception e){
+            log.error("获取类 simpleName异常{}",e);
+        }
         return str;
     }
 
-    public abstract MBaseDao<T> getDao();
+    public abstract   MBaseDao<T> getDao();
 }

@@ -10,6 +10,7 @@
     http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
     http://www.springframework.org/schema/aop 
      http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+    <tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true"/>
 	<!-- 读取资源文件 -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -36,7 +37,7 @@
 		<property name="configLocation" value="classpath:config/mybatis.xml" />
 	</bean>
 
-<!--	&lt;!&ndash; 事务配置 &ndash;&gt;
+<!--事务配置 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
@@ -57,7 +58,7 @@
 		</tx:attributes>
 	</tx:advice>
 
-	<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg index="0" ref="sqlSessionFactory" />

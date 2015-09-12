@@ -2,6 +2,9 @@ package com.aomei.model;
 
 import java.util.Date;
 
+/**
+ * 生产单实体对象
+ */
 public class ManufactureOrder {
     private Integer id;
 

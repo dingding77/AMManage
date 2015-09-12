@@ -16,7 +16,7 @@
             $('input[type=text][required=true]').validatebox();
         });
         function saveOrder(){
-            var url='addSave.htm';
+            var url='manufactureAddSave.htm';
             $('#form1').form('submit',{
                 url: url,
                 onSubmit: function(){
@@ -30,12 +30,12 @@
                             msg: result.errorMsg
                         });
                     }else{
-                        $.messager.show({
-                            title: '提示',
-                            msg:'添加成功'
+                        $.messager.alert('操作提示','添加成功','info',function(){
+                            location.reload();
                         });
+
                     }
-                    formReset();
+
                 }
             });
         }

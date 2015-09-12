@@ -51,8 +51,12 @@ public class LoginAction extends ActionSupport{
     @Result(name = SUCCESS, type = "redirect",location = "/common/index.htm"),
     @Result(name = LOGIN,   type = "redirect",location = "/common/login-form.htm?type=01")})
 	public String login() throws Exception {
+        if(user==null){
+            return LOGIN;
+        }
 		//根据用户名和密码获取用户对象
         User loginUser=userService.login(user);
+
         if(loginUser!=null){
             log.info("用户【{}】登录成功",loginUser.getUsername());
             List<Menu> menuList=userService.getUserMenus(loginUser);
@@ -65,10 +69,13 @@ public class LoginAction extends ActionSupport{
 
             session.setAttribute("userRoleList",userRoleList);
             session.setAttribute("user",loginUser);
-            session.setAttribute("user_menus",menuList);
-            String menus=tree.buildTree();
-            log.info("menus:{}",menus);
-            session.setAttribute("menus", menus);
+            if(menuList!=null&&menuList.size()>0){
+                session.setAttribute("user_menus",menuList);
+                String menus=tree.buildTree();
+                log.info("menus:{}",menus);
+                session.setAttribute("menus", menus);
+            }
+
             return SUCCESS;
         }else{
             log.info("用户【{}】登录失败",user.getUsername());

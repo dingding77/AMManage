@@ -8,6 +8,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -104,7 +106,24 @@ public class PurchaseOrderAction extends ActionSupport {
             dataMap=new HashMap<String, Object>();
         }
         try {
+            String extInfo=purchaseOrder.getExtInfo();
+            if(StringUtils.isNotEmpty(extInfo)){
+                JSONObject jsonObject=JSONObject.fromObject(extInfo);
+                String supplierName=jsonObject.getString("supplierName");
+                if(StringUtils.isNotEmpty(supplierName)){
+                    purchaseOrder.setSupplierName(supplierName);
+                }
+                String supplierContract=jsonObject.getString("supplierContract");
+                if(StringUtils.isNotEmpty(supplierContract)){
+                    purchaseOrder.setSupplierContract(supplierContract);
+                }
+                String supplierPhone=jsonObject.getString("supplierPhone");
+                if(StringUtils.isNotEmpty(supplierPhone)){
+                    purchaseOrder.setSupplierPhone(supplierPhone);
+                }
+            }
             this.purchaseOrderService.add(purchaseOrder);
+
         }catch (Exception e){
             dataMap.put("errorMsg","添加失败");
             e.printStackTrace();

@@ -20,7 +20,13 @@
     <script type="text/javascript">
 
     var _menus={
+        <%
+        if(session.getAttribute("menus")!=null){
+        %>
         <%=session.getAttribute("menus")%>
+        <%
+        }
+        %>
     };
 
 
@@ -146,7 +152,7 @@
     <div region="north" border="false" style="overflow: hidden; height: 40px;
         background: url(../images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
         line-height: 40px;color: #fff; font-family: Verdana,'微软雅黑,黑体'">
-        <span style="float:right; padding-right:20px;" class="head">欢迎 Admin <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
+        <span style="float:right; padding-right:20px;" class="head">欢迎 ${user.username} <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
         <span style="padding-left:10px; font-size: 16px; ">
             <img src="../images/blocks.gif" width="20" height="20" align="absmiddle" />
             傲美实业订单管理系统
@@ -164,7 +170,18 @@
         <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
 			<div title="欢迎使用" style="padding:20px;overflow:hidden; color:blue;text-align: center">
 				<div class="welcome" style="font-size: 25px; font-weight: bold; margin:120px auto;">
-					欢迎使用傲美订单管理系统
+                    <%
+                        if(session.getAttribute("menus")==null){
+                    %>
+                    您还没有相关操作权限，请联系管理员
+                    <%
+                        }else{
+                    %>
+                    欢迎使用傲美订单管理系统
+                    <%
+                        }
+                    %>
+
 				</div>
 			</div>
 		</div>
@@ -172,7 +189,7 @@
     
     
     <!--修改密码窗口-->
-    <div id="w" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
+    <div id="w" class="easyui-window" title="修改密码" collapsible="false" closed="true" minimizable="false"
         maximizable="false" icon="icon-save"  style="width: 400px;  padding: 5px;
         background: #fafafa;">
         <div class="easyui-layout" fit="true">
@@ -214,5 +231,19 @@
 		<div id="exit">退出</div>
 	</div>
 
+<script type="text/javascript">
+    <%
+        if (session.isNew()) { //判断是否为新用户
+    %>
+    jQuery.messager.show({
+        title:'温馨提示:',
+        msg:'你好,欢迎使用傲美订单系统!',
+        timeout:5000,
+        showType:'slide'
+    });
+    <%
+        }
+    %>
+</script>
 </body>
 </html>

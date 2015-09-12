@@ -47,6 +47,8 @@ public class ManufactureOrderAction extends ActionSupport {
     private Integer id;
     @Autowired
     private ManufactureOrderDao manufactureOrderDao;
+
+
     @Action(value="order-list")
     public String orderList(){
         return SUCCESS;
@@ -67,20 +69,20 @@ public class ManufactureOrderAction extends ActionSupport {
         dataMap.put("total", 8);
         return SUCCESS;
     }
-    @Action(value = "addSave", results = { @Result(name = "success", type = "json", params = {
+    @Action(value = "manufactureAddSave", results = { @Result(name = "success", type = "json", params = {
             "root", "dataMap" }) })
     public String addSave(){
         if(dataMap==null){
             dataMap=new HashMap<String, Object>();
         }
         try{
-            int result=manufactureOrderDao.insertSelective(manufactureOrder);
+            int result=manufactureOrderDao.addOrder(manufactureOrder);
             if(result!=1){
                 dataMap.put("errorMsg","添加失败");
             }
         }catch (Exception e){
             dataMap.put("errorMsg","添加失败");
-            e.printStackTrace();
+            log.error("生产单添加失败{}",e);
         }
         return SUCCESS;
     }

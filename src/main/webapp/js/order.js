@@ -12,11 +12,11 @@ function IsNumeric(sText) {
 };
 function calcProdSubTotal() {
     var prodSubTotal = 0;
-    $(".row-total-input").parents('td').find('input:eq(1)').each(function () {
+    $("input[class='row-total-input']").each(function () {
         var valString = $(this).val() || 0;
-        prodSubTotal += parseInt(valString);
+        prodSubTotal=parseFloat(prodSubTotal+parseFloat(valString)).toFixed(4);
     });
-    $("#product-subtotal").parents('td').find('input:eq(1)').val(prodSubTotal);
+    $("#product-subtotal").parents('td').find('input:eq(1)').css('background-color','white').val(prodSubTotal);
 };
 function calcTotalPallets() {
     var totalPallets = 0;
@@ -54,14 +54,12 @@ function addEventForInput(){
     for(var i=0;i<palletsList.length;i++){
         palletsList.eq(i).blur(function () {
             var $this = $(this);
-            var numPallets = $this.val();
+            var numPallets = $this.parents('tr').find("input.num-pallets-input").val();
             var multiplier = $this.parents('tr').find("input.price-per-pallet").val();
             if ((IsNumeric(numPallets)) && (numPallets != '')&&(IsNumeric(multiplier)) && (multiplier != '')) {
-                var rowTotal = numPallets * multiplier;
-                $this.parents('tr').find("td:eq(6) input:eq(1)").css("background-color", "white").val(rowTotal);
-            } else {
-                $this.css("background-color", "#ffdcdc");
-            };
+                var rowTotal = parseFloat(numPallets * multiplier).toFixed(4);
+                $this.parents('tr').find("td:eq(6)").find('input[class="row-total-input"]').val(rowTotal);
+            }
             calcProdSubTotal();
 
         });

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.aomei.model.DeliveryNote" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
-    <result column="deliver_no" property="deliverNo" jdbcType="INTEGER" />
+    <result column="deliver_no" property="deliverNo" jdbcType="VARCHAR" />
     <result column="deliver_way" property="deliverWay" jdbcType="VARCHAR" />
     <result column="deliver_date" property="deliverDate" jdbcType="DATE" />
     <result column="payment_way" property="paymentWay" jdbcType="VARCHAR" />

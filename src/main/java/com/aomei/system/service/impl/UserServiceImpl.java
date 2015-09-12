@@ -10,6 +10,7 @@ import com.aomei.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService{
     public List<Role> getUserRoles(User user) throws Exception {
         List<Role> list=null;
         //获取用户信息
-        user= userMapper.findUser(user);
+        user= userMapper.selectByPrimaryKey(user.getId());
         if(user!=null){
         //获取用户角色
             list=roleMapper.getRolesByUserId(user.getId());
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService{
         if(roles.size()>0){
             return menuMapper.getMenusByRoles(roles);
         }else{
-            return null;
+            return new ArrayList<Menu>();
         }
     }
 }

@@ -1,12 +1,16 @@
 package com.aomei.service.impl;
 
+import com.aomei.dao.NumberRecordMapper;
 import com.aomei.dao.PurchaseDetailDao;
 import com.aomei.dao.PurchaseOrderDao;
+import com.aomei.model.NumberRecord;
 import com.aomei.model.PurchaseDetail;
 import com.aomei.model.PurchaseOrder;
 import com.aomei.service.PurchaseOrderService;
+import com.aomei.util.PrefixUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +22,8 @@ import java.util.Map;
 public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     @Autowired
     PurchaseOrderDao purchaseOrderDao;
-
+    @Autowired
+    private NumberRecordMapper numberRecordMapper;
     @Autowired
     PurchaseDetailDao purchaseDetailDao;
 
@@ -28,7 +33,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     }
 
     @Override
+    @Transactional
     public int add(PurchaseOrder record) {
+        NumberRecord numberRecord=numberRecordMapper.getRecordById();
+        record.setPurchaseNo(PrefixUtil.AMPO_PREFFIX+"00000"+numberRecord.getAmpo());
         int orderId=purchaseOrderDao.insert(record);
         if(record.getDetailList()!=null){
             for(PurchaseDetail detail:record.getDetailList()){
@@ -36,6 +44,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
             }
             purchaseDetailDao.insertPurchaseDetailBatch(record.getDetailList());
         }
+        numberRecord.setAmpo(numberRecord.getAmpo()+1);
+        numberRecordMapper.updateRecord(numberRecord);
         return orderId;
     }
 

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -18,9 +19,10 @@ import java.util.List;
  */
 @Slf4j
 public class AuthorityInterceptor extends AbstractInterceptor{
-
+    private static  final String JSON_LOGIN="loginInJson";
     // 拦截Action处理的拦截方法
     public String intercept(ActionInvocation invocation) throws Exception {
+        HttpServletResponse response=ServletActionContext.getResponse();
         HttpServletRequest request = ServletActionContext.getRequest();
         HttpSession session = request.getSession();
         // 取出名为user的session属性
@@ -34,7 +36,7 @@ public class AuthorityInterceptor extends AbstractInterceptor{
                 if(!isAjaxRequest(request)){
                     // 判断该用户是否有访问改路径的权限
                     boolean flag = false;
-                    List<Menu> listMenu=(List<Menu>)session.getAttribute("user_menus");
+                    List<Menu> listMenu=(List<Menu>)session.getAttribute("userAllMenuList");
                     String address = request.getRequestURI().lastIndexOf("/")== request.getRequestURI().length()-1?request.getRequestURI().substring(0,
                             request.getRequestURI().length() - 1): request.getRequestURI();
                     log.info("访问的地址为:{}",address);
@@ -60,11 +62,10 @@ public class AuthorityInterceptor extends AbstractInterceptor{
                     session.removeAttribute("REDIRECT_URL");
                     if (flag) {
                         return invocation.invoke();
+                    }else{
+                        log.debug("当前用户无访问此菜单(" + url + ")的权限");
+                        return "noAuthority";
                     }
-//                    else {
-//                        log.debug("当前用户无访问此菜单(" + url + ")的权限");
-//                        return "noAuthority";
-//                    }
                 }
 
             }else{
@@ -74,13 +75,13 @@ public class AuthorityInterceptor extends AbstractInterceptor{
                         : address + "?" + request.getQueryString();
                 log.debug("url02:"+address);
                 session.setAttribute("REDIRECT_URL", address);
-
-                // session.put("REDIRECT_URL", request.getRequestURL().toString());
-                // log.info(request.getRequestURL().toString());
                 log.debug("user is not login.");
-                // 没有登陆，将服务器提示设置成一个HttpServletRequest属性
-                // ctx.put("tip","您还没有登录，请登陆系统");
-                return Action.LOGIN;
+                if(isAjaxRequest(request)){
+                    response.sendError(408);
+                    return this.JSON_LOGIN;
+                }else{
+                    return Action.LOGIN;
+                }
             }
         }
         return invocation.invoke();

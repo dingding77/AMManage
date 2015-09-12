@@ -7,6 +7,13 @@ import java.util.Map;
 
 public interface ManufactureOrderDao extends MBaseDao<ManufactureOrder>{
     /**
+     * 该方法 保存时会同步更新生产单序号
+     * @param manufactureOrder
+     * @return
+     * @throws Exception
+     */
+    public int addOrder(ManufactureOrder manufactureOrder)throws Exception;
+    /**
      * 分页查询
      * @param map
      * @return

@@ -25,5 +25,8 @@
         <mapper resource="config/mappers/PurchaseOrderMapper.xml"/>
         <mapper resource="config/mappers/CompanyInfoMapper.xml"/>
         <mapper resource="config/mappers/CommonMapper.xml"/>
+        <mapper resource="config/mappers/RoleResourcesMapper.xml"/>
+        <mapper resource="config/mappers/UserRoleMapper.xml"/>
+        <mapper resource="config/mappers/NumberRecordMapper.xml"/>
     </mappers>
 </configuration>

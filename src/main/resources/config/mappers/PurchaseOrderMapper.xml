@@ -11,10 +11,13 @@
     <result column="is_delete" property="isDelete" jdbcType="CHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+    <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
+
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_id, supplier_name, supplier_contract, supplier_phone, purchase_date, is_delete, 
-    creator, create_time
+    creator, create_time,purchase_no
   </sql>
     <sql id="doQueryParams">
         <if test="purchaseOrder.buyerId != null" >
@@ -40,6 +43,9 @@
         </if>
         <if test="purchaseOrder.createTime != null" >
             and create_time = #{purchaseOrder.createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="purchaseOrder.purchaseNo != null">
+            and purchase_no = #{purchaseOrder.purchaseNo,jdbcType=VARCHAR}
         </if>
     </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -73,11 +79,11 @@
       </selectKey>
     insert into t_purchase_order (buyer_id, supplier_name,
       supplier_contract, supplier_phone, purchase_date, 
-      is_delete, creator, create_time
+      is_delete, creator,ext_info,create_time,purchase_no
       )
     values (#{buyerId,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR},
       #{supplierContract,jdbcType=VARCHAR}, #{supplierPhone,jdbcType=VARCHAR}, #{purchaseDate,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=CHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      #{isDelete,jdbcType=CHAR}, #{creator,jdbcType=VARCHAR},#{extInfo,jdbcType=VARCHAR},now(),#{purchaseNo,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.aomei.model.PurchaseOrder" >
@@ -110,9 +116,15 @@
       <if test="creator != null" >
         creator,
       </if>
+      <if test="extInfo !=null">
+        ext_info,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
+        <if test="purchaseNo != null" >
+            purchase_no,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -139,9 +151,15 @@
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
       </if>
+      <if test="extInfo !=null">
+        #{ext_info,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+        <if test="purchaseNo != null" >
+            #{purchaseNo,jdbcType=VARCHAR},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.PurchaseOrder" >

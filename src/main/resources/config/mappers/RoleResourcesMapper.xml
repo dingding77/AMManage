@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RoleResourcesMapper" >
+  <resultMap id="BaseResultMap" type="com.aomei.model.RoleResources" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="roleId" property="roleid" jdbcType="INTEGER" />
+    <result column="menuId" property="menuid" jdbcType="INTEGER" />
+    <result column="isDelete" property="isdelete" jdbcType="CHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="doQueryParams" >
+    where 1=1
+      <if test="roleid != null" >
+          and roleId = #{roleid,jdbcType=INTEGER}
+      </if>
+      <if test="menuid != null" >
+          and menuId = #{menuid,jdbcType=INTEGER}
+      </if>
+      <if test="isdelete != null" >
+          and isDelete = #{isdelete,jdbcType=CHAR}
+      </if>
+      <if test="createtime != null" >
+          and createTime = #{createtime,jdbcType=TIMESTAMP}
+      </if>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, roleId, menuId, isDelete, createTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aomei.query.RoleResourcesQuery" >
+    select
+    <include refid="Base_Column_List"/>
+    from t_role_resources
+    <include refid="doQueryParams"/>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_role_resources
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_role_resources
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aomei.model.RoleResources" >
+    insert into t_role_resources (roleId, menuId,
+      isDelete, createTime)
+    values (#{roleid,jdbcType=INTEGER}, #{menuid,jdbcType=INTEGER},
+      #{isdelete,jdbcType=CHAR}, now())
+  </insert>
+    <!--批量添加-->
+    <insert id="batchInsert" parameterType="java.util.List" >
+        insert into t_role_resources (roleId, menuId,isDelete, createTime)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+        (#{item.roleid,jdbcType=INTEGER}, #{item.menuid,jdbcType=INTEGER},'N', now())
+        </foreach>
+    </insert>
+    <!--更新删除标识-->
+    <update id="updateDeleteFlag" parameterType="java.util.Map">
+        update t_role_resources set isdelete=#{isDelete,jdbcType=CHAR} where roleid=#{roleId,jdbcType=INTEGER}
+        and menuid in
+        <foreach close=")" collection="menuArray" index="index" item="item" open="(" separator=",">
+            #{item.menuid}
+        </foreach>
+    </update>
+  <insert id="insertSelective" parameterType="com.aomei.model.RoleResources" >
+    insert into t_role_resources
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleid != null" >
+        roleId,
+      </if>
+      <if test="menuid != null" >
+        menuId,
+      </if>
+      <if test="isdelete != null" >
+        isDelete,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="menuid != null" >
+        #{menuid,jdbcType=INTEGER},
+      </if>
+      <if test="isdelete != null" >
+        #{isdelete,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.aomei.query.RoleResourcesQuery" resultType="java.lang.Integer" >
+    select count(*) from t_role_resources
+    <if test="_parameter != null" >
+      <include refid="doQueryParams" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.RoleResources" >
+    update t_role_resources
+    <set >
+      <if test="roleid != null" >
+        roleId = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="menuid != null" >
+        menuId = #{menuid,jdbcType=INTEGER},
+      </if>
+      <if test="isdelete != null" >
+        isDelete = #{isdelete,jdbcType=CHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.RoleResources" >
+    update t_role_resources
+    set roleId = #{roleid,jdbcType=INTEGER},
+      menuId = #{menuid,jdbcType=INTEGER},
+      isDelete = #{isdelete,jdbcType=CHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
