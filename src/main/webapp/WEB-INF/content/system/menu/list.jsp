@@ -30,12 +30,7 @@
         </div>
         <div style="margin-bottom:10px">
             <div>父级菜单:</div>
-            <select name="menu.parentid"  class="easyui-combobox">
-                <s:iterator value="#session['userAllMenuList']" var="menu">
-                    <s:if test="#menu.menuType!=1">
-                        <option value="<s:property value="#menu.id"/>"><s:property value="#menu.name"/></option>
-                    </s:if>
-                </s:iterator>
+            <select id="menu_parentId" name="menu.parentid"  class="easyui-combobox" data-options="url:'getParentMenu.htm',valueField:'id',textField:'name'">
             </select>
         </div>
         <div style="margin-bottom:10px">
@@ -45,7 +40,7 @@
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
-                <option value="2">3</option>
+                <option value="3">3</option>
             </select>
         </div>
         <div style="margin-bottom:10px">
@@ -102,9 +97,6 @@
     });
     $('#dlg').dialog({
         iconCls: 'icon-save',
-        onClose:function(){
-            cancelAdd();
-        },
         closed:true,
         buttons: [{
             text:'Ok',
@@ -130,7 +122,11 @@
 
     function add(){
         showMask('');
-        $('#dlg').dialog('open')
+        $('#menu_parentId').combobox('reload','getParentMenu.htm');
+        $('#dlg').dialog('open');
+        $('div[class="panel window"] div[class="panel-tool"]>a[class="panel-tool-close"]').click(function(){
+            cancelAdd();
+        });
     }
     function cancelAdd(){
         destroyMask();
@@ -183,6 +179,7 @@
     function doSearch(){
         $('#dg').datagrid('load',$('form[id="searchForm"]').serializeJson());
     }
+
 </script>
 </body>
 </html>
