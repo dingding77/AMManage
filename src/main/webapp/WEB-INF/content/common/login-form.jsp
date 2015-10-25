@@ -27,16 +27,13 @@
     <div class="content" style="margin-top: 25px;">
         <div class="title hide">欢迎登录</div>
         <div style="color: red; width: 300px; margin: auto; text-align: center;">${requestScope.errorMsg}</div>
-        <form name="login" action="login.htm" method="post">
+        <form name="login" action="goHome.htm" method="post">
             <fieldset>
                 <div class="input">
-                    <input class="input_all name" name="user.username" id="name" placeholder="用户名" type="text" onFocus="this.className='input_all name_now';" onBlur="this.className='input_all name'" maxLength="24" />
+                    <input class="input_all name" style="height: 50px; font-size: 15px; font-weight: bold;" name="user.username" id="name" placeholder="用户名" type="text" onFocus="this.className='input_all name_now';" onBlur="this.className='input_all name'" maxLength="24" />
                 </div>
                 <div class="input">
-                    <input class="input_all password" name="user.pwd" id="password" type="password" placeholder="密码" onFocus="this.className='input_all password_now';" onBlur="this.className='input_all password'" maxLength="24" />
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" name="remember" id="remember" /><label for="remember"><span>记住密码</span></label>
+                    <input class="input_all password" style="height: 50px; font-size: 15px;" name="user.pwd" id="password" type="password" placeholder="密码" onFocus="this.className='input_all password_now';" onBlur="this.className='input_all password'" maxLength="24" />
                 </div>
                 <div class="enter">
                     <input class="button hide" name="submit" type="submit" value="登录" />
