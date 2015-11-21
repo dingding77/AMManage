@@ -40,7 +40,7 @@
       denote_id)
     values
       (#{goodsNo,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR},
-      #{goodsName,jdbcType=VARCHAR}, #{goodsNum,jdbcType=INTEGER}, #{goodsUnit,jdbcType=VARCHAR}, 
+      #{goodsName,jdbcType=VARCHAR}, #{goodsNum,jdbcType=INTEGER}, #{goodsUnit,jdbcType=VARCHAR},
       #{goodsPrice,jdbcType=DECIMAL}, #{goodsAmount,jdbcType=DECIMAL}, #{realsendNum,jdbcType=INTEGER}, 
       #{denoteId,jdbcType=INTEGER})
   </insert>
@@ -79,10 +79,10 @@
       <if test="goodsUnit != null" >
         goods_Unit,
       </if>
-      <if test="goodsPrice != null" >
+      <if test="goodsPrice != null and goodsPrice>0" >
         goods_Price,
       </if>
-      <if test="goodsAmount != null" >
+      <if test="goodsAmount != null and goodsAmount>0" >
         goods_Amount,
       </if>
       <if test="realsendNum != null" >
@@ -111,10 +111,10 @@
       <if test="goodsUnit != null" >
         #{goodsUnit,jdbcType=VARCHAR},
       </if>
-      <if test="goodsPrice != null" >
+      <if test="goodsPrice != null and goodsPrice>0" >
         #{goodsPrice,jdbcType=DECIMAL},
       </if>
-      <if test="goodsAmount != null" >
+      <if test="goodsAmount != null and goodsAmount>0" >
         #{goodsAmount,jdbcType=DECIMAL},
       </if>
       <if test="realsendNum != null" >
@@ -143,10 +143,10 @@
       <if test="goodsUnit != null" >
         goods_Unit = #{goodsUnit,jdbcType=VARCHAR},
       </if>
-      <if test="goodsPrice != null" >
+      <if test="goodsPrice != null and goodsPrice>0" >
         goods_Price = #{goodsPrice,jdbcType=DECIMAL},
       </if>
-      <if test="goodsAmount != null" >
+      <if test="goodsAmount != null and goodsAmount>0" >
         goods_Amount = #{goodsAmount,jdbcType=DECIMAL},
       </if>
       <if test="realsendNum != null" >
@@ -174,13 +174,13 @@
                 <if test="item.goodsNum != null" >
                     goods_Num = #{item.goodsNum,jdbcType=INTEGER},
                 </if>
-                <if test="item.goodsUnit != null" >
+                <if test="item.goodsUnit !=null" >
                     goods_Unit = #{item.goodsUnit,jdbcType=VARCHAR},
                 </if>
-                <if test="item.goodsPrice != null" >
+                <if test="item.goodsPrice !=null and item.goodsPrice >0" >
                     goods_Price = #{item.goodsPrice,jdbcType=DECIMAL},
                 </if>
-                <if test="item.goodsAmount != null" >
+                <if test="item.goodsAmount !=null and item.goodsAmount >0" >
                     goods_Amount = #{item.goodsAmount,jdbcType=DECIMAL},
                 </if>
                 <if test="item.realsendNum != null" >

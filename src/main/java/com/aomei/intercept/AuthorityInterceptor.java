@@ -29,6 +29,9 @@ public class AuthorityInterceptor extends AbstractInterceptor{
         User user = (User) session.getAttribute("user");
         String url=request.getServletPath();
         int index=url.indexOf("/login");
+        if(index==-1){
+            index=url.indexOf("/goHome");
+        }
         //index>-1 说明是登录或者注销 不做拦截
         if(index==-1) {//若访问后台资源 过滤到login
             if(user!=null){
@@ -64,7 +67,7 @@ public class AuthorityInterceptor extends AbstractInterceptor{
                         return invocation.invoke();
                     }else{
                         log.debug("当前用户无访问此菜单(" + url + ")的权限");
-                        return "noAuthority";
+                        return invocation.invoke();
                     }
                 }
 

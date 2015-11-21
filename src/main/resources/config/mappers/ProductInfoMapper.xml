@@ -1,106 +1,231 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="ProductInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.aomei.model.ProductInfo" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="VARCHAR" />
-    <result column="zh_size" property="zhSize" jdbcType="VARCHAR" />
-    <result column="total_size" property="totalSize" jdbcType="VARCHAR" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductInfoMapper">
+  <resultMap id="BaseResultMap" type="com.aomei.model.ProductInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="pantone_no" jdbcType="VARCHAR" property="pantoneNo" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+    <result column="pstp" jdbcType="VARCHAR" property="pstp" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="is_delete" jdbcType="VARCHAR" property="isDelete" />
+    <result column="price" jdbcType="VARCHAR" property="price" />
+    <result column="style_no" jdbcType="VARCHAR" property="styleNo" />
+
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, name, code, type, zh_size, total_size
+  <sql id="doQueryParams">
+      where 1=1
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="pantoneNo != null">
+                and pantone_no = #{pantoneNo,jdbcType=VARCHAR}
+            </if>
+            <if test="size != null">
+                and size = #{size,jdbcType=VARCHAR}
+            </if>
+            <if test="pstp != null">
+                and pstp = #{pstp,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifyTime != null">
+                and modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="isDelete != null">
+                and is_delete = #{isDelete,jdbcType=VARCHAR}
+            </if>
+            <if test="price != null">
+                and price = #{price,jdbcType=VARCHAR}
+            </if>
+            <if test="styleNo != null">
+                and style_no = #{styleNo,jdbcType=VARCHAR}
+            </if>
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <sql id="Base_Column_List">
+    id, name, code,style_no, type, pantone_no, size, pstp, create_time, modify_time, is_delete,
+    price
+  </sql>
+  <select id="selectByExample" parameterType="com.aomei.query.ProductInfoQuery" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from t_product_info
+      <include refid="doQueryParams" />
+  </select>
+  <select id="selectLikeByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from t_product_info
+      where name like  CONCAT('%',#{name},'%' )
+  </select>
+    <select id="selectPages" parameterType="com.aomei.query.ProductInfoQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product_info
+        <include refid="doQueryParams" />
+        limit #{limitStart},#{limitEnd}
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_product_info
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_product_info
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update  t_product_info set is_delete='Y'
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.aomei.model.ProductInfo" >
+  <insert id="insert" parameterType="com.aomei.model.ProductInfo">
     insert into t_product_info (id, name, code, 
-      type, zh_size, total_size
-      )
+      type, pantone_no,style_no, size,
+      pstp, create_time, modify_time, 
+      is_delete, price)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{type,jdbcType=VARCHAR}, #{zhSize,jdbcType=VARCHAR}, #{totalSize,jdbcType=VARCHAR}
-      )
+      #{type,jdbcType=VARCHAR}, #{pantoneNo,jdbcType=VARCHAR},#{styleNo,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR},
+      #{pstp,jdbcType=VARCHAR},now(),now(),
+      'N', #{price,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.aomei.model.ProductInfo" >
+  <insert id="insertSelective" parameterType="com.aomei.model.ProductInfo">
     insert into t_product_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         name,
       </if>
-      <if test="code != null" >
+      <if test="code != null">
         code,
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type,
       </if>
-      <if test="zhSize != null" >
-        zh_size,
+      <if test="pantoneNo != null">
+        pantone_no,
       </if>
-      <if test="totalSize != null" >
-        total_size,
+      <if test="styleNo != null">
+            style_no,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+      <if test="pstp != null">
+        pstp,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="price != null">
+        price,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
+      <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="code != null" >
+      <if test="code != null">
         #{code,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         #{type,jdbcType=VARCHAR},
       </if>
-      <if test="zhSize != null" >
-        #{zhSize,jdbcType=VARCHAR},
+      <if test="pantoneNo != null">
+        #{pantoneNo,jdbcType=VARCHAR},
       </if>
-      <if test="totalSize != null" >
-        #{totalSize,jdbcType=VARCHAR},
+        <if test="styleNo != null">
+            #{styleNo,jdbcType=VARCHAR},
+        </if>
+      <if test="size != null">
+        #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="pstp != null">
+        #{pstp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.ProductInfo" >
+  <select id="selectCount" parameterType="com.aomei.query.ProductInfoQuery" resultType="java.lang.Integer">
+    select count(*) from t_product_info
+      <include refid="doQueryParams" />
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.ProductInfo">
     update t_product_info
-    <set >
-      <if test="name != null" >
+    <set>
+      <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="code != null" >
+      <if test="code != null">
         code = #{code,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
       </if>
-      <if test="zhSize != null" >
-        zh_size = #{zhSize,jdbcType=VARCHAR},
+      <if test="pantoneNo != null">
+        pantone_no = #{pantoneNo,jdbcType=VARCHAR},
       </if>
-      <if test="totalSize != null" >
-        total_size = #{totalSize,jdbcType=VARCHAR},
+      <if test="size != null">
+        size = #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="pstp != null">
+        pstp = #{pstp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.aomei.model.ProductInfo" >
+  <update id="updateByPrimaryKey" parameterType="com.aomei.model.ProductInfo">
     update t_product_info
     set name = #{name,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
-      zh_size = #{zhSize,jdbcType=VARCHAR},
-      total_size = #{totalSize,jdbcType=VARCHAR}
+      pantone_no = #{pantoneNo,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR},
+      pstp = #{pstp,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

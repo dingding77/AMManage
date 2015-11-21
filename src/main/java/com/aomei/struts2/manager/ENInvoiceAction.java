@@ -4,10 +4,13 @@ import com.aomei.dao.EnCommercialInvoiceDao;
 import com.aomei.dao.EnciOrderDao;
 import com.aomei.model.EnCommercialInvoice;
 import com.aomei.model.EnciOrder;
+import com.aomei.util.FreeMakerStreamUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -15,6 +18,7 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,10 +62,11 @@ public class ENInvoiceAction extends ActionSupport {
         dataMap.put("limitStart",(page-1)*rows);
         dataMap.put("limitEnd",rows);
         List<EnCommercialInvoice> list=enCommercialInvoiceDao.selectPages(dataMap);
+        int total=enCommercialInvoiceDao.selectCount(dataMap);
         log.info("获取商业合同第【{}】页数据，每页显示【{}】条数据",page,rows);
 
         dataMap.put("rows",list);
-        dataMap.put("total", 8);
+        dataMap.put("total", total);
         return SUCCESS;
     }
 
@@ -169,5 +174,40 @@ public class ENInvoiceAction extends ActionSupport {
         }
         return SUCCESS;
     }
+    @Action(value = "enInvoiceAction-exportWord",
+            results = { @Result(name = "success", type = "stream")
+            })
+    public void  excel(){
+        if(id!=null){
+            enCommercialInvoice=enCommercialInvoiceDao.selectByPrimaryKey(id);
+            List<EnciOrder> list=enCommercialInvoice.getEnciOrders();
+            if(list!=null){
+                List<EnciOrder> newList=new ArrayList<EnciOrder>();
+                for(EnciOrder order:list){
+                    if(StringUtils.isNotEmpty(order.getOrderNo())||StringUtils.isNotEmpty(order.getGoodsDesc())||StringUtils.isNotEmpty(order.getPsc())){
+                        newList.add(order);
+                    }
+                }
+                enCommercialInvoice.setEnciOrders(newList);
+            }
+            //模板参数
+            Map<String,Object> templateData = new HashMap<String, Object>();
+            templateData.put("EnCommercialInvoice", enCommercialInvoice);
+            templateData.put("orderList",enCommercialInvoice.getEnciOrders());
+            String filedisplay="发票_"+enCommercialInvoice.getId();
+            try {
+                String templatePath= FreeMakerStreamUtil.templatePath("/template");
+                FreeMakerStreamUtil fsu=new FreeMakerStreamUtil(templatePath,"CommercialInvoice.xml",filedisplay,templateData, ServletActionContext.getResponse());
+                fsu.createExce();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally{
+
+            }
+        }
+
+    }
+
 
 }

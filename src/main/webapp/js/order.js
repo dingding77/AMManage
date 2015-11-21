@@ -48,20 +48,4 @@ $(function () {
     addEventForInput();
 });
 
-function addEventForInput(){
-    //
-    var palletsList=$('.num-pallets-input,.price-per-pallet').parent().find('input:eq(1)');
-    for(var i=0;i<palletsList.length;i++){
-        palletsList.eq(i).blur(function () {
-            var $this = $(this);
-            var numPallets = $this.parents('tr').find("input.num-pallets-input").val();
-            var multiplier = $this.parents('tr').find("input.price-per-pallet").val();
-            if ((IsNumeric(numPallets)) && (numPallets != '')&&(IsNumeric(multiplier)) && (multiplier != '')) {
-                var rowTotal = parseFloat(numPallets * multiplier).toFixed(4);
-                $this.parents('tr').find("td:eq(6)").find('input[class="row-total-input"]').val(rowTotal);
-            }
-            calcProdSubTotal();
 
-        });
-    }
-}

@@ -64,7 +64,7 @@
                 商业发票
                 <input type="hidden" name="enCommercialInvoice.id" value="${enCommercialInvoice.id}"/>
 
-                <input type="hidden" name="enCommercialInvoice.createUserid" value="${user.userId}"/>
+                <input type="hidden" name="enCommercialInvoice.createUserid" value="${user.id}"/>
             </td>
         </tr>
         <tr>

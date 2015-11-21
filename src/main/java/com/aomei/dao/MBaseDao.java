@@ -62,4 +62,7 @@ public interface MBaseDao <T>{
      * @return
      */
     List<T> selectPages(Map<String,Object> map);
+    int selectCount(Map<String,Object> map);
+
+
 }

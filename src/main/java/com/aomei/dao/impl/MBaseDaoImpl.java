@@ -91,4 +91,8 @@ public class MBaseDaoImpl<T> extends SqlSessionDaoSupport {
     public int deleteByPrimaryKeyArray(Integer[] ids) {
         return getSqlSession().delete(getClassName()+".deleteByPrimaryKeyArray",ids);
     }
+
+    public  int selectCount(Map<String,Object> map){
+        return (Integer)getSqlSession().selectOne(getClassName()+".selectCount",map);
+    }
 }

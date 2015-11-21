@@ -1,5 +1,8 @@
 package com.aomei.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 public class DeliveryGoods implements Serializable {
@@ -12,12 +15,12 @@ public class DeliveryGoods implements Serializable {
     private String goodsName;
 
     private Integer goodsNum;
-
+    @Getter @Setter
     private String goodsUnit;
-
-    private Long goodsPrice;
-
-    private Long goodsAmount;
+    @Getter @Setter
+    private Double goodsPrice;
+    @Getter @Setter
+    private Double goodsAmount;
 
     private Integer realsendNum;
 
@@ -63,30 +66,6 @@ public class DeliveryGoods implements Serializable {
 
     public void setGoodsNum(Integer goodsNum) {
         this.goodsNum = goodsNum;
-    }
-
-    public String getGoodsUnit() {
-        return goodsUnit;
-    }
-
-    public void setGoodsUnit(String goodsUnit) {
-        this.goodsUnit = goodsUnit == null ? null : goodsUnit.trim();
-    }
-
-    public Long getGoodsPrice() {
-        return goodsPrice;
-    }
-
-    public void setGoodsPrice(Long goodsPrice) {
-        this.goodsPrice = goodsPrice;
-    }
-
-    public Long getGoodsAmount() {
-        return goodsAmount;
-    }
-
-    public void setGoodsAmount(Long goodsAmount) {
-        this.goodsAmount = goodsAmount;
     }
 
     public Integer getRealsendNum() {

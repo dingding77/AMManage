@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.aomei.model.PurchaseDetail" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="style_no" property="styleNo" jdbcType="INTEGER" />
+    <result column="style_no" property="styleNo" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="DOUBLE" />
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="buy_num" property="buyNum" jdbcType="INTEGER" />
@@ -38,7 +39,7 @@
       <if test="size != null" >
           and size = #{size,jdbcType=DOUBLE}
       </if>
-      <if test="price != null" >
+      <if test="price != null and price>0" >
           and price = #{price,jdbcType=DECIMAL}
       </if>
       <if test="buyNum != null" >
@@ -187,7 +188,8 @@
   <update id="updateByPrimaryKey" parameterType="com.aomei.model.PurchaseDetail" >
     update t_purchase_detail
     set name = #{name,jdbcType=VARCHAR},
-      style_no = #{styleNo,jdbcType=INTEGER},
+      style_no = #{styleNo,jdbcType=VARCHAR},
+      color_no = #{colorNo,jdbcType=VARCHAR},
       size = #{size,jdbcType=DOUBLE},
       price = #{price,jdbcType=DECIMAL},
       buy_num = #{buyNum,jdbcType=INTEGER},
@@ -207,7 +209,10 @@
                     name = #{item.name,jdbcType=VARCHAR},
                 </if>
                 <if test="item.styleNo != null" >
-                    style_no = #{item.styleNo,jdbcType=INTEGER},
+                    style_no = #{item.styleNo,jdbcType=VARCHAR},
+                </if>
+                <if test="item.colorNo != null" >
+                    color_no = #{item.colorNo,jdbcType=VARCHAR},
                 </if>
                 <if test="item.size != null" >
                     size = #{item.size,jdbcType=DOUBLE},

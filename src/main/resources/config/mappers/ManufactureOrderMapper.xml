@@ -58,16 +58,127 @@
     from t_manufacture_order
     where id = #{id,jdbcType=INTEGER}
   </select>
+    <sql id="doQueryParams">
+        where 1=1
+        <if test="manufactureOrder!=null">
+            <if test="manufactureOrder.cstmCode != null and manufactureOrder.cstmCode !=''" >
+                AND cstm_Code=#{manufactureOrder.cstmCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proNo != null and manufactureOrder.proNo !=''" >
+                AND pro_No=#{manufactureOrder.proNo,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.orderDate != null" >
+                AND order_Date=#{manufactureOrder.orderDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.deliveryDate != null" >
+                AND delivery_Date=#{manufactureOrder.deliveryDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.houdaoRequests != null" >
+                AND houdao_Requests=#{manufactureOrder.houdao_Requests,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.board != null" >
+                AND board=#{manufactureOrder.board,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proNum != null" >
+                AND pro_Num=#{manufactureOrder.proNum,jdbcType=INTEGER}
+            </if>
+            <if test="manufactureOrder.proDesc != null" >
+                AND pro_Desc=#{manufactureOrder.proDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.styleNo != null" >
+                AND style_No=#{manufactureOrder.styleNo,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.callslipDate != null" >
+                AND callslip_Date=#{manufactureOrder.callslipDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.materialNo != null" >
+                AND material_No=#{manufactureOrder.materialNo,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.needNum != null" >
+                AND need_Num=#{manufactureOrder.needNum,jdbcType=INTEGER}
+            </if>
+            <if test="manufactureOrder.realNum != null" >
+                AND real_Num=#{manufactureOrder.realNum,jdbcType=INTEGER}
+            </if>
+            <if test="manufactureOrder.revertDate != null" >
+                AND revert_Date=#{manufactureOrder.revertDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.revertNum != null" >
+                AND revert_Num=#{manufactureOrder.revertNum,jdbcType=INTEGER}
+            </if>
+            <if test="manufactureOrder.repeatOrder != null" >
+                AND repeat_Order=#{manufactureOrder.repeatOrder,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.newEdition != null" >
+                AND new_Edition=#{manufactureOrder.newEdition,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proOperator != null" >
+                AND pro_Operator=#{manufactureOrder.proOperator,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proPasteLike != null" >
+                AND pro_Paste_Like=#{manufactureOrder.proPasteLike,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proTimeConsuming != null" >
+                AND pro_Time_Consuming=#{manufactureOrder.proTimeConsuming,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proDate != null" >
+                AND pro_Date=#{manufactureOrder.proDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.fssOperator != null" >
+                AND fss_Operator=#{manufactureOrder.fssOperator,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.fssDate != null" >
+                AND fss_Date=#{manufactureOrder.fssDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.fssTimeConsuming != null" >
+                AND fss_Time_Consuming=#{manufactureOrder.fssTimeConsuming,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.qcOperator != null" >
+                AND QC_Operator=#{manufactureOrder.qcOperator,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.qcTimeConsuming != null" >
+                AND QC_Time_Consuming=#{manufactureOrder.qcTimeConsuming,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.goodsPasteLike != null" >
+                AND goods_Paste_Like=#{manufactureOrder.goodsPasteLike,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.packDetail != null" >
+                AND pack_Detail=#{manufactureOrder.packDetail,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.qcDate != null" >
+                AND QC_Date=#{manufactureOrder.qcDate,jdbcType=DATE}
+            </if>
+            <if test="manufactureOrder.proPlanning != null" >
+                AND pro_Planning=#{manufactureOrder.proPlanning,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.proDocumentary != null" >
+                AND pro_Documentary=#{manufactureOrder.proDocumentary,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.remark != null" >
+                AND remark=#{manufactureOrder.remark,jdbcType=VARCHAR}
+            </if>
+            <if test="manufactureOrder.beginOrderDate !=null and manufactureOrder.beginOrderDate !='' and manufactureOrder.endOrderDate ==null">
+                AND str_to_date(order_Date,'%Y-%m-%d')>=#{manufactureOrder.beginOrderDate}
+            </if>
+            <if test="manufactureOrder.beginOrderDate !=null and manufactureOrder.beginOrderDate !='' and manufactureOrder.endOrderDate !=null">
+                AND str_to_date(order_Date,'%Y-%m-%d') between #{manufactureOrder.beginOrderDate}
+                AND #{manufactureOrder.endOrderDate}
+            </if>
+        </if>
+
+    </sql>
     <select id="selectPages" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
         select
         <include refid="Base_Column_List" />
         ,
         <include refid="Blob_Column_List" />
         from t_manufacture_order
-        where 1=1
-
+        <include refid="doQueryParams"/>
         limit #{limitStart},#{limitEnd}
-
+    </select>
+    <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(0) from t_manufacture_order
+        <include refid="doQueryParams"/>
     </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_manufacture_order

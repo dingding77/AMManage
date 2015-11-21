@@ -21,8 +21,14 @@ public class PurchaseOrder implements Serializable {
     private Date purchaseDate;
 
     private String isDelete;
-
+    private String payment;
+    private Date deliveryTime;
     private String creator;
+    private String touching;//制单
+    private String auditor;
+    private String director;
+    private String department;
+    private String salesman;
     /**采购单号 格式AMPO000001**/
     private String purchaseNo;
     private String extInfo;//拓展信息

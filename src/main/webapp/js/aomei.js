@@ -64,6 +64,17 @@ function toolDestroy(url,idKey) {
     }
 }
 
+function toolExport(url,key){
+    var rows= $('#dg').datagrid('getSelections');
+    if(rows.length==0){
+        $.messager.alert("操作提示", "请选择一项！","info");
+    }else if(rows.length>1){
+        $.messager.alert("操作提示", "只能选择一项数据！","info");
+    }else{
+        var storeId=rows[0][key];
+        window.location.href=url+storeId;
+    }
+}
 function showMask(showMsg){
     $("<div class=\"datagrid-mask\"></div>").css({display:"block",width:'100%',height:'100%'}).appendTo("body");
     if(showMsg){
@@ -112,9 +123,19 @@ function showMenu(id){
                     var methodName=menu.methodName;
                     var name=menu.name;
                     var link='<a href="#" class="easyui-linkbutton" iconCls="'+iconImg+'" plain="true" onclick="'+methodName+'">'+name+' </a>';
+                    if(methodName=='exportFile(),printFile()'){
+                        link='<a href="javascript:void(0)" id="sb" iconCls="icon-save" onclick="javascript:void(0)">保存</a>';
+                        link=link+'<div id="mm" style="width:100px;">';
+                        link=link+'<div iconCls="icon-undo" onclick="exportFile()">导出</div>';
+                        link=link+'<div iconCls="icon-print" onclick="printFile()">打印</div>';
+                        link=link+'</div>';
+                    }
                     $('#showMenu').append(link);
                 });
                 $.parser.parse('#showMenu');
+                $('#sb').splitbutton({
+                    menu:'#mm'
+                });
 
             }
         }

@@ -11,12 +11,54 @@
     <result column="docTrade_user" property="doctradeUser" jdbcType="VARCHAR" />
     <result column="docTrade_date" property="doctradeDate" jdbcType="DATE" />
     <result column="busi_user" property="busiUser" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="create_userId" property="createUserid" jdbcType="INTEGER" />
+      <result column="relation_order_type" jdbcType="VARCHAR" property="relationOrderType" />
+      <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
       <collection property="deliveryGoodsList" column="id" select="DeliveryGoodsMapper.selectDeliveryGoodsByDnId"/>
   </resultMap>
+  <sql id="doQueryParams">
+    where 1=1
+      <if test="deliveryNote!=null">
+          <if test="deliveryNote.customerName != null and deliveryNote.customerName != ''" >
+              AND customer_name=#{deliveryNote.customerName,jdbcType=VARCHAR}
+          </if>
+          <if test="deliveryNote.deliverNo != null and deliveryNote.deliverNo != ''" >
+              AND deliver_no=#{deliveryNote.deliverNo,jdbcType=VARCHAR}
+          </if>
+          <if test="deliveryNote.deliverWay != null and deliveryNote.deliverWay != ''" >
+              AND deliver_way=#{deliveryNote.deliverWay,jdbcType="VARCHAR"}
+          </if>
+          <if test="deliveryNote.deliverDate != null" >
+              AND deliver_date=#{deliveryNote.deliverDate,jdbcType=DATE}
+          </if>
+          <if test="deliveryNote.paymentWay != null and deliveryNote.paymentWay != ''" >
+              AND payment_way=#{deliveryNote.paymentWay,jdbcType=VARCHAR}
+          </if>
+          <if test="deliveryNote.doctradeUser != null and deliveryNote.doctradeUser != ''" >
+              AND docTrade_user=#{deliveryNote.deliveryNote.doctradeUser,jdbcType=VARCHAR}
+          </if>
+          <if test="deliveryNote.doctradeDate != null" >
+              AND docTrade_date=#{deliveryNote.deliveryNote.doctradeDate,jdbcType=DATE}
+          </if>
+          <if test="deliveryNote.busiUser != null and deliveryNote.busiUser !=''" >
+              AND busi_user=#{deliveryNote.busiUser,jdbcType=VARCHAR}
+          </if>
+          <if test="deliveryNote.createUserid != null">
+              AND create_userId={deliveryNote.createUserid,jdbcType=INTEGER}
+          </if>
+          <if test="relationOrderType != null">
+              AND  relation_order_type=#{relationOrderType,jdbcType=VARCHAR}
+          </if>
+          <if test="orderNo != null">
+              AND  order_No=#{orderNo,jdbcType=VARCHAR}
+          </if>
+      </if>
+
+  </sql>
   <sql id="Base_Column_List" >
     id, customer_name, deliver_no, deliver_way, deliver_date, payment_way, docTrade_user, 
-    docTrade_date, busi_user, create_userId
+    docTrade_date, busi_user, create_userId,receiver,relation_order_type,order_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -24,11 +66,15 @@
     from t_delivery_note
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+  select count(0) from t_delivery_note
+  <include refid="doQueryParams"/>
+  </select>
     <select id="selectPages" resultMap="BaseResultMap" parameterType="java.util.Map" >
         select
         <include refid="Base_Column_List" />
         from t_delivery_note
-        where 1=1
+        <include refid="doQueryParams"/>
         limit #{limitStart},#{limitEnd}
     </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -49,11 +95,11 @@
     insert into t_delivery_note (customer_name, deliver_no,
       deliver_way, deliver_date, payment_way, 
       docTrade_user, docTrade_date, busi_user, 
-      create_userId)
+      create_userId,relation_order_type,order_no)
     values (#{customerName,jdbcType=VARCHAR}, #{deliverNo,jdbcType=INTEGER},
       #{deliverWay,jdbcType=VARCHAR}, #{deliverDate,jdbcType=DATE}, #{paymentWay,jdbcType=VARCHAR}, 
       #{doctradeUser,jdbcType=VARCHAR}, #{doctradeDate,jdbcType=DATE}, #{busiUser,jdbcType=VARCHAR}, 
-      #{createUserid,jdbcType=INTEGER})
+      #{createUserid,jdbcType=INTEGER},#{relationOrderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.aomei.model.DeliveryNote" >
       <selectKey    keyProperty="id" resultType="int" order="AFTER">
@@ -88,6 +134,12 @@
       <if test="createUserid != null" >
         create_userId,
       </if>
+        <if test="relationOrderType !=null">
+            relation_order_type,
+        </if>
+        <if test="orderNo != null">
+            order_No,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerName != null" >
@@ -117,6 +169,12 @@
       <if test="createUserid != null" >
         #{createUserid,jdbcType=INTEGER},
       </if>
+        <if test="relationOrderType !=null">
+            #{relationOrderType,jdbcType=VARCHAR},
+        </if>
+        <if test="orderNo != null">
+            #{orderNo,jdbcType=VARCHAR},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.DeliveryNote" >
@@ -146,6 +204,12 @@
       <if test="busiUser != null" >
         busi_user = #{busiUser,jdbcType=VARCHAR},
       </if>
+        <if test="relationOrderType !=null">
+            relation_order_type=#{relationOrderType,jdbcType=VARCHAR},
+        </if>
+        <if test="orderNo != null">
+            AND  order_No=#{orderNo,jdbcType=VARCHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -158,6 +222,8 @@
       payment_way = #{paymentWay,jdbcType=VARCHAR},
       docTrade_user = #{doctradeUser,jdbcType=VARCHAR},
       docTrade_date = #{doctradeDate,jdbcType=DATE},
+      relation_order_type=#{relationOrderType,jdbcType=VARCHAR},
+      order_No=#{orderNo,jdbcType=VARCHAR},
       busi_user = #{busiUser,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -21,9 +21,33 @@
         .combo>input[class*="combo-text validatebox-text"]{ border: 0;outline: none;}
 
     </style>
+    <script type="text/javascript" src="<%=contextPath %>/js/calculate.js"></script>
     <script>
         $(function(){
             $('input[type=text][required=true]').validatebox();
+            for(var i=0;i<0;i++){
+                $('#gooosNum_'+i).numberbox({
+                    onChange:function(){
+                        var goodsNum=($(this).val());
+                        var gooosPrice=($('#gooosPrice_'+i).numberbox('getValue'));
+
+                        if(goodsNum!='' && gooosPrice !=''){
+                            $('#goodsAmount_'+i).val(mul(goodsNum,gooosPrice));
+                        }
+                    }
+                });
+                $('#gooosPrice_'+i).numberbox({
+                    onChange:function(){
+                        var gooosPrice=($(this).val());
+                        var goodsNum=($('#gooosNum_'+i).numberbox('getValue'));
+                        if(goodsNum!='' && gooosPrice !=''){
+                            $('#goodsAmount_'+i).val(mul(goodsNum,gooosPrice));
+                        }else{
+                            $('#goodsAmount_'+i).val('');
+                        }
+                    }
+                });
+            }
         });
         function saveZhInvoice(){
             var url='zhInvoiceAddSave.htm';
@@ -47,8 +71,31 @@
                 }
             });
         }
-        function formReset(){
-            $("input[name='res']").click();
+        function calcMoney(index){
+            var gooosPrice=($('#gooosPrice_'+index).numberbox('getValue'));
+            var goodsNum=($('#gooosNum_'+index).numberbox('getValue'));
+            if(goodsNum!='' && gooosPrice !=''){
+                $('#goodsAmount_'+index).val(mul(goodsNum,gooosPrice));
+            }else{
+                if(goodsNum==''&&gooosPrice!=''){
+                    $('#goodsNum_'+index).validatebox({required: true});
+                    $.parser.parse($("#goodsNum_"+index));
+                }else if(goodsNum!=''&&gooosPrice==''){
+                    $('#gooosPrice_'+index).validatebox({required: true});
+                    $.parser.parse($("#gooosPrice_"+index));
+                }
+                $('#goodsAmount_'+index).val('');
+            }
+            var sumNum=0;
+            $('input[id*="goodsAmount_"]').each(function(){
+                var num=$(this).val();
+                if(num&&num>0){
+                    sumNum=add(sumNum,num);
+                }
+            });
+            if(sumNum>0){
+                $('#total_span').text(sumNum);
+            }
         }
     </script>
 
@@ -58,7 +105,7 @@
 <form  id="form1" action="" method="post" >
     <TABLE class="invoiceTab" WIDTH="80%" BORDER="0" ALIGN="CENTER" CELLPADDING="0" CELLSPACING="0" BGCOLOR="#fff">
         <tr>
-            <td colspan="8" style="font-size:20px; font-weight:bold; text-align:center;">上海傲美实业有限公司</td>
+            <td colspan="8"  style="font-size:20px; font-weight:bold; text-align:center;">上海傲美实业有限公司</td>
         </tr>
         <tr>
             <td colspan="8" style="text-align:center">上海市嘉定区南翔镇昌翔路575号2号门2楼  TEL:021-66306672   FAX:021-56065197
@@ -66,6 +113,11 @@
         </tr>
         <tr>
             <td colspan="8" style="font-size:20px; font-weight:bold; text-align:center">送  货  单</td>
+        </tr>
+        <tr>
+            <td colspan="8">
+            对应订单类型&nbsp;&nbsp;生产单:<input name="relationOrder" value="shengchan" type="radio" checked="true" />采购单:<input name="relationOrder" value="caigou" type="radio"/>
+            </td>
         </tr>
         <tr>
             <td colspan="5">客户名称：<input required="true" type="text"name="deliveryNote.customerName" /></td>
@@ -77,10 +129,10 @@
         </tr>
         <tr>
             <td colspan="5">制单日期：
-                <input class="Wdate" name="deliveryNote.doctradeDate"  type="text"  style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/>
+                <input class="Wdate" name="deliveryNote.doctradeDate"  type="text"   onFocus="WdatePicker({isShowClear:false})"/>
             </td>
             <td colspan="3">送货日期：
-                <input class="Wdate" name="deliveryNote.deliverDate"  type="text"  style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/>
+                <input class="Wdate" name="deliveryNote.deliverDate"  type="text"   onFocus="WdatePicker({isShowClear:false})"/>
             </td>
         </tr>
         <tr class="title">
@@ -98,10 +150,10 @@
                 <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].goodsNo"></td>
                 <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].contractNo"></td>
                 <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].goodsName"></td>
-                <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].goodsNum"></td>
+                <td><input type="text"  id="gooosNum_${index}"  class="textbox-text easyui-numberbox" name="deliveryNote.deliveryGoodsList[${index}].goodsNum" data-options="min:1,onChange:function(){calcMoney(${index})}"></td>
                 <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].goodsUnit"></td>
-                <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].goodsPrice"></td>
-                <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].goodsAmount"></td>
+                <td><input type="text" id="gooosPrice_${index}" class="textbox-text easyui-numberbox" data-options="precision:4,min:0,onChange:function(){calcMoney(${index})}"  name="deliveryNote.deliveryGoodsList[${index}].goodsPrice"></td>
+                <td><input type="text" id="goodsAmount_${index}"  name="deliveryNote.deliveryGoodsList[${index}].goodsAmount"></td>
                 <td><input type="text"  name="deliveryNote.deliveryGoodsList[${index}].realsendNum"></td>
             </tr>
         </s:iterator>
@@ -109,7 +161,7 @@
             <td>大写金额:</td>
             <td colspan="4">&nbsp;</td>
             <td>合计金额:</td>
-            <td colspan="2">&nbsp;</td>
+            <td colspan="2"><span id="total_span"></span></td>
         </tr>
         <tr>
             <td colspan="8">
@@ -122,9 +174,9 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">制单人:${user.userName}</td>
-            <td colspan="3">业务员:<input type="text" value="${user.userName}"></td>
-            <td colspan="3">收货人签名:<input type="text"></td>
+            <td colspan="2">制单人:${user.username}<input type="hidden" value="${user.username}" name="deliveryNote.doctradeUser"/></td>
+            <td colspan="3">业务员:<input type="text" value="${user.username}" name="deliveryNote.busiUser"></td>
+            <td colspan="3">收货人签名:<input type="text" name="deliveryNote.receiver"></td>
         </tr>
     </TABLE>
     <div id="button" style="margin-top: 20px;">

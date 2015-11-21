@@ -13,7 +13,6 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,13 +40,7 @@ public class CustomerAction extends BaseAction<Customer>{
     @Action(value = "showCustomer", results = { @Result(name = "success", type = "json", params = {
             "root", "customers" }) })
     public String showCustomer(){
-        customers=new ArrayList<Customer>();
-        for(int i=0;i<10;i++){
-            Customer customer=new Customer();
-            customer.setName("Name"+i);
-            customer.setCode("0000"+i);
-            customers.add(customer);
-        }
+        customers=customerDao.selectPages(null);
         return SUCCESS;
     }
 
@@ -55,8 +48,7 @@ public class CustomerAction extends BaseAction<Customer>{
             "root", "customer" }) })
     public String getCustomerInfoByCode(){
         if(customer!=null){
-            customer.setAddress("上海市嘉定区");
-            customer.setPhone("13621853980");
+            customerDao.selectCustomerByCode(customer.getCode());
         }
         return SUCCESS;
     }

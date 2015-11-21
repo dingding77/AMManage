@@ -1,12 +1,14 @@
 package com.aomei.util;
 
 import com.aomei.model.Menu;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 /**
  * Created by Administrator on 2015/6/21.
  */
+@Slf4j
 public class TreeMenu {
     private StringBuffer html = new StringBuffer();
     private List<Menu> nodes;//菜单节点
@@ -40,13 +42,14 @@ public class TreeMenu {
         return html.toString();
     }
     public void build(Menu menu){
+        log.info("当前菜单为:{}",menu.getName());
         List<Menu> children=menu.getChildrens();
 
         if(children!=null&&children.size()>0){
             for(int i=0;i<children.size();i++){
 
                 Menu sonMenu=children.get(i);
-                if(sonMenu.getLevel()>1){
+                if(sonMenu.getLevel()>1&&i==0){
                     html.append(",'child':[{");
                 }else{
                     html.append("{");
@@ -58,14 +61,10 @@ public class TreeMenu {
                 html.append("'url':"+url);
                 build(sonMenu);
 
-                if(sonMenu.getLevel()>1){
+                if(sonMenu.getLevel()>1&&i==children.size()-1){
                     html.append("}]");
                 }else{
-                    if(i==children.size()-1){
-                        html.append("}");
-                    }else{
-                        html.append("},");
-                    }
+                    html.append("},");
                 }
 
             }

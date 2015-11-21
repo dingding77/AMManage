@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
         int orderId=purchaseOrderDao.insert(record);
         if(record.getDetailList()!=null){
             for(PurchaseDetail detail:record.getDetailList()){
-                detail.setPurchaseId(orderId);
+                detail.setPurchaseId(record.getId());
             }
             purchaseDetailDao.insertPurchaseDetailBatch(record.getDetailList());
         }
@@ -65,16 +66,39 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     }
 
     @Override
-    public int updateByIdSelective(PurchaseOrder record) {
-        int rows=purchaseOrderDao.updateByPrimaryKeySelective(record);
-        purchaseDetailDao.batchUpdate(record.getDetailList());
+    public int updateByIdSelective(PurchaseOrder record) throws Exception{
+        int rows=-1;
+        try{
+            rows=purchaseOrderDao.updateByPrimaryKeySelective(record);
+            purchaseDetailDao.batchUpdate(record.getDetailList());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
         return rows;
     }
 
     @Override
+    @Transactional
     public int updateById(PurchaseOrder record) {
-        int rows=purchaseOrderDao.updateByPrimaryKey(record);
-        purchaseDetailDao.batchUpdate(record.getDetailList());
+        int rows=purchaseOrderDao.updateByPrimaryKeySelective(record);
+        if(rows>0){
+            List<PurchaseDetail> detailList=record.getDetailList();
+            if(detailList!=null){
+                List<PurchaseDetail> addList=new ArrayList<PurchaseDetail>();
+                for(PurchaseDetail detail:detailList){
+                    if(detail.getId()==null){
+                        detail.setPurchaseId(record.getId());
+                        addList.add(detail);
+                    }
+                }
+                detailList.removeAll(addList);
+                purchaseDetailDao.batchUpdate(detailList);
+                if(addList.size()>0){
+                    purchaseDetailDao.insertPurchaseDetailBatch(addList);
+                }
+            }
+        }
         return rows;
     }
 
@@ -90,6 +114,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
     @Override
     public int selectCount(Map<String, Object> param) {
-        return 0;
+        return purchaseOrderDao.selectCount(param);
     }
 }

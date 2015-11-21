@@ -137,9 +137,9 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">制单人:${user.userName}</td>
-            <td colspan="3">业务员:<input type="text" value="${user.userName}"></td>
-            <td colspan="3">收货人签名:<input type="text"></td>
+            <td colspan="2">制单人:${deliveryNote.doctradeUser}</td>
+            <td colspan="3">业务员:<input type="text" value="${deliveryNote.busiUser}" name="deliveryNote.busiUser"></td>
+            <td colspan="3">收货人签名:<input type="text" value="${deliveryNote.receiver}" name="deliveryNote.receiver"></td>
         </tr>
     </TABLE>
     <div id="button" style="margin-top: 20px;">

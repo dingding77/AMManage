@@ -56,7 +56,7 @@
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aomei.query.MenuQuery" >
     select
     <include refid="Base_Column_List"/>
-      FROM T_MENU
+      FROM t_menu
       <include refid="doQueryParams"/>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -213,12 +213,12 @@
     <select id="queryAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from T_MENU where is_delete='N'
+        from t_menu where is_delete='N'
     </select>
     <select id="getMenusByRoles" resultMap="BaseResultMap" parameterType="java.util.List">
         select
         <include refid="Base_Column_List"/>
-        from T_MENU M where is_delete='N' and exists(
+        from t_menu M where is_delete='N' and exists(
         select 1 from t_role_resources rs where rs.menuId=M.id and rs.isDelete='N'
         and rs.roleId in
         <foreach collection="list" item="role" index="index"

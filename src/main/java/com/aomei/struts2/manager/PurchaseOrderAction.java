@@ -1,15 +1,19 @@
 package com.aomei.struts2.manager;
 
 import com.aomei.dao.CompanyInfoDao;
+import com.aomei.dao.PurchaseDetailDao;
 import com.aomei.model.CompanyInfo;
+import com.aomei.model.PurchaseDetail;
 import com.aomei.model.PurchaseOrder;
 import com.aomei.service.PurchaseOrderService;
+import com.aomei.util.FreeMakerStreamUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -17,6 +21,7 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +47,12 @@ public class PurchaseOrderAction extends ActionSupport {
     public Integer id;             //操作参数 单一主键
     @Getter @Setter
     public PurchaseOrder purchaseOrder;                //实体对象
+    @Autowired
+    public PurchaseDetailDao purchaseDetailDao;
     @Getter @Setter
     CompanyInfo companyInfo;
+    @Getter @Setter
+    String relation;
     @Autowired
     private PurchaseOrderService purchaseOrderService;
     @Autowired
@@ -56,20 +65,56 @@ public class PurchaseOrderAction extends ActionSupport {
         return SUCCESS;
     }
 
-    @Action(value="update")
-    public String toUpdatePage(){
-        int rows=purchaseOrderService.updateById(purchaseOrder);
-        return SUCCESS;
+    @Action(value="edit")
+    public String toEditPage(){
+        try{
 
+            purchaseOrder=purchaseOrderService.getByPrimaryKey(id);
+            String extInfo=purchaseOrder.getExtInfo();
+            companyInfo=new CompanyInfo();
+            if(StringUtils.isNotEmpty(extInfo)){
+                JSONObject jsonObject=JSONObject.fromObject(extInfo);
+                String supplierName=jsonObject.getString("supplierName");
+                if(StringUtils.isNotEmpty(supplierName)){
+                    purchaseOrder.setSupplierName(supplierName);
+                }
+                String supplierContract=jsonObject.getString("supplierContract");
+                if(StringUtils.isNotEmpty(supplierContract)){
+                    purchaseOrder.setSupplierContract(supplierContract);
+                }
+                String supplierPhone=jsonObject.getString("supplierPhone");
+                if(StringUtils.isNotEmpty(supplierPhone)){
+                    purchaseOrder.setSupplierPhone(supplierPhone);
+                }
+                String companyName=jsonObject.getString("companyName");
+                if(StringUtils.isNotEmpty(companyName)){
+                    companyInfo.setName(companyName);
+                }
+                String companyPhone=jsonObject.getString("companyPhone");
+                if(StringUtils.isNotEmpty(companyPhone)){
+                    companyInfo.setTelephone(companyPhone);
+                }
+                String companyContract=jsonObject.getString("companyContract");
+                if(StringUtils.isNotEmpty(companyContract)){
+                    companyInfo.setContract(companyContract);
+                }
+
+            }
+            log.info("订单{}共包含{}个产品",id,purchaseOrder.getDetailList().size());
+        }catch (Exception e){
+            log.error("获取数据异常{}",e);
+        }
+        return SUCCESS;
     }
+
     @Action(value="show")
     public String toShowPage(){
-        this.purchaseOrder=purchaseOrderService.getByPrimaryKey(id);
-        return SUCCESS;
+        return toEditPage();
     }
 
     @Action(value="list")
     public String toListPage(){
+        log.info("purchase/list、relation={}",relation);
         return SUCCESS;
     }
 
@@ -92,7 +137,7 @@ public class PurchaseOrderAction extends ActionSupport {
             dataMap.put("rows",list);
             dataMap.put("total", total);
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("采购单查询异常{}",e);
         }
         return SUCCESS;
     }
@@ -134,7 +179,26 @@ public class PurchaseOrderAction extends ActionSupport {
     @Action(value = "editSave", results = { @Result(name = "success", type = "json", params = {
             "root", "dataMap" }) })
     public String editSave(){
+        if(dataMap==null){
+            dataMap=new HashMap<String, Object>();
+        }
         try {
+            String extInfo=purchaseOrder.getExtInfo();
+            if(StringUtils.isNotEmpty(extInfo)){
+                JSONObject jsonObject=JSONObject.fromObject(extInfo);
+                String supplierName=jsonObject.getString("supplierName");
+                if(StringUtils.isNotEmpty(supplierName)){
+                    purchaseOrder.setSupplierName(supplierName);
+                }
+                String supplierContract=jsonObject.getString("supplierContract");
+                if(StringUtils.isNotEmpty(supplierContract)){
+                    purchaseOrder.setSupplierContract(supplierContract);
+                }
+                String supplierPhone=jsonObject.getString("supplierPhone");
+                if(StringUtils.isNotEmpty(supplierPhone)){
+                    purchaseOrder.setSupplierPhone(supplierPhone);
+                }
+            }
             this.purchaseOrderService.updateById(purchaseOrder);
         }catch (Exception e){
             dataMap.put("errorMsg","修改失败");
@@ -177,5 +241,68 @@ public class PurchaseOrderAction extends ActionSupport {
         }
         return SUCCESS;
     }
+    @Action(value = "purchaseOrder-exportWord",
+            results = { @Result(name = "success", type = "stream")
+            })
+    public void  excel(){
+        this.purchaseOrder=this.purchaseOrderService.getByPrimaryKey(this.purchaseOrder.getId());
+        //模板参数
+        Map<String,Object> templateData = new HashMap<String, Object>();
+        templateData.put("purchaseOrder", purchaseOrder);
+        templateData.put("purchaseDetailList",purchaseOrder.getDetailList());
+        String extInfo=purchaseOrder.getExtInfo();
+        if(StringUtils.isNotEmpty(extInfo)){
+            JSONObject jsonObject=JSONObject.fromObject(extInfo);
+            String supplierName=jsonObject.getString("supplierName");
+            if(StringUtils.isNotEmpty(supplierName)){
+                purchaseOrder.setSupplierName(supplierName);
+            }
+            String supplierContract=jsonObject.getString("supplierContract");
+            if(StringUtils.isNotEmpty(supplierContract)){
+                purchaseOrder.setSupplierContract(supplierContract);
+            }
+            String supplierPhone=jsonObject.getString("supplierPhone");
+            if(StringUtils.isNotEmpty(supplierPhone)){
+                purchaseOrder.setSupplierPhone(supplierPhone);
+            }
+            String companyName=jsonObject.getString("companyName");
+            if(StringUtils.isNotEmpty(companyName)){
+                templateData.put("companyName",companyName);
+            }
+            String companyPhone=jsonObject.getString("companyPhone");
+            if(StringUtils.isNotEmpty(companyPhone)){
+                templateData.put("companyPhone",companyPhone);
+            }
+            String companyContract=jsonObject.getString("companyContract");
+            if(StringUtils.isNotEmpty(companyContract)){
+                templateData.put("companyContract",companyContract);
+            }
+            String companyDate=jsonObject.getString("companyDate");
+            if(StringUtils.isNotEmpty(companyDate)){
+                templateData.put("companyDate",companyDate);
+            }
+        }
+        List<PurchaseDetail> detailList=purchaseOrder.getDetailList();
+        int totalNum=0;
+        BigDecimal totalAmount=new BigDecimal("0.0");
+        if(detailList!=null){
+            for(PurchaseDetail detail:detailList){
+                totalNum=totalNum+detail.getBuyNum();
+                totalAmount= totalAmount.add(new BigDecimal(detail.getTotalAmt()));
+            }
+        }
+        templateData.put("totalAmount",totalAmount.doubleValue());
+        templateData.put("totalNum",totalNum);
+        String filedisplay="采购单("+this.purchaseOrder.getPurchaseNo()+")";
+        try {
+            String templatePath= FreeMakerStreamUtil.templatePath("/template");
+            FreeMakerStreamUtil fsu=new FreeMakerStreamUtil(templatePath,"PurchaseOrder.xml",filedisplay,templateData, ServletActionContext.getResponse());
+            fsu.createExce();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally{
 
+        }
+    }
 }

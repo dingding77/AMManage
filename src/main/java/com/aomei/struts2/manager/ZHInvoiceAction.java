@@ -6,11 +6,14 @@ import com.aomei.dao.NumberRecordMapper;
 import com.aomei.model.DeliveryGoods;
 import com.aomei.model.DeliveryNote;
 import com.aomei.model.NumberRecord;
+import com.aomei.util.FreeMakerStreamUtil;
 import com.aomei.util.PrefixUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -18,6 +21,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,11 +68,12 @@ public class ZHInvoiceAction extends ActionSupport {
         try{
             dataMap.put("limitStart",(page-1)*rows);
             dataMap.put("limitEnd",rows);
+            dataMap.put("deliveryNote",deliveryNote);
             List<DeliveryNote> list=deliveryNoteDao.selectPages(dataMap);
             log.info("获取送货单合同第【{}】页数据，每页显示【{}】条数据",page,rows);
-
+            int total=deliveryNoteDao.selectCount(dataMap);
             dataMap.put("rows",list);
-            dataMap.put("total", 8);
+            dataMap.put("total", total);
         }catch (Exception e){
             e.printStackTrace();
             log.info("查询送货单列表异常={}",e);
@@ -98,11 +104,9 @@ public class ZHInvoiceAction extends ActionSupport {
                     dataMap.put("errorMsg","添加失败");
                 }
             }
-
-
         }catch (Exception e){
             dataMap.put("errorMsg","添加失败");
-            e.printStackTrace();
+            log.error("送货单添加异常{}",e);
         }
         return SUCCESS;
     }
@@ -188,6 +192,48 @@ public class ZHInvoiceAction extends ActionSupport {
             e.printStackTrace();
         }
         return SUCCESS;
+    }
+    @Action(value = "zhInvoiceAction-exportWord",
+            results = { @Result(name = "success", type = "stream")
+            })
+    public void  excel(){
+        if(id!=null){
+            BigDecimal sum=new BigDecimal("0.0");
+            deliveryNote=deliveryNoteDao.selectByPrimaryKey(id);
+            List<DeliveryGoods> list=deliveryNote.getDeliveryGoodsList();
+            if(list!=null){
+                List<DeliveryGoods> newList=new ArrayList<DeliveryGoods>();
+                for(DeliveryGoods order:list){
+                    if(StringUtils.isNotEmpty(order.getContractNo())||StringUtils.isNotEmpty(order.getGoodsNo())||StringUtils.isNotEmpty(order.getGoodsNum()+"")){
+                        newList.add(order);
+                        if(order.getGoodsAmount()!=null){
+                            double val=sum.add(new BigDecimal(order.getGoodsAmount())).doubleValue();
+                            sum=new BigDecimal(val);
+                        }
+                    }
+                }
+                deliveryNote.setDeliveryGoodsList(newList);
+            }
+
+            //模板参数
+            Map<String,Object> templateData = new HashMap<String, Object>();
+            String sumExp="=SUM(J10:J"+(deliveryNote.getDeliveryGoodsList().size())+")";
+            templateData.put("deliveryNote", deliveryNote);
+            templateData.put("goodsList",deliveryNote.getDeliveryGoodsList());
+            templateData.put("sumExp",sum.doubleValue());
+            String filedisplay="送货单";
+            try {
+                String templatePath= FreeMakerStreamUtil.templatePath("/template");
+                FreeMakerStreamUtil fsu=new FreeMakerStreamUtil(templatePath,"DeliveryNote.xml",filedisplay,templateData, ServletActionContext.getResponse());
+                fsu.createExce();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally{
+
+            }
+        }
+
     }
 
 }

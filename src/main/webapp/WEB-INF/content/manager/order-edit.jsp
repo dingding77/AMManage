@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/content/common/header.jspf"%>
-    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/newtable.css" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+<link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/newtable.css" />
     <style>
         th,td{ line-height: 30px; padding-left: 5px;}
         .orderTab tr td input{border: 0; border-bottom: 1px solid gray; outline: none;}
@@ -71,10 +73,53 @@
         </tr>
         <tr class="firstTabInfo">
             <td>后道要求</td>
-            <td colspan="3"><input type="text" name="manufactureOrder.houdaoRequests" value="${manufactureOrder.houdaoRequests}"></td>
+            <td colspan="3" style="text-align: left;">
+                <select class="easyui-combobox" id="pstp"  name="houdaoRequests" style="width:200px;height:50px">
+
+                </select>
+            </td>
             <td>机台</td>
-            <td colspan="3"><input type="text" name="manufactureOrder.board" value="${manufactureOrder.board}"></td>
+            <td colspan="3">
+                <input type="text" class="easyui-combobox" id="board"  name="board" >
+            </td>
         </tr>
+        <script type="text/javascript">
+        $(function(){
+            $('#pstp').combobox({
+                url:'../system/dictionary/getPstpList.htm?dataDictionary.type=pstp',
+                valueField:'value',
+                textField:'value',
+                multiple:true,
+                onLoadSuccess:function(data){
+                    if(data){
+                        var _value='${manufactureOrder.houdaoRequests}';
+                        if(_value){
+                            $('#pstp').combobox('setText',_value);
+                            //此处分割符不是','而是 ', '
+                            $('#pstp').combobox('setValues',_value.split(', '));
+                        }
+                    }
+                }
+            });
+            $('#board').combobox({
+                url:'../system/dictionary/getPstpList.htm?dataDictionary.type=ms',
+                valueField:'value',
+                textField:'value',
+                multiple:true,
+                onLoadSuccess:function(data){
+                    if(data){
+                        var _value='${manufactureOrder.board}';
+                        if(_value){
+                            $('#board').combobox('setText',_value);
+                            $('#board').combobox('setValues',_value.split(', '));
+                        }
+                    }
+
+                }
+            });
+
+        });
+        </script>
         <tr style="border: 0" class="splitRow">
             <th height="30" style="border-left: 1px solid #99bbe8;"></th>
             <th></th>
@@ -218,8 +263,8 @@
         </tr>
     </TABLE>
     <div id="button" style="margin-top: 20px;">
-        <a href="javascript:void(0)" onclick="saveOrder()" class="easyui-linkbutton">提交</a> &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="formReset()">重置</a>
+        <a href="javascript:void(0)" onclick="saveOrder()" style="width: 100px;" class="easyui-linkbutton">提交</a> &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0)" class="easyui-linkbutton" style="width: 100px;" onclick="formReset()">重置</a>
         <input id="res" name="res" type="reset" style="display:none;" />
     </div>
     </div>

@@ -39,18 +39,22 @@ public abstract   class BaseAction<T> extends ActionSupport {
 
     @Action(value = "getListJson", results = { @Result(type = "json",params = {"root","dataMap"})})
     public String  getBaseListJson(){
-        if(baseDao==null){
-            baseDao=getDao();
+        try{
+            if(baseDao==null){
+                baseDao=getDao();
+            }
+            initDataMap();
+            dataMap.put("limitStart",(page-1)*rows);
+            dataMap.put("limitEnd",rows);
+            dealDataMap();
+            List<T> list=baseDao.selectPages(dataMap);
+            int total=baseDao.selectCount(dataMap);
+            log.info("获取第【{}】页数据，每页显示【{}】条数据,共查询到"+total+"条数据",page,rows);
+            dataMap.put("rows",list);
+            dataMap.put("total", total);
+        }catch (Exception e){
+            log.error("查询列表异常={}",e);
         }
-        initDataMap();
-        dataMap.put("limitStart",(page-1)*rows);
-        dataMap.put("limitEnd",rows);
-        dealDataMap();
-        List<T> list=baseDao.selectPages(dataMap);
-        log.info("获取第【{}】页数据，每页显示【{}】条数据",page,rows);
-
-        dataMap.put("rows",list);
-        dataMap.put("total", 8);
         return SUCCESS;
     }
 
@@ -80,7 +84,7 @@ public abstract   class BaseAction<T> extends ActionSupport {
             }
         }catch (Exception e){
             dataMap.put("errorMsg","添加失败");
-            e.printStackTrace();
+            log.error("addBaseSave()异常={}",e);
         }
         return SUCCESS;
     }

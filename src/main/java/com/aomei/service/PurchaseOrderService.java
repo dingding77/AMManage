@@ -17,7 +17,7 @@ public interface PurchaseOrderService {
 
     PurchaseOrder getByPrimaryKey(Integer id);
 
-    int updateByIdSelective(PurchaseOrder record);
+    int updateByIdSelective(PurchaseOrder record)throws Exception;
 
     int updateById(PurchaseOrder record);
 

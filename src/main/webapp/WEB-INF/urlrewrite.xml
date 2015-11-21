@@ -4,12 +4,13 @@
         "http://tuckey.org/res/dtds/urlrewrite2.6.dtd">
 <urlrewrite>
     <rule>
-        <from>^/(.*)login.html$</from>
+        <from>^/(.*)login.html</from>
         <to type="redirect">/AMManage/common/login.htm</to>
     </rule>
+
     <rule>
         <from>^login$</from>
-        <to>/common/login.htm</to>
+        <to type="redirect">/common/login.htm</to>
     </rule>
     <rule>
         <from>^/manager/login.htm$</from>

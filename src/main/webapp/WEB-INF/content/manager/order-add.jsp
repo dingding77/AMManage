@@ -1,8 +1,44 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="../common/header.jspf"%>
-    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/newtable.css" />
-
+<link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/newtable.css" />
+<link href="../js/jquery.imgareaselect-0.9.10/css/imgareaselect-default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.imgareaselect-0.9.10/scripts/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="../js/jquery.imgareaselect-0.9.10/scripts/jquery.imgareaselect.pack.js"></script>
+<script type="text/javascript" src="../js/upload.js"></script>
+<script type="text/javascript">
+ $(function(){
+        $('#cutimg-window').window({
+         title: '图片处理',
+         width: 600,
+         height: 300,
+         top: ($(document.body).height() - 300) * 0.5,
+         left: ($(window).width() - 600) * 0.5,
+         shadow: true,
+         modal: true,
+         closed: true,
+         minimizable: false,
+         maximizable: false,
+         collapsible: false,
+         onClose:function(){
+             $('#cutimg-window').window('resize',{
+                 width: 600,
+                 height: 300,
+                 top: ($(document.body).height() - 300) * 0.5,
+                 left: ($(window).width() - 600) * 0.5,
+             });
+         }
+     });
+ });
+ function iFrameHeight() {
+     var ifm= document.getElementById("cutimg-iframe");
+     var subWeb = document.frames ? document.frames["cutimg-iframe"].document : ifm.contentDocument;
+     if(ifm != null && subWeb != null) {
+         ifm.height = subWeb.body.scrollHeight;
+         ifm.width = subWeb.body.scrollWidth;
+     }
+ }
+</script>
     <style>
         th,td{ line-height: 30px; padding-left: 5px;}
         .orderTab tr td input{border: 0; border-bottom: 1px solid gray; outline: none;font-weight: bold; color: #0000ff;}
@@ -10,6 +46,7 @@
         .splitRow th{ border: 0;}
         .Wdate{width: 100px;}
         .combo>input[class*="combo-text validatebox-text"]{ border: 0;outline: none;height: auto}
+
     </style>
     <script>
         $(function(){
@@ -118,13 +155,13 @@
             <td colspan="3">
                 <%--<input type="text" required="true" name="manufactureOrder.cstmCode">--%>
                 <input type="hidden" name="name" id="customerName">
-                <input class="easyui-combobox" id="sel_customer" name="sel_customer"
-                       data-options="valueField:'code',textField:'name'">
+                    <input class="easyui-combobox" id="sel_customer" required="true" name="sel_customer"
+                           data-options="valueField:'code',textField:'name'">
             </td>
             <td>客户代码</td>
             <td colspan="3">
-                <input type="hidden" name="code" id="customerCode">
-                <input class="easyui-combobox" id="sel_code" name="sel_customer"
+                <input type="hidden" name="manufactureOrder.cstmCode" id="customerCode">
+                <input class="easyui-combobox" id="sel_code" required="true" name="sel_customer"
                        data-options="valueField:'name',textField:'code'">
             </td>
         </tr>
@@ -132,20 +169,20 @@
             <td>下单日期</td>
             <td colspan="3"><input class="Wdate" name="manufactureOrder.orderDate" type="text" style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/></td>
             <td>交货日期</td>
-            <td colspan="3"><input class="Wdate" type="text" name="manufactureOrder.deliveryDate"></td>
+            <td colspan="3"><input class="Wdate" type="text" name="manufactureOrder.deliveryDate" type="text" style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/></td>
         </tr>
         <tr class="firstTabInfo">
             <td>后道要求</td>
             <td colspan="3" style="text-align: left;">
-                <select class="easyui-combobox" id="pstp" name="state" data-options="multiple:true,multiline:true" style="width:200px;height:50px">
+                <select class="easyui-combobox" id="pstp" url='../system/dictionary/getPstpList.htm?dataDictionary.type=pstp'  name="manufactureOrder.houdaoRequests" data-options="valueField:'value',textField:'value',multiple:true" style="width:200px;height:50px">
 
                 </select>
             </td>
             <td>机台</td>
             <td colspan="3">
-                <input type="checkbox" name="manufactureOrder.board">
-                <input type="checkbox" name="manufactureOrder.board">
-                <input type="checkbox" name="manufactureOrder.board">
+                <select class="easyui-combobox" id="board"  url='../system/dictionary/getPstpList.htm?dataDictionary.type=ms'  name="manufactureOrder.board" data-options="valueField:'value',textField:'value',multiple:true" style="width:200px;height:50px">
+
+                </select>
             </td>
         </tr>
         <tr style="border: 0" class="splitRow">
@@ -158,19 +195,28 @@
             <th></th>
             <th style="border-right:1px solid #99bbe8;"></th>
         </tr>
-        <tr>
-            <td>数量(个)</td>
-            <td colspan="4">产品描述</td>
-            <td colspan="3">款号</td>
-        </tr>
-        <tr>
-            <td><input type="text" name="manufactureOrder.proNum"></td>
-            <td colspan="4">
-                <textarea cols="50" name="manufactureOrder.proDesc" rows="5">
-                </textarea>
-            </td>
-            <td colspan="3">
-                <input type="text" name="manufactureOrder.styleNo">
+        <tr style="border:0;">
+            <td colspan="8" style="border: 0; border-left: 1px solid #99bbe8;">
+                <table class="subTable" style="width: 100%;border: 0;margin: 0;padding: 0" border="0">
+                <tr>
+                    <td style="border-left: 0;">数量</td>
+                    <td>品名</td>
+                    <td>尺码</td>
+                    <td>款号</td>
+                    <td>色号</td>
+                    <td>货物编号</td>
+                    <td>客户编号</td>
+                </tr>
+                <tr>
+                    <td style="border-left: 0;"><input type="text"/></td>
+                    <td><input type="text"/></td>
+                    <td><input type="text"/></td>
+                    <td><input type="text"/></td>
+                    <td><input type="text"/></td>
+                    <td><input type="text"/></td>
+                    <td><input type="text"/></td>
+                </tr>
+            </table>
             </td>
         </tr>
         <tr>
@@ -209,7 +255,14 @@
         </tr>
         <tr>
             <td colspan="4">生产操作员:<input type="text" name="manufactureOrder.proOperator"></td>
-            <td colspan="4">生产贴样处:<input type="text" name="manufactureOrder.proPasteLike"></td>
+            <td colspan="4">生产贴样处:
+                <div>
+                    <img id="proPasteLike_show" style="width: 40px; height: 40px;">
+                </div>
+                <input type="file" onchange="uploadImage('proPasteLike','proPasteLike_file')" id="proPasteLike_file" name="file2" >
+
+                <input type="hidden" id="proPasteLike" name="manufactureOrder.proPasteLike">
+            </td>
         </tr>
         <tr>
             <td colspan="8">耗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时:
@@ -256,7 +309,12 @@
         </tr>
         <tr>
             <td colspan="4">品检操作员:<input type="text" name="manufactureOrder.qcOperator"></td>
-            <td colspan="4">货样贴样处:<input type="text" name="manufactureOrder.goodsPasteLike"></td>
+            <td colspan="4">货样贴样处:
+                <div>
+                    <img id="goodsPasteLike_show"  style="width: 40px; height: 40px;">
+                </div>
+                <input type="file" onchange="uploadImage('goodsPasteLike','goodsPasteLike_file')" id="goodsPasteLike_file" name="file2" >
+                <input type="hidden" id="goodsPasteLike" name="manufactureOrder.goodsPasteLike"></td>
         </tr>
         <tr>
             <td colspan="8">耗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时:
@@ -288,12 +346,17 @@
             </td>
         </tr>
     </TABLE>
+
     <div id="button" style="margin-top: 20px;">
-        <a href="javascript:void(0)" onclick="saveOrder()" class="easyui-linkbutton">提交</a> &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="formReset()">重置</a>
+        <a href="javascript:void(0)" onclick="saveOrder()" class="easyui-linkbutton" style="width: 100px;">提交</a> &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="formReset()" style="width: 100px;">重置</a>
         <input id="res" name="res" type="reset" style="display:none;" />
     </div>
     </div>
 </form>
+<div id="cutimg-window" class="easyui-window" data-options="iconCls:'icon-save',closed:true" title="图片处理">
+    <iframe id="cutimg-iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" onLoad="iFrameHeight()"></iframe>
+</div>
+
 </body>
 </html>

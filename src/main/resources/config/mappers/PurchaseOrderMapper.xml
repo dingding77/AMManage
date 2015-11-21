@@ -13,23 +13,30 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
-
+    <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
+    <result column="payment" property="payment" jdbcType="VARCHAR" />
+      <result column="touching" property="touching" jdbcType="VARCHAR" />
+      <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+      <result column="director" property="director" jdbcType="VARCHAR" />
+      <result column="department" property="department" jdbcType="VARCHAR" />
+      <result column="salesman" property="salesman" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, buyer_id, supplier_name, supplier_contract, supplier_phone, purchase_date, is_delete, 
-    creator, create_time,purchase_no
+    creator, create_time,purchase_no,delivery_time,payment,ext_info,touching,auditor,director,
+    department,salesman
   </sql>
     <sql id="doQueryParams">
         <if test="purchaseOrder.buyerId != null" >
             and buyer_id = #{purchaseOrder.buyerId,jdbcType=VARCHAR}
         </if>
-        <if test="purchaseOrder.supplierName != null" >
+        <if test="purchaseOrder.supplierName != null and purchaseOrder.supplierName !=''" >
             and supplier_name = #{purchaseOrder.supplierName,jdbcType=VARCHAR}
         </if>
-        <if test="purchaseOrder.supplierContract != null" >
+        <if test="purchaseOrder.supplierContract != null and purchaseOrder.supplierContract != ''" >
             and supplier_contract = #{purchaseOrder.supplierContract,jdbcType=VARCHAR}
         </if>
-        <if test="purchaseOrder.supplierPhone != null" >
+        <if test="purchaseOrder.supplierPhone != null and purchaseOrder.supplierPhone != ''" >
             and supplier_phone = #{purchaseOrder.supplierPhone,jdbcType=VARCHAR}
         </if>
         <if test="purchaseOrder.purchaseDate != null" >
@@ -64,7 +71,7 @@
         limit #{limitStart},#{limitEnd}
     </select>
     <!--记录数查询-->
-    <select id="selectCount">
+    <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(0) from t_purchase_order
         where 1=1
         <include refid="doQueryParams"/>
@@ -79,11 +86,14 @@
       </selectKey>
     insert into t_purchase_order (buyer_id, supplier_name,
       supplier_contract, supplier_phone, purchase_date, 
-      is_delete, creator,ext_info,create_time,purchase_no
+      is_delete, creator,ext_info,create_time,purchase_no,
+      delivery_time,payment,touching,auditor,director,department,salesman
       )
     values (#{buyerId,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR},
       #{supplierContract,jdbcType=VARCHAR}, #{supplierPhone,jdbcType=VARCHAR}, #{purchaseDate,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=CHAR}, #{creator,jdbcType=VARCHAR},#{extInfo,jdbcType=VARCHAR},now(),#{purchaseNo,jdbcType=VARCHAR}
+      #{isDelete,jdbcType=CHAR}, #{creator,jdbcType=VARCHAR},#{extInfo,jdbcType=VARCHAR},now(),#{purchaseNo,jdbcType=VARCHAR},
+      #{deliveryTime,jdbcType=TIMESTAMP},#{payment,jdbcType=VARCHAR},#{touching,jdbcType=VARCHAR},#{auditor,jdbcType=VARCHAR},
+      #{director,jdbcType=VARCHAR},#{department,jdbcType=VARCHAR},#{salesman,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.aomei.model.PurchaseOrder" >
@@ -125,6 +135,27 @@
         <if test="purchaseNo != null" >
             purchase_no,
         </if>
+        <if test="deliveryTime != null">
+            delivery_time,
+        </if>
+        <if test="payment != null">
+            payment,
+        </if>
+        <if test="touching != null">
+            touching,
+        </if>
+        <if test="auditor != null">
+            auditor,
+        </if>
+        <if test="director != null">
+            director,
+        </if>
+        <if test="department != null">
+            department,
+        </if>
+        <if test="salesman != null">
+            salesman,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -160,6 +191,27 @@
         <if test="purchaseNo != null" >
             #{purchaseNo,jdbcType=VARCHAR},
         </if>
+        <if test="deliveryTime != null">
+            #{deliveryTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="payment != null">
+            #{payment,jdbcType=VARCHAR},
+        </if>
+        <if test="touching != null">
+            #{touching,jdbcType=VARCHAR},
+        </if>
+        <if test="auditor != null">
+            #{auditor,jdbcType=VARCHAR},
+        </if>
+        <if test="director != null">
+            #{director,jdbcType=VARCHAR},
+        </if>
+        <if test="department != null">
+            #{department,jdbcType=VARCHAR},
+        </if>
+        <if test="salesman != null">
+            #{salesman,jdbcType=VARCHAR},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.PurchaseOrder" >
@@ -189,6 +241,27 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+        <if test="deliveryTime != null">
+            delivery_time= #{deliveryTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="payment != null">
+            payment=#{payment,jdbcType=VARCHAR},
+        </if>
+        <if test="touching != null">
+            touching=#{touching,jdbcType=VARCHAR},
+        </if>
+        <if test="auditor != null">
+            auditor=#{auditor,jdbcType=VARCHAR},
+        </if>
+        <if test="director != null">
+            director=#{director,jdbcType=VARCHAR},
+        </if>
+        <if test="department != null">
+            department=#{department,jdbcType=VARCHAR},
+        </if>
+        <if test="salesman != null">
+            salesman=#{salesman,jdbcType=VARCHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -198,10 +271,14 @@
       supplier_name = #{supplierName,jdbcType=VARCHAR},
       supplier_contract = #{supplierContract,jdbcType=VARCHAR},
       supplier_phone = #{supplierPhone,jdbcType=VARCHAR},
+      delivery_time= #{deliveryTime,jdbcType=TIMESTAMP},
+      payment=#{payment,jdbcType=VARCHAR},
       purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=CHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+        touching=#{touching,jdbcType=VARCHAR},
+        auditor=#{auditor,jdbcType=VARCHAR},
+        director=#{director,jdbcType=VARCHAR},
+        department=#{department,jdbcType=VARCHAR},
+        salesman=#{salesman,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <delete id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">

@@ -25,4 +25,5 @@ public class BaseMapperImpl<T,Query> extends MBaseDaoImpl<T> implements BaseMapp
         result.setTotalCount(count);
         return result;
     }
+
 }

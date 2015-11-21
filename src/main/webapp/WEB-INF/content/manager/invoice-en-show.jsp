@@ -33,7 +33,7 @@
                 商业发票
                 <input type="hidden" name="enCommercialInvoice.id" value="${enCommercialInvoice.id}"/>
 
-                <input type="hidden" name="enCommercialInvoice.createUserid" value="${user.userId}"/>
+                <input type="hidden" name="enCommercialInvoice.createUserid" value="${user.id}"/>
             </td>
         </tr>
         <tr>
@@ -59,6 +59,13 @@
             </td>
         </tr>
         <tr>
+            <td colspan="3"></td>
+            <td class="text-right">出货日期:</td>
+            <td>
+                <input class="Wdate" type="text" name="enCommercialInvoice.shipmentDate" value="<s:property value='enCommercialInvoice.shipmentDate'/>"  style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">装船口岸 From: SHANGHAI CHINA
                 <input name="enCommercialInvoice.seaportFrom" value="SHANGHAI CHINA" type="hidden">
             </td>
@@ -66,12 +73,17 @@
         </tr>
         <tr>
             <td colspan="2">PAYMENT : <input type="text" value="${enCommercialInvoice.payment}" name="enCommercialInvoice.payment" style="width: 30px;">%
-                <select>
+                <input type="hidden" value="${enCommercialInvoice.paymentType}" id="paymentType_val">
+                <select  name="enCommercialInvoice.paymentType" id="paymentType_sel">
                     <option value="T/T">T/T</option>
                     <option value="D/P">D/P</option>
                     <option value="D/A">D/A</option>
                     <option value="M/T">M/T</option>
                 </select>
+                <script type="text/javascript">
+                    var paymentType_val=$('#paymentType_val').val();
+                    $('#paymentType_sel').val(paymentType_val);
+                </script>
             </td>
             <td colspan="3">开证银行 Issued by:<input type="text" value="${enCommercialInvoice.destinationTo}" name="enCommercialInvoice.issuedBy" style="width: 300px;"></td>
         </tr>

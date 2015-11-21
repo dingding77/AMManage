@@ -2,6 +2,7 @@ package com.aomei.dao.impl;
 
 import com.aomei.dao.CustomerDao;
 import com.aomei.model.Customer;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,5 +11,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("customerDao")
 public class CustomerDaoImpl extends MBaseDaoImpl<Customer> implements CustomerDao{
-
+    @Override
+    public Customer selectCustomerByCode(String code) throws DataAccessException {
+        return (Customer)getSqlSession().selectOne("selectCustomerByCode",code);
+    }
 }

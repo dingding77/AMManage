@@ -72,6 +72,28 @@ public class ManufactureOrder {
 
     private String remark;
 
+    /**新增其它查询条件**/
+
+    private String beginOrderDate;
+
+    public String getBeginOrderDate() {
+        return beginOrderDate=(beginOrderDate==null?null:beginOrderDate.trim());
+    }
+
+    public void setBeginOrderDate(String beginOrderDate) {
+        this.beginOrderDate = (beginOrderDate==null?null:beginOrderDate.trim());
+    }
+
+    public String getEndOrderDate() {
+        return endOrderDate;
+    }
+
+    public void setEndOrderDate(String endOrderDate) {
+        this.endOrderDate = (endOrderDate==null?null:endOrderDate.trim());
+    }
+
+    private String endOrderDate;
+
     public Integer getId() {
         return id;
     }

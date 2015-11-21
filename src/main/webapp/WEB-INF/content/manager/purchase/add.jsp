@@ -2,8 +2,6 @@
          pageEncoding="UTF-8"%>
 <%@include file="../../common/header.jspf"%>
     <link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/newtable.css" />
-    <script type="text/javascript" src="<%=contextPath %>/js/order.js"></script>
-
     <style>
         th,td{ line-height: 30px; padding-left: 5px;}
         .customerTab{ margin: 10px auto;}
@@ -14,10 +12,12 @@
         .Wdate{width: 100px;}
         .combo>input[class*="combo-text validatebox-text"]{ border: 0;outline: none;height: auto}
     </style>
+    <script type="text/javascript" src="<%=contextPath %>/js/calculate.js"></script>
     <script>
         var _index=1;
         $(function(){
             $('input[type=text][required=true]').validatebox();
+            addEventForInput(0);
         });
         function saveCustomer(){
             var url='addSave.htm';
@@ -104,12 +104,50 @@
             var targetRow=$('#PURCHASE_DETAIL tbody tr:eq(-2)');
             targetRow.after('<tr>'+$('#detailList').tpl(json).html()+'</tr>');
             $.parser.parse($('#PURCHASE_DETAIL tbody tr:eq(-2)'));
+            addEventForInput(_index);
             _index=_index+1;
-            addEventForInput();
+            addComBoboxEvent();
         }
         function deleteRowForDetail(obj){
             var _row=obj.parents('tr');
             _row.remove();
+        }
+        function caclTotalAmt(){
+            var productSubtotal=0;
+            $('input[id*="totalAmt_"]').each(function(){
+                var totalAmt=$(this).val();
+                if(totalAmt!=null&&totalAmt!=''){
+                    productSubtotal=add(productSubtotal,totalAmt);
+                }
+            });
+            $('#product-subtotal').text(productSubtotal);
+        }
+        function addEventForInput(i){
+            $('#buyNum_'+i).numberbox({
+                onChange:function(){
+                    var goodsNum=($(this).val());
+                    var gooosPrice=($('#price_'+i).numberbox('getValue'));
+
+                    if(goodsNum!='' && gooosPrice !=''){
+                        $('#totalAmt_'+i).val(mul(goodsNum,gooosPrice));
+                    }else{
+                        $('#totalAmt_'+i).val('');
+                    }
+                    caclTotalAmt();
+                }
+            });
+            $('#price_'+i).numberbox({
+                onChange:function(){
+                    var gooosPrice=($(this).val());
+                    var goodsNum=($('#buyNum_'+i).numberbox('getValue'));
+                    if(goodsNum!='' && gooosPrice !=''){
+                        $('#totalAmt_'+i).val(mul(goodsNum,gooosPrice));
+                    }else{
+                        $('#totalAmt_'+i).val('');
+                    }
+                    caclTotalAmt();
+                }
+            });
         }
     </script>
 
@@ -122,37 +160,69 @@
             return $.tmpl('template', data);
         }
     })($);
+    $(function(){
+        addComBoboxEvent();
+    });
+    function addComBoboxEvent(){
+       $("input[class*='purchaseOrderSelName']:last").combobox({
+                    onChange: function (newVal,oldVal) {
+                        var _this=$(this);
+                        $.ajax({
+                            url:'../product/getListJonsByCode.htm?query.code='+newVal,
+                            type:'POST',
+                            dataType:'json',
+                            success:function(data){
+                                var proInfo=eval(data);
+
+                                var _styleNo=proInfo.styleNo;
+                                var _pantoneNo=proInfo.pantoneNo;
+                                var _size=proInfo.size;
+                                var _price=proInfo.price;
+
+                                var _row=_this.parent().parent();
+                                var _tds=_row.children('td');
+                                _tds.eq(1).children('input').val(_styleNo);
+                                _tds.eq(2).children('input').val(_pantoneNo);
+                                _tds.eq(3).children('input').val(_size);
+                                var id=(_tds.eq(4).find('input:eq(0)').attr('id'));
+                                $('#'+id).numberbox('setValue', _price);
+                            }
+                        });
+                    }}
+        );
+    }
 </script>
 <script id="detailList" type="text/x-jquery-tmpl">
-    <tr>
-    <td>
-    <input type="text" name="purchaseOrder.detailList[@{detailIndex}].name"/>
+        <tr>
+            <td>
+                <input class="easyui-combobox purchaseOrderSelName"  required="true" name="purchaseOrder.detailList[0].name"
+                       data-options="valueField:'code',textField:'name',url:'../product/getListJonsBuQuery.htm'">
             </td>
-    <td>
-    <input type="text" name="purchaseOrder.detailList[@{detailIndex}].styleNo"/>
+            <td>
+                <input type="text" name="purchaseOrder.detailList[@{detailIndex}].styleNo"/>
             </td>
-        <td>
-            <input type="text" name="purchaseOrder.detailList[@{detailIndex}].colorNo"/>
-        </td>
-    <td>
-    <input type="text" name="purchaseOrder.detailList[@{detailIndex}].size"/>
+            <td>
+                <input type="text" name="purchaseOrder.detailList[@{detailIndex}].colorNo"/>
             </td>
-        <td>
-            <input type="text"name="purchaseOrder.detailList[@{detailIndex}].price"  class="price-per-pallet easyui-numberbox"   precision="4" required="true"/>
-        </td>
-        <td>
-            <input type="text" name="purchaseOrder.detailList[@{detailIndex}].buyNum" class=" num-pallets-input easyui-numberbox" required="true"/>
-        </td>
-        <td>
-            <input type="text" name="purchaseOrder.detailList[@{detailIndex}].totalAmt"  style="background-color:white;" class="row-total-input" disabled="disabled"/>
-        </td>
-    <td>
-    <input type="text"name="purchaseOrder.detailList[@{detailIndex}].remark"/>
+            <td>
+                <input type="text" name="purchaseOrder.detailList[@{detailIndex}].size"/>
             </td>
-        <td>
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteRowForDetail($(this))">删除</a>
-        </td>
-    </tr>
+            <td>
+                <input type="text" id="price_@{detailIndex}"  name="purchaseOrder.detailList[@{detailIndex}].price"  class="easyui-numberbox"  precision="4" required="true"/>
+            </td>
+            <td>
+                <input type="text" id="buyNum_@{detailIndex}" name="purchaseOrder.detailList[@{detailIndex}].buyNum" class="easyui-numberbox" required="true"/>
+            </td>
+            <td>
+                <input type="text" id="totalAmt_@{detailIndex}" name="purchaseOrder.detailList[@{detailIndex}].totalAmt" style="background-color:white;"  />
+            </td>
+            <td>
+                <input type="text"name="purchaseOrder.detailList[@{detailIndex}].remark"/>
+            </td>
+            <td style="width: 100px; text-align: center;">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteRowForDetail($(this))">删除</a>
+            </td>
+        </tr>
 
 </script>
 <body LEFTMARGIN=0 TOPMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0
@@ -167,12 +237,12 @@
         <tr>
             <th>单位名称</th>
             <td>
-                <input name="companyName" value="${companyInfo.name}"/>
+                <input name="companyName"  value="${companyInfo.name}"/>
                 <input type="hidden" name="purchaseOrder.extInfo" id="extInfo">
             </td>
             <th>单位名称</th>
             <td>
-                <input name="supplierName"/>
+                <input name="supplierName"  class="easyui-textbox"/>
             </td>
         </tr>
 
@@ -183,7 +253,7 @@
             </td>
             <th>联系人</th>
             <td>
-                <input name="supplierContract"/>
+                <input name="supplierContract" class="easyui-textbox"/>
             </td>
         </tr>
 
@@ -195,17 +265,17 @@
             </td>
             <th>日期</th>
             <td>
-                <input name="supplierDate"  class="Wdate" style="cursor: pointer"/>
+                <input name="supplierDate" onfocus="WdatePicker()"   class="Wdate" style="cursor: pointer"/>
             </td>
         </tr>
         <tr>
             <th>日期</th>
             <td>
-                <input name="companyDate" class="Wdate" style="cursor: pointer"/>
+                <input name="companyDate" onfocus="WdatePicker()"  class="Wdate" style="cursor: pointer"/>
             </td>
             <th>电话</th>
             <td>
-                <input name="supplierPhone"/>
+                <input name="supplierPhone" class="easyui-textbox"/>
             </td>
         </tr>
         <tr>
@@ -218,6 +288,20 @@
             <th>收货人员</th>
             <td colspan="3">
                 <input name="receiver"/>
+            </td>
+        </tr>
+        <tr>
+            <th>付款方式</th>
+            <td colspan="3">
+                <select name="purchaseOrder.payment">
+                    <option value="月结">月结</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>我司交期</th>
+            <td colspan="3">
+                <input name="purchaseOrder.deliveryTime" onfocus="WdatePicker()"   class="Wdate" style="cursor: pointer"/>
             </td>
         </tr>
     </TABLE>
@@ -236,7 +320,8 @@
         </tr>
         <tr>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].name"/>
+                <input class="easyui-combobox purchaseOrderSelName"  required="true" name="purchaseOrder.detailList[0].name"
+                       data-options="valueField:'code',textField:'name',url:'../product/getListJonsBuQuery.htm'">
             </td>
             <td>
                 <input type="text" name="purchaseOrder.detailList[0].styleNo"/>
@@ -248,26 +333,45 @@
                 <input type="text" name="purchaseOrder.detailList[0].size"/>
             </td>
             <td>
-                <input type="text"name="purchaseOrder.detailList[0].price"  class="price-per-pallet easyui-numberbox"  precision="4" required="true"/>
+                <input type="text" id="price_0"  name="purchaseOrder.detailList[0].price"  class="easyui-numberbox"  precision="4" required="true"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].buyNum" class=" num-pallets-input easyui-numberbox" required="true"/>
+                <input type="text" id="buyNum_0" name="purchaseOrder.detailList[0].buyNum" class="easyui-numberbox" required="true"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].totalAmt" style="background-color:white;" class="row-total-input" disabled="disabled" />
+                <input type="text" id="totalAmt_0" name="purchaseOrder.detailList[0].totalAmt" style="background-color:white;"  />
             </td>
             <td>
                 <input type="text"name="purchaseOrder.detailList[0].remark"/>
             </td>
-            <td>
+            <td style="width: 100px; text-align: center;">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="addRowForDetail()">添加</a>
             </td>
         </tr>
         <tr>
             <td colspan="9" style="text-align: right;">产品小计:
-                <input type="text" class="total-box easyui-numberbox" id="product-subtotal" style="background-color: white; width: 200px;" disabled="disabled">
+                <span id="product-subtotal" style="background-color: white; width: 200px;" ></span>
             </td>
         </tr>
+    </TABLE>
+    <TABLE class="customerTab detail" WIDTH="100%" BORDER="0" ALIGN="CENTER" CELLPADDING="0" CELLSPACING="0" BGCOLOR="#fff">
+    <tr>
+        <td>
+            审核:<input type="text" id="auditor" name="purchaseOrder.auditor"/>
+        </td>
+        <td>
+            主管:<input type="text" id="director" name="purchaseOrder.director"/>
+        </td>
+        <td>
+            部门:<input type="text" id="department" name="purchaseOrder.department"/>
+        </td>
+        <td>
+            业务员:<input type="text" id="salesman" name="purchaseOrder.salesman"/>
+        </td>
+        <td>
+            制单:<input type="text" id="touching" name="purchaseOrder.touching"/>
+        </td>
+    </tr>
     </TABLE>
     <div id="button" style="margin-top: 20px;">
         <a href="javascript:void(0)" onclick="addSave()" class="easyui-linkbutton">提交</a> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -279,7 +383,6 @@
 <script type="text/javascript">
     function calcProdSubTotal() {
         var prodSubTotal = 0;
-        alert($("input[class='row-total-input']").length);
         $("input[class='row-total-input']").each(function () {
             var valString = $(this).val() || 0;
             prodSubTotal=parseFloat(parseFloat(prodSubTotal)+parseFloat(valString)).toFixed(4);
@@ -295,7 +398,6 @@
             }else{
                 data=data+( field.name+':\"'+field.value + '\"' );
             }
-
         });
         data=data+'}';
         $('#extInfo').val((data));
@@ -307,7 +409,6 @@
         $('#FORM').form('submit',{
             url: url,
             onSubmit: function(){
-                alert($(this).form('validate'));
                 return $(this).form('validate');
             },
             success: function(result){

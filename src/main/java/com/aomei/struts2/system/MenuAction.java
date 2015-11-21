@@ -97,6 +97,14 @@ public class MenuAction extends BaseAction<Menu> {
         return SUCCESS;
     }
 
+    @Action(value="getParentMenu", results = { @Result(type = "json",params = {"root","listMenu"})})
+    public String getParentMenu(){
+        MenuQuery query=new MenuQuery();
+        query.setIsDelete("N");
+        query.setMenuType("0");
+        listMenu=menuMapper.selectByExample(query);
+        return SUCCESS;
+    }
 
     @Action(value = "menuTree", results = { @Result(name = SUCCESS, type = "json", params = { "root", "msg" }) })
     public String goodsTree(){

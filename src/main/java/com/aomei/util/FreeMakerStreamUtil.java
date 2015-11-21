@@ -4,8 +4,15 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -27,6 +34,10 @@ public class FreeMakerStreamUtil {
     private Configuration configuration;
     @Getter @Setter
     private HttpServletResponse response;
+    @Getter @Setter
+    private boolean isResponseClient=true;
+    @Getter @Setter
+    private List<String> imgList;
 
     public FreeMakerStreamUtil() {
 
@@ -66,7 +77,7 @@ public class FreeMakerStreamUtil {
             File tempFile = new File(tmpDir);
             out= new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(tempFile), "UTF-8"));
-            getConfiguration().getTemplate(templateFileName).process(dataMap, out);
+            configuration.getTemplate(templateFileName).process(dataMap, out);
         }catch (Exception e){
             throw  e;
         }finally {
@@ -76,7 +87,10 @@ public class FreeMakerStreamUtil {
             }
         }
         File outfile=new File(tmpDir);
-        exportWord(outfile);//弹出excel保存到客户端
+        if(isResponseClient){
+            exportWord(outfile);//弹出excel保存到客户端
+        }
+
     }
     public static String templatePath(String templateDir){
         String classPath=FreeMakerStreamUtil.class.getResource("").getPath();
@@ -89,16 +103,68 @@ public class FreeMakerStreamUtil {
 
         return templatePath;
     }
+    private void writeImg(){
+        {
+            FileOutputStream fileOut = null;
+            BufferedImage bufferImg = null;
+            //先把读进来的图片放到一个ByteArrayOutputStream中，以便产生ByteArray
+            try {
+                org.apache.commons.io.output.ByteArrayOutputStream byteArrayOut = new org.apache.commons.io.output.ByteArrayOutputStream();
+                bufferImg = ImageIO.read(new File("C:\\Users\\Administrator\\Pictures\\QQ截图20151002104837.png"));
+                ImageIO.write(bufferImg, "jpg", byteArrayOut);
+
+                //HSSFWorkbook wb = new HSSFWorkbook();
+                //HSSFSheet sheet1 = wb.createSheet("test picture");
+
+                FileInputStream finput = new FileInputStream("d://" );
+
+                POIFSFileSystem fs = new POIFSFileSystem( finput );
+                HSSFWorkbook wb = new HSSFWorkbook(fs);
+                HSSFSheet sheet1=wb.getSheetAt(0);
+                //画图的顶级管理器，一个sheet只能获取一个（一定要注意这点）
+                HSSFPatriarch patriarch = sheet1.createDrawingPatriarch();
+                //452 * 215
+                //anchor主要用于设置图片的属性
+                HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 1023,255,(short) 0, 39, (short) 3, 51);
+                anchor.setAnchorType(3);
+                //插入图片
+                patriarch.createPicture(anchor, wb.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG));
+                //anchor主要用于设置图片的属性
+                HSSFClientAnchor anchor1 = new HSSFClientAnchor(0, 0, 1023,255,(short) 4, 39, (short) 7, 51);
+                anchor.setAnchorType(3);
+                //插入图片
+                patriarch.createPicture(anchor, wb.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG));
+                patriarch.createPicture(anchor1, wb.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG));
+
+                fileOut = new FileOutputStream("D:/测试Excel"+System.currentTimeMillis()+".xls");
+                // 写入excel文件
+                wb.write(fileOut);
+                System.out.println("----Excle文件已生成------");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally{
+                if(fileOut != null){
+                    try {
+                        fileOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     public void exportWord(File outfile) throws Exception{
-        OutputStream os = response.getOutputStream();
         response.reset();// 清空输出流
         String filename = java.net.URLEncoder.encode(outFileName, "utf-8")
                 + ".xls"; // 可设置中文名称
         response.setHeader("Content-disposition", "attachment; filename="
                 + filename);// 设定输出文件头
         response.setContentType("application/msword;charset=UTF-8"); // 定义输出类型
-
+        //获取输入流 当前流数据中仅包含字符信息
         FileInputStream inputStream = new FileInputStream(outfile);
+
+        //设置图片 end
         OutputStream outputStream = response.getOutputStream();
         BufferedInputStream bufferedInputStream = new BufferedInputStream(
                 inputStream); // 缓冲文件输入流

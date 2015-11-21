@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@include file="../../common/header.jspf"%>
 <body>
-<table id="dg" title="订单列表" class="easyui-datagrid"
+<table id="dg" title="客户信息列表" class="easyui-datagrid"
        url="getListJson.htm"
        toolbar="#toolbar" pagination="true"
        rownumbers="true" fitColumns="true" singleSelect="false">
@@ -18,12 +18,14 @@
 
 <div id="toolbar" align="left" style="height: auto">
     <div id="showMenu"></div>
+    <!--
     <div style="line-height:1px; background:#ccc;width:100%;margin:0 auto 0 auto;">&nbsp;</div>
     <label>订单名称:</label><input type="text" class="easyui-textbox" name="manufactureOrder.order.orderName"/>
     <label>订单日期:</label><input class="Wdate" type="text" id="beginOrderDate" style="cursor: pointer" onFocus="WdatePicker()"/>到<input class="Wdate" style="cursor: pointer" type="text" id="endOrderDate" onFocus="WdatePicker()"/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
     <div>
     </div>
+    -->
 </div>
 
 <script type="text/javascript">

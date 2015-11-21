@@ -23,7 +23,15 @@ $(function(){
     });
 */
 })
-
+function updateTab(url) {
+    var tab = $('#tabs').tabs('getSelected');
+    $("#tabs").tabs('update', {
+        tab: tab,
+        options: {
+            content: createFrame(url)
+        }
+    });
+}
 //初始化左侧
 function InitLeftMenu() {
 	$("#nav").accordion({animate:false,fit:true,border:false});
@@ -142,7 +150,7 @@ function addTab(subtitle,url,icon){
 		});
 	}else{
 		$('#tabs').tabs('select',subtitle);
-		$('#mm-tabupdate').click();
+        updateTab();
 	}
 	tabClose();
 }

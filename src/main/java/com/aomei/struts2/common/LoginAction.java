@@ -46,11 +46,16 @@ public class LoginAction extends ActionSupport{
         }
         return SUCCESS;
     }
+    @Action(value="login", results = {
+            @Result(name = LOGIN,   type = "redirect",location = "/common/login-form.htm")})
+    public String login() throws Exception {
+        return LOGIN;
+    }
 
-	@Action(value="login", results = {
+	@Action(value="goHome", results = {
     @Result(name = SUCCESS, type = "redirect",location = "/common/index.htm"),
     @Result(name = LOGIN,   type = "redirect",location = "/common/login-form.htm?type=01")})
-	public String login() throws Exception {
+	public String goHome() throws Exception {
         if(user==null){
             return LOGIN;
         }

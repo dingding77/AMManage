@@ -7,7 +7,7 @@ public class PurchaseDetail implements Serializable {
 
     private String name;
 
-    private Integer styleNo;
+    private String styleNo;
 
     private String colorNo;
 
@@ -43,11 +43,11 @@ public class PurchaseDetail implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getStyleNo() {
+    public String getStyleNo() {
         return styleNo;
     }
 
-    public void setStyleNo(Integer styleNo) {
+    public void setStyleNo(String styleNo) {
         this.styleNo = styleNo;
     }
 

@@ -30,7 +30,15 @@ public class EnCommercialInvoice implements Serializable {
 
     private Integer createUserid;
     @Getter @Setter
+    private String shipmentDate;
+    @Getter @Setter
+    private String relationOrderType;
+    @Getter @Setter
+    private String orderNo;
+    @Getter @Setter
     private List<EnciOrder> enciOrders;
+    @Getter @Setter
+    private String paymentType;
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {

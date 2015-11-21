@@ -11,13 +11,61 @@
     <result column="seaport_from" jdbcType="VARCHAR" property="seaportFrom" />
     <result column="destination_to" jdbcType="VARCHAR" property="destinationTo" />
     <result column="payment" jdbcType="VARCHAR" property="payment" />
+    <result column="payment_type" jdbcType="VARCHAR" property="paymentType" />
     <result column="issued_by" jdbcType="VARCHAR" property="issuedBy" />
     <result column="create_userId" jdbcType="INTEGER" property="createUserid" />
+    <result column="shipment_Date" jdbcType="VARCHAR" property="shipmentDate" />
+    <result column="relation_order_type" jdbcType="VARCHAR" property="relationOrderType" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <collection property="enciOrders" column="id" select="EnciOrderMapper.selectEnciOrdersByEnciId"/>
   </resultMap>
   <sql id="Base_Column_List">
     id, TO_COMPANY, Invoice_Number, FROM_COMPANY, RE_INFO, DOC_Trade, seaport_from, destination_to, 
-    payment, issued_by, create_userId
+    payment, issued_by, create_userId,shipment_Date,payment_type,relation_order_type,order_no
+  </sql>
+  <sql id="doQueryParams">
+      where 1=1
+      <if test="toCompany != null">
+          AND  TO_COMPANY=#{toCompany,jdbcType=VARCHAR}
+      </if>
+      <if test="invoiceNumber != null">
+          AND  Invoice_Number=#{invoiceNumber,jdbcType=VARCHAR}
+      </if>
+      <if test="fromCompany != null">
+          AND  FROM_COMPANY=#{fromCompany,jdbcType=VARCHAR}
+      </if>
+      <if test="relationOrderType != null">
+          AND  relation_order_type=#{relationOrderType,jdbcType=VARCHAR}
+      </if>
+      <if test="orderNo != null">
+          AND  order_No=#{orderNo,jdbcType=VARCHAR}
+      </if>
+
+      <if test="reInfo != null">
+          AND  RE_INFO=#{reInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="docTrade != null">
+          AND  DOC_Trade=#{docTrade,jdbcType=DATE}
+      </if>
+      <if test="seaportFrom != null">
+          AND  seaport_from=#{seaportFrom,jdbcType=VARCHAR}
+      </if>
+      <if test="destinationTo != null">
+          AND  destination_to=#{destinationTo,jdbcType=VARCHAR}
+      </if>
+      <if test="payment != null">
+          AND  payment=#{payment,jdbcType=VARCHAR}
+      </if>
+      <if test="issuedBy != null">
+          AND  issued_by=#{issuedBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createUserid != null">
+          AND  create_userId=#{createUserid,jdbcType=INTEGER}
+      </if>
+      <if test="shipmentDate != null">
+          AND  shipment_Date=#{shipmentDate,jdbcType=VARCHAR}
+      </if>
+
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -29,8 +77,12 @@
         select
         <include refid="Base_Column_List" />
         from t_commercial_invoice_en
-        where 1=1
+        <include refid="doQueryParams"/>
         limit #{limitStart},#{limitEnd}
+    </select>
+    <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(0) from t_commercial_invoice_en
+        <include refid="doQueryParams"/>
     </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_commercial_invoice_en
@@ -49,12 +101,12 @@
       </selectKey>
       insert into t_commercial_invoice_en (TO_COMPANY, Invoice_Number,
       FROM_COMPANY, RE_INFO, DOC_Trade, 
-      seaport_from, destination_to, payment, 
-      issued_by, create_userId)
+      seaport_from, destination_to, payment,payment_type,
+      issued_by, create_userId,shipment_Date,relation_order_type,order_no)
     values (#{toCompany,jdbcType=VARCHAR}, #{invoiceNumber,jdbcType=VARCHAR},
       #{fromCompany,jdbcType=VARCHAR}, #{reInfo,jdbcType=VARCHAR}, #{docTrade,jdbcType=DATE},
-      #{seaportFrom,jdbcType=VARCHAR}, #{destinationTo,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR}, 
-      #{issuedBy,jdbcType=VARCHAR}, #{createUserid,jdbcType=INTEGER})
+      #{seaportFrom,jdbcType=VARCHAR}, #{destinationTo,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR},#{paymentType,jdbcType=VARCHAR},
+      #{issuedBy,jdbcType=VARCHAR}, #{createUserid,jdbcType=INTEGER},#{shipmentDate,jdbcType=VARCHAR},#{relationOrderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.aomei.model.EnCommercialInvoice">
       <selectKey    keyProperty="id" resultType="int" order="AFTER">
@@ -86,12 +138,24 @@
       <if test="payment != null">
         payment,
       </if>
+        <if test="paymentType != null">
+            payment_type,
+        </if>
       <if test="issuedBy != null">
         issued_by,
       </if>
       <if test="createUserid != null">
         create_userId,
       </if>
+      <if test="shipmentDate !=null">
+          shipment_Date,
+      </if>
+      <if test="relationOrderType !=null">
+          relation_order_type,
+      </if>
+        <if test="orderNo != null">
+            order_No,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="toCompany != null">
@@ -118,12 +182,24 @@
       <if test="payment != null">
         #{payment,jdbcType=VARCHAR},
       </if>
+        <if test="paymentType != null">
+            #{paymentType,jdbcType=VARCHAR},
+        </if>
       <if test="issuedBy != null">
         #{issuedBy,jdbcType=VARCHAR},
       </if>
       <if test="createUserid != null">
         #{createUserid,jdbcType=INTEGER},
       </if>
+    <if test="shipmentDate !=null">
+        #{shipmentDate,jdbcType=VARCHAR},
+    </if>
+        <if test="relationOrderType !=null">
+            #{relationOrderType,jdbcType=VARCHAR},
+        </if>
+        <if test="orderNo != null">
+            #{orderNo,jdbcType=VARCHAR},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.EnCommercialInvoice">
@@ -153,12 +229,24 @@
       <if test="payment != null">
         payment = #{payment,jdbcType=VARCHAR},
       </if>
+        <if test="paymentType != null">
+            payment_type = #{paymentType,jdbcType=VARCHAR},
+        </if>
       <if test="issuedBy != null">
         issued_by = #{issuedBy,jdbcType=VARCHAR},
       </if>
       <if test="createUserid != null">
         create_userId = #{createUserid,jdbcType=INTEGER},
       </if>
+        <if test="shipmentDate !=null">
+            shipment_Date=#{shipmentDate,jdbcType=VARCHAR},
+        </if>
+        <if test="relationOrderType !=null">
+            relation_order_type=#{relationOrderType,jdbcType=VARCHAR},
+        </if>
+        <if test="orderNo != null">
+            AND  order_No=#{orderNo,jdbcType=VARCHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -172,8 +260,12 @@
       seaport_from = #{seaportFrom,jdbcType=VARCHAR},
       destination_to = #{destinationTo,jdbcType=VARCHAR},
       payment = #{payment,jdbcType=VARCHAR},
+      payment_type = #{paymentType,jdbcType=VARCHAR},
       issued_by = #{issuedBy,jdbcType=VARCHAR},
-      create_userId = #{createUserid,jdbcType=INTEGER}
+      create_userId = #{createUserid,jdbcType=INTEGER},
+      relation_order_type=#{relationOrderType,jdbcType=VARCHAR},
+      order_No=#{orderNo,jdbcType=VARCHAR},
+      shipment_Date=#{shipmentDate,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

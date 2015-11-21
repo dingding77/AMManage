@@ -17,8 +17,35 @@
     </style>
 </head>
 <script>
+    var orderFlag='purchaseNo';
     $(function(){
         $('input[type=text][required=true]').validatebox();
+
+        $('#dd').dialog({
+            title: '关联操作',
+            width: '80%',
+            height: '50%',
+            cache: false,
+            modal: true,
+            closed:true,
+            buttons: [{
+                text:'Ok',
+                iconCls:'icon-ok',
+                handler:function(){
+                    chooseOneOrder();
+                }
+            },{
+                text:'Cancel',
+                handler:function(){
+                    $('#dd').dialog('close');
+                }
+            }]
+        });
+
+        $('input[name="enCommercialInvoice.relationOrderType"]').change(function() {
+            $('#orderNo').val('');
+            $('#span_orderNo').text('');
+        });
     });
     function saveEnInvoice(){
         var url='enInvoiceAddSave.htm';
@@ -45,6 +72,36 @@
     function formReset(){
         $("input[name='res']").click();
     }
+
+    function chooseOrderInfo(){
+        var orderType=$('input[name="enCommercialInvoice.relationOrderType"]:checked').val();
+        if(orderType=='1'){//生产单
+            orderFlag='proNo';
+            $('#dd').dialog({href: 'order-list.htm?relation=relation'})
+            $('#dd').dialog('open');
+        }else if(orderType=='2'){//采购单
+            orderFlag='purchaseNo';
+
+            $('#dd').dialog({href: 'purchase/list.htm?relation=relation'})
+            $('#dd').dialog('open');
+        }else{
+            $.messager.alert('操作提示','为匹配到订单类型','info');
+        }
+    }
+
+    function chooseOneOrder(){
+        var rows= $('#dg').datagrid('getSelections');
+        if(rows.length==0){
+            $.messager.alert("操作提示", "请选择一项！","info")
+        }else if(rows.length>1){
+            $.messager.alert("操作提示", "只能选择一项数据！","info");
+        }else{
+
+            $('#orderNo').val(rows[0][orderFlag]);
+            $('#span_orderNo').text('单号:'+rows[0][orderFlag]);
+            $('#dd').dialog('close');
+        }
+    }
 </script>
 <body LEFTMARGIN=0 TOPMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0
       scroll=yes>
@@ -61,12 +118,22 @@
         <tr>
             <td colspan="5"  class="title">
                 商业发票
-                <input type="hidden" name="enCommercialInvoice.createUserid" value="${user.userId}"/>
+                <input type="hidden" name="enCommercialInvoice.createUserid" value="${user.id}"/>
             </td>
         </tr>
         <tr>
             <td colspan="5"  class="title">
                 COMMERCIAL INVOICE
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                对应订单类型&nbsp;&nbsp;<input name="enCommercialInvoice.relationOrderType" value="1" type="radio" checked="true" />生产单<input name="enCommercialInvoice.relationOrderType" value="2" type="radio"/>采购单
+            </td>
+            <td colspan="2">
+                <a class="easyui-linkbutton" onclick="chooseOrderInfo()" style="margin-left: 5px;">立即关联订单</a>
+                <input type="hidden" id="orderNo" name="enCommercialInvoice.orderNo"/>
+                <label id="span_orderNo"></label>
             </td>
         </tr>
         <tr>
@@ -87,6 +154,13 @@
             </td>
         </tr>
         <tr>
+            <td colspan="3"></td>
+            <td class="text-right">出货日期:</td>
+            <td>
+                <input class="Wdate" type="text" name="enCommercialInvoice.shipmentDate"  style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">装船口岸 From: SHANGHAI CHINA
                 <input name="enCommercialInvoice.seaportFrom" value="SHANGHAI CHINA" type="hidden">
             </td>
@@ -94,7 +168,7 @@
         </tr>
         <tr>
             <td colspan="2">PAYMENT : <input type="text" required="true" name="enCommercialInvoice.payment" style="width: 30px;">%
-                <select>
+                <select name="enCommercialInvoice.paymentType">
                     <option value="T/T">T/T</option>
                     <option value="D/P">D/P</option>
                     <option value="D/A">D/A</option>
@@ -120,8 +194,8 @@
             <tr class="maininfo">
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].orderNo"/></td>
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].goodsDesc"/></td>
-                <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].price"/></td>
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].psc"/></td>
+                <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].price" style="width: 30%"/><select><option value="EXW">EXW</option><option value="CIF">CIF</option></select></td>
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].totalAmount"/></td>
             </tr>
         </s:iterator>
@@ -155,5 +229,6 @@
         <input id="res" name="res" type="reset" style="display:none;" />
     </div>
 </form>
+<div id="dd"></div>
 </body>
 </html>

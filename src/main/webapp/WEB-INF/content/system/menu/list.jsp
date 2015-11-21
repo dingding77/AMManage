@@ -35,7 +35,7 @@
         </div>
         <div style="margin-bottom:10px">
             <div>级别:</div>
-            <select name="menu.level" class="easyui-combobox">
+            <select name="menu.level">
                 <option value="">--请选择--</option>
                 <option value="0">0</option>
                 <option value="1">1</option>
@@ -45,7 +45,7 @@
         </div>
         <div style="margin-bottom:10px">
             <div>菜单类型:</div>
-            <select name="menu.menuType" class="easyui-combobox" id="menuType">
+            <select name="menu.menuType" id="menuType">
                 <option value="">--请选择--</option>
                 <option value="0">菜单</option>
                 <option value="1">按钮</option>
@@ -59,7 +59,7 @@
 
         <div style="margin-bottom:10px" id="relationBtn_methodName">
             <div>操作方法:</div>
-            <select name="menu.methodName" class="easyui-combobox">
+            <select name="menu.methodName">
                 <option value="">--请选择--</option>
                 <option value="add()">新增</option>
                 <option value="edit()">编辑</option>
@@ -70,7 +70,7 @@
 
         <div style="margin-bottom:10px" id="relationBtn_img">
             <div>按钮图标:</div>
-            <select name="menu.iconImg" class="easyui-combobox">
+            <select name="menu.iconImg">
                 <option value="">--请选择--</option>
                 <option value="icon-add">icon-add</option>
                 <option value="icon-edit">icon-edit</option>

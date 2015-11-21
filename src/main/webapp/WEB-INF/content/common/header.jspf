@@ -7,17 +7,20 @@
 %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
-<title>智慧社区</title>
+<title>傲美订单管理</title>
 <head>
-    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/jquery-easyui-1.4.2/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/jquery-easyui-1.4.2/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/jquery-easyui-1.4.2/demo/demo.css" />
-    <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/jquery.min.js"></script>
-    <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="<%=contextPath %>/jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/js/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/js/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/js/easyui/demo.css" />
+    <script type="text/javascript" src="<%=contextPath %>/js/easyui/jquery.min.js"></script>
+
+    <script type="text/javascript" src="<%=contextPath %>/js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/js/ajaxfileupload.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/js/aomei.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/js/jquery.tmpl.min.js"></script>
     <script language="javascript" type="text/javascript" src="<%=contextPath %>/My97DatePicker/WdatePicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/aomei.css" />
 </head>
 <script>
     //获取服务器当前系统日期
@@ -49,5 +52,8 @@
             });
 
         }
+    }
+    function doSearch(){
+        $('#dg').datagrid('load',$('form[id="searchForm"]').serializeJson());
     }
 </script>

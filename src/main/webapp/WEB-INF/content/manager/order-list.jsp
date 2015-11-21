@@ -2,19 +2,24 @@
          pageEncoding="UTF-8"%>
 <%@include file="../common/header.jspf"%>
 <body>
-<table id="dg" title="订单列表" class="easyui-datagrid"
+<table id="dg" title="生产订单列表" class="easyui-datagrid"
        toolbar="#toolbar" pagination="true"
-       rownumbers="true" fitColumns="true" singleSelect="false">
+       rownumbers="true" fitColumns="true" fit="true" singleSelect="false">
 
 </table>
 <div id="toolbar" align="left" style="height: auto">
-    <div id="showMenu"></div>
+    <s:if test="relation!='relation'">
+        <div id="showMenu"></div>
+    </s:if>
+
     <div style="line-height:1px; background:#ccc;width:100%;margin:0 auto 0 auto;">&nbsp;</div>
-    <label>订单名称:</label><input type="text" class="easyui-textbox" name="manufactureOrder.order.orderName"/>
-    <label>订单日期:</label><input class="Wdate" type="text"  id="beginOrderDate" style="cursor: pointer;border:1px solid #ccc" onFocus="WdatePicker()"/>到<input class="Wdate" style="cursor: pointer;border:1px solid #ccc" type="text" id="endOrderDate" onFocus="WdatePicker()"/>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+    <form id="searchForm">
+    <label>订单编号:</label><input type="text" class="easyui-textbox" name="manufactureOrder.proNo"/>
+    <label>订单日期:</label><input class="Wdate WdateNormal" type="text"  id="beginOrderDate" name="manufactureOrder.beginOrderDate"  onFocus="WdatePicker()"/>到<input class="Wdate WdateNormal" type="text" id="endOrderDate" name="manufactureOrder.endOrderDate" onFocus="WdatePicker()"/>
+    <a href="javascript:void(0)" onclick="doSearch()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
     <div>
     </div>
+    </form>
 </div>
 <script type="text/javascript">
 
@@ -24,11 +29,12 @@
         pageSize:8,
         pageList:[8,16,32],
         pagination:true,
+        queryParams:{'manufactureOrder.beginOrderDate':$('#beginOrderDate').val(),'manufactureOrder.endOrderDate':$('#endOrderDate').val()},
         columns:[[
             {field:'id',checkbox:'true'},
-            {field:'cstmCode',title:'客户信息',width:50},
             {field:'proNo',title:'订单编号',width:50},
-            {field:'orderDate',title:'订单日期',width:50,hidden:true}
+            {field:'cstmCode',title:'客户编号',width:50},
+            {field:'orderDate',title:'订单日期',width:50,formatter:formatterdate}
         ]]
     });
     showMenu('11')
@@ -36,7 +42,7 @@
     function add(){
         toolsAdd('新增订单','/manager/order-add.htm');
     }
-    function editBtn(){
+    function edit(){
         toolsEdit('编辑订单','/manager/order-edit.htm','id')
     }
     function show(){
@@ -45,6 +51,9 @@
 
     function destroy(){
         toolDestroy('order-delete.htm','id')
+    }
+    function exportFile(){
+        toolExport('manufactureOrder-exportWord.htm?manufactureOrder.id=','id');
     }
 </script>
 </body>

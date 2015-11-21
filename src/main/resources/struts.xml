@@ -60,7 +60,7 @@
             </interceptor-stack>
         </interceptors>
         <global-results>
-            <result name="login">/WEB-INF/content/common/login-form.jsp</result>
+            <result name="login" type="redirectAction">/login.html</result>
             <result name="loginInJson" type="redirectAction">/login.html</result>
             <result name="noAuthority">/WEB-INF/content/common/no-authority.jsp</result>
         </global-results>
