@@ -6,9 +6,6 @@ var onlyOpenTitle="欢迎使用";//不允许关闭的标签的标题
 
 $(function(){
 	InitLeftMenu();
-	tabClose();
-	tabCloseEven();
-
 /* 选择TAB时刷新内容
 	$('#tabs').tabs({
         onSelect: function (title) {

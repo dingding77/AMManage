@@ -56,4 +56,8 @@
     function doSearch(){
         $('#dg').datagrid('load',$('form[id="searchForm"]').serializeJson());
     }
+    $(function(){
+        window.parent.tabClose();
+        window.parent.tabCloseEven();
+    });
 </script>

@@ -16,6 +16,7 @@
         .maininfo td input{ text-align: center; }
     </style>
 <script>
+    var orderFlag='';
     $(function(){
         $('input[type=text][required=true]').validatebox();
         var paymentType_val=$('#paymentType_val').val();
@@ -26,6 +27,27 @@
         }else if(relationOrderType=='2'){
             $('input[type="radio"]:eq(1)').attr("checked",'checked');
         }
+
+        $('#dd').dialog({
+            title: '关联操作',
+            width: '80%',
+            height: '50%',
+            cache: false,
+            modal: true,
+            closed:true,
+            buttons: [{
+                text:'Ok',
+                iconCls:'icon-ok',
+                handler:function(){
+                    chooseOneOrder();
+                }
+            },{
+                text:'Cancel',
+                handler:function(){
+                    $('#dd').dialog('close');
+                }
+            }]
+        });
     });
     function saveEnInvoice(){
         var url='enInvoiceEditSave.htm';
@@ -51,6 +73,34 @@
     }
     function formReset(){
         $("input[name='res']").click();
+    }
+    function chooseOrderInfo(){
+        var orderType=$('input[name="enCommercialInvoice.relationOrderType"]:checked').val();
+        if(orderType=='1'){//生产单
+            orderFlag='proNo';
+            $('#dd').dialog({href: 'order-list.htm?relation=relation'})
+            $('#dd').dialog('open');
+        }else if(orderType=='2'){//采购单
+            orderFlag='purchaseNo';
+
+            $('#dd').dialog({href: 'purchase/list.htm?relation=relation'})
+            $('#dd').dialog('open');
+        }else{
+            $.messager.alert('操作提示','未匹配到订单类型','info');
+        }
+    }
+    function chooseOneOrder(){
+        var rows= $('#dg').datagrid('getSelections');
+        if(rows.length==0){
+            $.messager.alert("操作提示", "请选择一项！","info")
+        }else if(rows.length>1){
+            $.messager.alert("操作提示", "只能选择一项数据！","info");
+        }else{
+
+            $('#orderNo').val(rows[0][orderFlag]);
+            $('#span_orderNo').text('单号:'+rows[0][orderFlag]);
+            $('#dd').dialog('close');
+        }
     }
 </script>
 <body LEFTMARGIN=0 TOPMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0
@@ -79,9 +129,14 @@
             </td>
         </tr>
         <tr>
-            <td colspan="5">
+            <td colspan="3">
                 <input type="hidden" id="relationOrderType" value="${enCommercialInvoice.relationOrderType}">
                 对应订单类型&nbsp;&nbsp;<input name="enCommercialInvoice.relationOrderType" value="1" type="radio" checked="true" />生产单<input name="enCommercialInvoice.relationOrderType" value="2" type="radio"/>采购单
+            </td>
+            <td colspan="2">
+                <a class="easyui-linkbutton" onclick="chooseOrderInfo()" style="margin-left: 5px;">修改关联订单</a>
+                <input type="hidden" id="orderNo" name="enCommercialInvoice.orderNo" value="${enCommercialInvoice.orderNo}"/>
+                <label id="span_orderNo"><s:if test="enCommercialInvoice.orderNo!=null && enCommercialInvoice.orderNo!=''">单号:${enCommercialInvoice.orderNo}</s:if></label>
             </td>
         </tr>
         <tr>
@@ -183,5 +238,6 @@
         <input id="res" name="res" type="reset" style="display:none;" />
     </div>
 </form>
+<div id="dd"></div>
 </body>
 </html>

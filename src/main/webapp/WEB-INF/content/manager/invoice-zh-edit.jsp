@@ -80,6 +80,16 @@
             </td>
         </tr>
         <tr>
+            <td colspan="5">
+                对应订单类型&nbsp;&nbsp;<input name="deliveryNote.relationOrderType" value="1" type="radio" checked="true" />生产单<input name="deliveryNote.relationOrderType" value="2" type="radio"/>采购单
+            </td>
+            <td colspan="3">
+                <a class="easyui-linkbutton" onclick="chooseOrderInfo()" style="margin-left: 5px;">修改关联订单</a>
+                <input type="hidden" id="orderNo" name="deliveryNote.orderNo" value="${deliveryNote.orderNo}"/>
+                <label id="span_orderNo"><s:if test="deliveryNote.orderNo!=null && deliveryNote.orderNo!=''">单号:${deliveryNote.orderNo}</s:if></label>
+            </td>
+        </tr>
+        <tr>
             <td colspan="5">客户名称：<input required="true" type="text" name="deliveryNote.customerName"  value="${deliveryNote.customerName}"/></td>
             <td colspan="3">送货单号：<input required="true" type="text" name="deliveryNote.deliverNo" value="${deliveryNote.deliverNo}"/></td>
         </tr>
@@ -148,6 +158,58 @@
         <input id="res" name="res" type="reset" style="display:none;" />
     </div>
 </form>
+<div id="dd"></div>
+</body>
+<script>
+    var orderFlag='';
+    $('#dd').dialog({
+        title: '关联操作',
+        width: '80%',
+        height: '50%',
+        cache: false,
+        modal: true,
+        closed:true,
+        buttons: [{
+            text:'Ok',
+            iconCls:'icon-ok',
+            handler:function(){
+                chooseOneOrder();
+            }
+        },{
+            text:'Cancel',
+            handler:function(){
+                $('#dd').dialog('close');
+            }
+        }]
+    });
+    function chooseOrderInfo(){
+        var orderType=$('input[name="deliveryNote.relationOrderType"]:checked').val();
+        if(orderType=='1'){//生产单
+            orderFlag='proNo';
+            $('#dd').dialog({href: 'order-list.htm?relation=relation'})
+            $('#dd').dialog('open');
+        }else if(orderType=='2'){//采购单
+            orderFlag='purchaseNo';
 
+            $('#dd').dialog({href: 'purchase/list.htm?relation=relation'})
+            $('#dd').dialog('open');
+        }else{
+            $.messager.alert('操作提示','未匹配到订单类型','info');
+        }
+    }
+    function chooseOneOrder(){
+        var rows= $('#dg').datagrid('getSelections');
+        if(rows.length==0){
+            $.messager.alert("操作提示", "请选择一项！","info")
+        }else if(rows.length>1){
+            $.messager.alert("操作提示", "只能选择一项数据！","info");
+        }else{
+
+            $('#orderNo').val(rows[0][orderFlag]);
+            $('#span_orderNo').text('单号:'+rows[0][orderFlag]);
+            $('#dd').dialog('close');
+        }
+    }
+</script>
 </body>
 </html>
