@@ -202,8 +202,8 @@
                     <input type="hidden" name="enCommercialInvoice.enciOrders[${status.index}].enciId" value="<s:property value="#item.enciId"/>"/>
                 </td>
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${status.index}].goodsDesc" value="<s:property value="#item.goodsDesc"/>"/></td>
-                <td><input type="text" name="enCommercialInvoice.enciOrders[${status.index}].price" value="<s:property value="#item.price"/>"/></td>
-                <td><input type="text" name="enCommercialInvoice.enciOrders[${status.index}].psc" value="<s:property value="#item.psc"/>"/></td>
+                <td><input type="text" class="easyui-numberbox" precision="0"  name="enCommercialInvoice.enciOrders[${status.index}].psc" value="<s:property value="#item.psc"/>"/></td>
+                <td><input type="text" class="easyui-numberbox" precision="4"  name="enCommercialInvoice.enciOrders[${status.index}].price" value="<s:property value="#item.price"/>"/></td>
                 <td><input type="text"name="enCommercialInvoice.enciOrders[${status.index}].totalAmount" value="<s:property value="#item.totalAmount"/>"/></td>
             </tr>
         </s:iterator>

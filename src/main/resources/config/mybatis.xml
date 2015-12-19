@@ -29,6 +29,7 @@
         <mapper resource="config/mappers/UserRoleMapper.xml"/>
         <mapper resource="config/mappers/NumberRecordMapper.xml"/>
         <mapper resource="config/mappers/ProductInfoMapper.xml"/>
-
+        <mapper resource="config/mappers/ReportConfigMapper.xml"/>
+        <mapper resource="config/mappers/ManufactureOrderDetailMapper.xml"/>
     </mappers>
 </configuration>

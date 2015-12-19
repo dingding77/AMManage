@@ -194,8 +194,9 @@
             <tr class="maininfo">
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].orderNo"/></td>
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].goodsDesc"/></td>
-                <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].psc"/></td>
-                <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].price" style="width: 30%"/><select><option value="EXW">EXW</option><option value="CIF">CIF</option></select></td>
+                <td><input type="text" class="easyui-numberbox" precision="0"  name="enCommercialInvoice.enciOrders[${index}].psc"/></td>
+                <td><input type="text" class="easyui-numberbox" precision="4" name="enCommercialInvoice.enciOrders[${index}].price" style="width: 30%"/>
+                <select name="enCommercialInvoice.enciOrders[0].priceUnit"><option value="EXW">EXW</option><option value="CIF">CIF</option></select></td>
                 <td><input type="text" name="enCommercialInvoice.enciOrders[${index}].totalAmount"/></td>
             </tr>
         </s:iterator>

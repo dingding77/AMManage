@@ -100,48 +100,19 @@
             <td class="text-center">Unit Price EXW OR CIF SHANGHAI (1000PCS)</td>
             <td class="text-center">Total Amount USD</td>
         </tr>
-        <tr class="maininfo">
-            <td><input type="text" name="enCommercialInvoice.enciOrders[0].orderNo" value="${enCommercialInvoice.enciOrders[0].orderNo}"/></td>
-            <td><input type="text" name="enCommercialInvoice.enciOrders[0].goodsDesc" value="${enCommercialInvoice.enciOrders[0].goodsDesc}"/></td>
-            <td><input type="text" name="enCommercialInvoice.enciOrders[0].price" value="${enCommercialInvoice.enciOrders[0].price}"/></td>
-            <td><input type="text" name="enCommercialInvoice.enciOrders[0].psc" value="${enCommercialInvoice.enciOrders[0].psc}"/></td>
-            <td><input type="text"name="enCommercialInvoice.enciOrders[0].totalAmount" value="${enCommercialInvoice.enciOrders[0].totalAmount}"/></td>
-        </tr>
-        <tr class="maininfo">
-            <td><input type="text" name="enCommercialInvoice.enciOrders[1].orderNo" value="${enCommercialInvoice.enciOrders[1].orderNo}"/></td>
-            <td><input type="text" name="enCommercialInvoice.enciOrders[1].goodsDesc" value="${enCommercialInvoice.enciOrders[1].goodsDesc}"/></td>
-            <td><input type="text" name="enCommercialInvoice.enciOrders[1].price" value="${enCommercialInvoice.enciOrders[1].price}"/></td>
-            <td><input type="text" name="enCommercialInvoice.enciOrders[1].psc" value="${enCommercialInvoice.enciOrders[1].psc}"/></td>
-            <td><input type="text"name="enCommercialInvoice.enciOrders[1].totalAmount" value="${enCommercialInvoice.enciOrders[1].totalAmount}"/></td>
-        </tr>
-        <tr class="maininfo">
-            <td class="text-center"><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-        </tr>
-        <tr class="maininfo">
-            <td class="text-center"><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-        </tr>
-        <tr class="maininfo">
-            <td class="text-center"><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-        </tr>
-        <tr class="maininfo">
-            <td class="text-center"><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-            <td><input type="text"/></td>
-        </tr>
+        <s:iterator value="enCommercialInvoice.enciOrders" var="item" status="status">
+            <tr class="maininfo">
+                <td>
+                    <input type="text" readonly="readonly" name="enCommercialInvoice.enciOrders[${status.index}].orderNo" value="<s:property value="#item.orderNo"/>"/>
+                    <input type="hidden" readonly="readonly" name="enCommercialInvoice.enciOrders[${status.index}].id" value="<s:property value="#item.id"/>"/>
+                    <input type="hidden" readonly="readonly" name="enCommercialInvoice.enciOrders[${status.index}].enciId" value="<s:property value="#item.enciId"/>"/>
+                </td>
+                <td><input type="text" readonly="readonly" name="enCommercialInvoice.enciOrders[${status.index}].goodsDesc" value="<s:property value="#item.goodsDesc"/>"/></td>
+                <td><input type="text"  readonly="readonly"  name="enCommercialInvoice.enciOrders[${status.index}].psc" value="<s:property value="#item.psc"/>"/></td>
+                <td><input type="text"  readonly="readonly" name="enCommercialInvoice.enciOrders[${status.index}].price" value="<s:property value="#item.price"/>"/></td>
+                <td><input type="text" readonly="readonly" name="enCommercialInvoice.enciOrders[${status.index}].totalAmount" value="<s:property value="#item.totalAmount"/>"/></td>
+            </tr>
+        </s:iterator>
         <tr>
             <td colspan="5">Followings is the bank information of Shanghai Ao Mei Industrial Co., Ltd. </td>
         </tr>

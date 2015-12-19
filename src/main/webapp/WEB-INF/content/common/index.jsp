@@ -109,9 +109,22 @@
         function addTab(tab_name, href){
             href = '<%=contextPath%>' + href;
             if ($('#tabs').tabs('exists',tab_name)){
-                //alert("aaaaaa" + href);
                 $('#tabs').tabs('select', tab_name);
-                refreshTab(href);
+                var tab = $('#tabs').tabs('getSelected');
+                $('#tabs').tabs('update',{
+                    tab:tab,
+                    options: {
+                        content:"<iframe id='tab"+index+"' class=\"tab\" style='width:100%;height:100%' scrolling=\"auto\" frameborder=\"0\" src= \""+href+"\"></iframe>",
+                        selected:true,
+                        tools:[{
+                            iconCls:'icon-mini-refresh',
+                            handler:function(){
+                                refreshTab(href);
+                            }
+                        }]
+                    }
+                });
+               // refreshTab(href);
             } else {
                 //alert("bbbbbbb"+href);
                 $('#tabs').tabs('add',{
@@ -224,8 +237,8 @@
     <div id="footer-inner">Copyright©2014-2015 上海市傲美服饰辅料有限公司 版权所有</div>
 </div>
 <div id="mm" class="easyui-menu" style="width:150px;">
-    <div id="tabupdate">刷新</div>
-    <div class="menu-sep"></div>
+    <%--<div id="tabupdate">刷新</div>
+    <div class="menu-sep"></div>--%>
     <div id="close">关闭</div>
     <div id="closeall">全部关闭</div>
     <div id="closeother">除此之外全部关闭</div>
@@ -242,8 +255,8 @@
     %>
     jQuery.messager.show({
         title:'温馨提示:',
-        msg:'你好,欢迎使用傲美订单系统!',
-        timeout:5000,
+        msg:'您好,欢迎使用傲美订单系统!',
+        timeout:3000,
         showType:'slide'
     });
     <%

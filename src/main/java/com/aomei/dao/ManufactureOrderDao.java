@@ -13,6 +13,14 @@ public interface ManufactureOrderDao extends MBaseDao<ManufactureOrder>{
      * @throws Exception
      */
     public int addOrder(ManufactureOrder manufactureOrder)throws Exception;
+
+    /**
+     * 更新订单
+     * @param manufactureOrder
+     * @return
+     * @throws Exception
+     */
+    public int updateOrder(ManufactureOrder manufactureOrder)throws Exception;
     /**
      * 分页查询
      * @param map

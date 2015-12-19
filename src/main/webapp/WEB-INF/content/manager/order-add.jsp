@@ -53,6 +53,8 @@
             $('input[type=text][required=true]').validatebox();
         });
         function saveOrder(){
+            var orderProductInfo=$('#orderProductInfo input').serialize();
+            $('#extendInfo').val(orderProductInfo);
             var url='manufactureAddSave.htm';
             $('#form1').form('submit',{
                 url: url,
@@ -134,6 +136,35 @@
                 }
             });
         });
+
+        $(function(){
+            addComBoboxEvent();
+        });
+        function addComBoboxEvent(){
+            $("input[class*='purchaseOrderSelName']:last").combobox({
+                        onChange: function (newVal,oldVal) {
+                            var _this=$(this);
+                            $.ajax({
+                                url:'/AMManage/manager/product/getListJonsByCode.htm?query.code='+newVal,
+                                type:'POST',
+                                dataType:'json',
+                                success:function(data){
+                                    var proInfo=eval(data);
+                                    var _styleNo=proInfo.styleNo;
+                                    var _pantoneNo=proInfo.pantoneNo;
+                                    var _size=proInfo.size;
+                                    var _price=proInfo.price;
+
+                                    var _row=_this.parent().parent();
+                                    var _tds=_row.children('td');
+                                    _tds.eq(2).children('input').val(_size);
+                                    _tds.eq(4).children('input').val(_pantoneNo);
+                                    _tds.eq(3).children('input').val(_styleNo);
+                                }
+                            });
+                        }}
+            );
+        }
     </script>
 
 </head>
@@ -197,10 +228,10 @@
         </tr>
         <tr style="border:0;">
             <td colspan="8" style="border: 0; border-left: 1px solid #99bbe8;">
-                <table class="subTable" style="width: 100%;border: 0;margin: 0;padding: 0" border="0">
+                <table id="orderProductInfo" class="subTable" style="width: 100%;border: 0;margin: 0;padding: 0" border="0">
                 <tr>
-                    <td style="border-left: 0;">数量</td>
-                    <td>品名</td>
+                    <td style="border-left: 0;">品名</td>
+                    <td>数量</td>
                     <td>尺码</td>
                     <td>款号</td>
                     <td>色号</td>
@@ -208,15 +239,18 @@
                     <td>客户编号</td>
                 </tr>
                 <tr>
-                    <td style="border-left: 0;"><input type="text"/></td>
-                    <td><input type="text"/></td>
-                    <td><input type="text"/></td>
-                    <td><input type="text"/></td>
-                    <td><input type="text"/></td>
-                    <td><input type="text"/></td>
-                    <td><input type="text"/></td>
+                    <td style="border-left: 0;">
+                     <input id="cc" class="easyui-combobox purchaseOrderSelName" name="manufactureOrder.detailList[0].name" data-options="valueField:'name',textField:'name',url:'/AMManage/manager/product/getListJonsBuQuery.htm'"></td>
+                    <td><input name="manufactureOrder.detailList[0].num" class="easyui-numberbox" precision="0" required="true"  type="text"/></td>
+                    <td><input name="manufactureOrder.detailList[0].size" type="text"/></td>
+                    <td><input name="manufactureOrder.detailList[0].kh" type="text"/></td>
+                    <td><input name="manufactureOrder.detailList[0].colorSize" type="text"/></td>
+                    <td><input name="manufactureOrder.detailList[0].hwbh" type="text"/></td>
+                    <td><input name="manufactureOrder.detailList[0].kebh" type="text"/></td>
                 </tr>
+
             </table>
+                <input type="hidden" name="manufactureOrder.extendInfo" id="extendInfo"/>
             </td>
         </tr>
         <tr>
@@ -227,15 +261,15 @@
                 <input class="Wdate" type="text" name="manufactureOrder.callslipDate" style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/>
             </td>
             <td colspan="2">材料编号:<input type="text" name="manufactureOrder.materialNo"></td>
-            <td colspan="2">实需数量:<input type="text" name="manufactureOrder.needNum"></td>
-            <td colspan="2">实领数量:<input type="text" name="manufactureOrder.realNum"></td>
+            <td colspan="2">实需数量:<input type="text" class="easyui-numberbox" precision="0" name="manufactureOrder.needNum"></td>
+            <td colspan="2">实领数量:<input type="text" class="easyui-numberbox" precision="0" name="manufactureOrder.realNum"></td>
         </tr>
         <tr>
             <td colspan="2">返料日期:
                 <input class="Wdate" type="text" name="manufactureOrder.revertDate" style="cursor: pointer" onFocus="WdatePicker({isShowClear:false})"/>
             </td>
             <td colspan="6">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量:
-                <input type="text" name="manufactureOrder.revertNum">
+                <input type="text" class="easyui-numberbox" precision="0" name="manufactureOrder.revertNum">
             </td>
         </tr>
         <tr style="border: 0" class="splitRow">

@@ -78,7 +78,9 @@
         <include refid="Base_Column_List" />
         from t_commercial_invoice_en
         <include refid="doQueryParams"/>
-        limit #{limitStart},#{limitEnd}
+        <if test="limitStart>=0 and limitEnd>0">
+            limit #{limitStart},#{limitEnd}
+        </if>
     </select>
     <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(0) from t_commercial_invoice_en

@@ -10,5 +10,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("productInfoDao")
 public class ProductInfoDaoImpl extends MBaseDaoImpl<ProductInfo> implements ProductInfoDao{
-
+    public int insertProductNotExists(ProductInfo productInfo) throws Exception{
+        int result=getSqlSession().insert(getClassName()+".insertProductNotExists",productInfo);
+        return result;
+    }
 }

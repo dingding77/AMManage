@@ -33,8 +33,8 @@
     <result column="QC_Date" property="qcDate" jdbcType="DATE" />
     <result column="pro_Planning" property="proPlanning" jdbcType="VARCHAR" />
     <result column="pro_Documentary" property="proDocumentary" jdbcType="VARCHAR" />
+    <result column="extend_Info" property="extendInfo" jdbcType="VARCHAR" />
     <result column="fss_Time_Consuming" property="fssTimeConsuming" jdbcType="VARCHAR" />
-
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.aomei.model.ManufactureOrder" extends="BaseResultMap" >
     <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
@@ -44,7 +44,7 @@
     pro_Desc, style_No, callslip_Date, material_No, need_Num, real_Num, revert_Date, 
     revert_Num, repeat_Order, new_Edition, pro_Operator, pro_Paste_Like, pro_Time_Consuming, 
     pro_Date, fss_Operator, fss_Date, QC_Operator, QC_Time_Consuming, goods_Paste_Like, 
-    pack_Detail, QC_Date, pro_Planning, pro_Documentary,fss_Time_Consuming
+    pack_Detail, QC_Date, pro_Planning, pro_Documentary,fss_Time_Consuming,extend_Info
   </sql>
   <sql id="Blob_Column_List" >
     remark
@@ -174,7 +174,9 @@
         <include refid="Blob_Column_List" />
         from t_manufacture_order
         <include refid="doQueryParams"/>
-        limit #{limitStart},#{limitEnd}
+        <if test="limitStart>=0 and limitEnd>0">
+            limit #{limitStart},#{limitEnd}
+        </if>
     </select>
     <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(0) from t_manufacture_order
@@ -192,7 +194,10 @@
     </foreach>
   </delete>
   <insert id="insert" parameterType="com.aomei.model.ManufactureOrder" >
-    insert into t_manufacture_order (id, cstm_Code, pro_No, 
+      <selectKey    keyProperty="id" resultType="int" order="AFTER">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
+    insert into t_manufacture_order (cstm_Code, pro_No,
       order_Date, delivery_Date, houdao_Requests, 
       board, pro_Num, pro_Desc, 
       style_No, callslip_Date, material_No, 
@@ -202,8 +207,8 @@
       pro_Date, fss_Operator, fss_Date, fss_Time_Consuming,
       QC_Operator, QC_Time_Consuming, goods_Paste_Like, 
       pack_Detail, QC_Date, pro_Planning, 
-      pro_Documentary, remark)
-    values (#{id,jdbcType=INTEGER}, #{cstmCode,jdbcType=VARCHAR}, #{proNo,jdbcType=VARCHAR}, 
+      pro_Documentary, remark,extend_Info)
+    values (#{cstmCode,jdbcType=VARCHAR}, #{proNo,jdbcType=VARCHAR},
       #{orderDate,jdbcType=DATE}, #{deliveryDate,jdbcType=DATE}, #{houdaoRequests,jdbcType=VARCHAR}, 
       #{board,jdbcType=VARCHAR}, #{proNum,jdbcType=INTEGER}, #{proDesc,jdbcType=VARCHAR}, 
       #{styleNo,jdbcType=VARCHAR}, #{callslipDate,jdbcType=DATE}, #{materialNo,jdbcType=VARCHAR}, 
@@ -213,14 +218,14 @@
       #{proDate,jdbcType=DATE}, #{fssOperator,jdbcType=VARCHAR}, #{fssDate,jdbcType=DATE}, #{fssTimeConsuming,jdbcType=VARCHAR},
       #{qcOperator,jdbcType=VARCHAR}, #{qcTimeConsuming,jdbcType=VARCHAR}, #{goodsPasteLike,jdbcType=VARCHAR}, 
       #{packDetail,jdbcType=VARCHAR}, #{qcDate,jdbcType=DATE}, #{proPlanning,jdbcType=VARCHAR}, 
-      #{proDocumentary,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+      #{proDocumentary,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR},#{extendInfo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.aomei.model.ManufactureOrder" >
+      <selectKey    keyProperty="id" resultType="int" order="AFTER">
+          SELECT @@IDENTITY AS ID
+      </selectKey>
     insert into t_manufacture_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="cstmCode != null" >
         cstm_Code,
       </if>
@@ -317,11 +322,11 @@
       <if test="remark != null" >
         remark,
       </if>
+        <if test="extendInfo != null" >
+            extend_Info,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="cstmCode != null" >
         #{cstmCode,jdbcType=VARCHAR},
       </if>
@@ -418,6 +423,9 @@
       <if test="remark != null" >
         #{remark,jdbcType=LONGVARCHAR},
       </if>
+        <if test="extendInfo != null" >
+            #{extendInfo,jdbcType=VARCHAR},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.ManufactureOrder" >
@@ -519,6 +527,9 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+        <if test="extendInfo != null" >
+            extend_Info=#{extendInfo,jdbcType=VARCHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -555,6 +566,7 @@
       QC_Date = #{qcDate,jdbcType=DATE},
       pro_Planning = #{proPlanning,jdbcType=VARCHAR},
       pro_Documentary = #{proDocumentary,jdbcType=VARCHAR},
+      extend_Info=#{extendInfo,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -590,6 +602,7 @@
       pack_Detail = #{packDetail,jdbcType=VARCHAR},
       QC_Date = #{qcDate,jdbcType=DATE},
       pro_Planning = #{proPlanning,jdbcType=VARCHAR},
+      extend_Info=#{extendInfo,jdbcType=VARCHAR},
       pro_Documentary = #{proDocumentary,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

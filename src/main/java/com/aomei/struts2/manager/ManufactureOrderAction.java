@@ -1,7 +1,9 @@
 package com.aomei.struts2.manager;
 
 import com.aomei.dao.ManufactureOrderDao;
+import com.aomei.dao.ManufactureOrderDetailMapper;
 import com.aomei.model.ManufactureOrder;
+import com.aomei.model.ManufactureOrderDetail;
 import com.aomei.util.DateUtil;
 import com.aomei.util.ExcelUtil;
 import com.opensymphony.xwork2.ActionSupport;
@@ -61,6 +63,8 @@ public class ManufactureOrderAction extends ActionSupport {
     String relation;
     @Autowired
     private ManufactureOrderDao manufactureOrderDao;
+    @Autowired
+    private ManufactureOrderDetailMapper manufactureOrderDetailMapper;
     private HttpServletRequest request;
 
     @Action(value="order-list")
@@ -110,26 +114,47 @@ public class ManufactureOrderAction extends ActionSupport {
     }
     @Action("order-edit")
     public String toEditPage(){
-        if(id!=null){
-            manufactureOrder=manufactureOrderDao.selectByPrimaryKey(id);
+        try{
+            if(id!=null){
+                manufactureOrder=manufactureOrderDao.selectByPrimaryKey(id);
+                ManufactureOrderDetail detail= manufactureOrderDetailMapper.selectByOrderId(id);
+                if(detail!=null){
+                    List<ManufactureOrderDetail> detailList=new ArrayList<ManufactureOrderDetail>();
+                    detailList.add(detail);
+                    manufactureOrder.setDetailList(detailList);
+                }
+            }
+        }catch (Exception e){
+            log.error("查询异常{}",e);
         }
+
         return SUCCESS;
     }
     @Action("order-show")
     public String toShowPage(){
-        if(id!=null){
-            manufactureOrder=manufactureOrderDao.selectByPrimaryKey(id);
+        try{
+            if(id!=null){
+                manufactureOrder=manufactureOrderDao.selectByPrimaryKey(id);
+                ManufactureOrderDetail detail= manufactureOrderDetailMapper.selectByOrderId(id);
+                if(detail!=null){
+                    List<ManufactureOrderDetail> detailList=new ArrayList<ManufactureOrderDetail>();
+                    detailList.add(detail);
+                    manufactureOrder.setDetailList(detailList);
+                }
+            }
+        }catch (Exception e){
+            log.error("查询异常{}",e);
         }
         return SUCCESS;
     }
-    @Action(value = "editSave", results = { @Result(name = "success", type = "json", params = {
+    @Action(value = "manufactureEditSave", results = { @Result(name = "success", type = "json", params = {
             "root", "dataMap" }) })
     public String editSave(){
         if(dataMap==null){
             dataMap=new HashMap<String, Object>();
         }
         try{
-            int result=manufactureOrderDao.updateByPrimaryKeySelective(manufactureOrder);
+            int result=manufactureOrderDao.updateOrder(manufactureOrder);
             if(result!=1){
                 dataMap.put("errorMsg","修改失败");
             }

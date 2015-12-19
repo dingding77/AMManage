@@ -11,7 +11,7 @@ public class PurchaseDetail implements Serializable {
 
     private String colorNo;
 
-    private Double size;
+    private String size;
 
     private double price;
 
@@ -51,11 +51,11 @@ public class PurchaseDetail implements Serializable {
         this.styleNo = styleNo;
     }
 
-    public Double getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Double size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

@@ -9,9 +9,10 @@
     <result column="PSC" property="psc" jdbcType="VARCHAR" />
     <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="VARCHAR" />
     <result column="ENCI_ID" property="enciId" jdbcType="INTEGER" />
+    <result column="PRICE_UNIT" property="priceUnit"  jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, ORDER_NO, GOODS_DESC, PRICE, PSC, TOTAL_AMOUNT, ENCI_ID
+    id, ORDER_NO, GOODS_DESC, PRICE, PSC, TOTAL_AMOUNT, ENCI_ID,PRICE_UNIT
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -33,20 +34,20 @@
   <insert id="insert" parameterType="com.aomei.model.EnciOrder" >
     insert into t_enci_order ORDER_NO, GOODS_DESC,
       PRICE, PSC, TOTAL_AMOUNT, 
-      ENCI_ID)
+      ENCI_ID,PRICE_UNIT)
     values (#{orderNo,jdbcType=VARCHAR}, #{goodsDesc,jdbcType=VARCHAR},
       #{price,jdbcType=DECIMAL}, #{psc,jdbcType=VARCHAR}, #{totalAmount,jdbcType=VARCHAR}, 
-      #{enciId,jdbcType=INTEGER})
+      #{enciId,jdbcType=INTEGER},#{priceUnit,jdbcType=VARCHAR})
   </insert>
     <insert id="addEnciOrderBatch" parameterType="java.util.List">
         insert into t_enci_order (ORDER_NO, GOODS_DESC,
         PRICE, PSC, TOTAL_AMOUNT,
-        ENCI_ID)
+        ENCI_ID,PRICE_UNIT)
         values
         <foreach collection="list" item="item" index="index" separator="," >
         (#{item.orderNo,jdbcType=VARCHAR}, #{item.goodsDesc,jdbcType=VARCHAR},
         #{item.price,jdbcType=DECIMAL}, #{item.psc,jdbcType=VARCHAR}, #{item.totalAmount,jdbcType=VARCHAR},
-        #{item.enciId,jdbcType=INTEGER})
+        #{item.enciId,jdbcType=INTEGER},#{item.priceUnit,jdbcType=VARCHAR})
         </foreach>
     </insert>
   <insert id="insertSelective" parameterType="com.aomei.model.EnciOrder" >
@@ -73,6 +74,9 @@
       <if test="enciId != null" >
         ENCI_ID,
       </if>
+        <if test="priceUnit != null" >
+            PRICE_UNIT,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -96,6 +100,9 @@
       <if test="enciId != null" >
         #{enciId,jdbcType=INTEGER},
       </if>
+        <if test="priceUnit != null" >
+            #{priceUnit,jdbcType=VARCHAR},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.aomei.model.EnciOrder" >
@@ -119,6 +126,9 @@
       <if test="enciId != null" >
         ENCI_ID = #{enciId,jdbcType=INTEGER},
       </if>
+        <if test="priceUnit != null" >
+           PRICE_UNIT= #{priceUnit,jdbcType=VARCHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -141,6 +151,9 @@
                 <if test="item.totalAmount != null" >
                     TOTAL_AMOUNT = #{item.totalAmount,jdbcType=VARCHAR},
                 </if>
+                <if test="item.priceUnit != null" >
+                    PRICE_UNIT= #{priceUnit,jdbcType=VARCHAR},
+                </if>
             </set>
             where ENCI_ID = #{item.enciId,jdbcType=INTEGER} and id = #{item.id,jdbcType=INTEGER}
         </foreach>
@@ -152,7 +165,8 @@
       PRICE = #{price,jdbcType=DECIMAL},
       PSC = #{psc,jdbcType=VARCHAR},
       TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
-      ENCI_ID = #{enciId,jdbcType=INTEGER}
+      ENCI_ID = #{enciId,jdbcType=INTEGER},
+      PRICE_UNIT= #{priceUnit,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

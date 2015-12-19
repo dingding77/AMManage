@@ -1,6 +1,10 @@
 package com.aomei.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * 生产单实体对象
@@ -71,7 +75,10 @@ public class ManufactureOrder {
     private String proDocumentary;
 
     private String remark;
+    private String extendInfo;
 
+    @Getter @Setter
+    List<ManufactureOrderDetail> detailList;
     /**新增其它查询条件**/
 
     private String beginOrderDate;
@@ -356,5 +363,13 @@ public class ManufactureOrder {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getExtendInfo() {
+        return extendInfo;
+    }
+
+    public void setExtendInfo(String extendInfo) {
+        this.extendInfo = extendInfo;
     }
 }

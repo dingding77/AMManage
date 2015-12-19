@@ -8,7 +8,7 @@
 <body>
 <table id="dg" title="菜单列表" class="easyui-datagrid"
        toolbar="#toolbar" pagination="true"
-       rownumbers="true" fitColumns="true" singleSelect="false">
+       rownumbers="true" fitColumns="true" style="width: 100%" singleSelect="false">
 
 </table>
 <div id="toolbar" align="left" style="height: auto">

@@ -87,20 +87,31 @@
             <th></th>
             <th style="border-right:1px solid #99bbe8;"></th>
         </tr>
-        <tr>
-            <td>数量(个)</td>
-            <td colspan="4">产品描述</td>
-            <td colspan="3">款号</td>
-        </tr>
-        <tr>
-            <td><input type="text" name="manufactureOrder.proNum" value="${manufactureOrder.proNum}"></td>
-            <td colspan="4">
-                <textarea cols="50" name="manufactureOrder.proDesc" rows="5">
-                    ${manufactureOrder.proDesc}
-                </textarea>
-            </td>
-            <td colspan="3">
-                <input type="text" name="manufactureOrder.styleNo" value="${manufactureOrder.styleNo}">
+        <tr style="border:0;">
+            <td colspan="8" style="border: 0; border-left: 1px solid #99bbe8;">
+                <table class="subTable" style="width: 100%;border: 0;margin: 0;padding: 0" border="0">
+                    <tr>
+                        <td style="border-left: 0;">品名</td>
+                        <td>数量</td>
+                        <td>尺码</td>
+                        <td>款号</td>
+                        <td>色号</td>
+                        <td>货物编号</td>
+                        <td>客户编号</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="cc" class="easyui-combobox purchaseOrderSelName" value="${manufactureOrder.detailList[0].name}" name="manufactureOrder.detailList[0].name" data-options="valueField:'name',textField:'name',url:'/AMManage/manager/product/getListJonsBuQuery.htm'">
+                            <input name="manufactureOrder.detailList[0].id" value="${manufactureOrder.detailList[0].id}" type="hidden"/>
+                        </td>
+                        <td><input name="manufactureOrder.detailList[0].num" value="${manufactureOrder.detailList[0].num}" type="text"/></td>
+                        <td><input name="manufactureOrder.detailList[0].size" value="${manufactureOrder.detailList[0].size}" type="text"/></td>
+                        <td><input name="manufactureOrder.detailList[0].kh" value="${manufactureOrder.detailList[0].kh}" type="text"/></td>
+                        <td><input name="manufactureOrder.detailList[0].colorSize" value="${manufactureOrder.detailList[0].colorSize}" type="text"/></td>
+                        <td><input name="manufactureOrder.detailList[0].hwbh" value="${manufactureOrder.detailList[0].hwbh}" type="text"/></td>
+                        <td><input name="manufactureOrder.detailList[0].kebh" value="${manufactureOrder.detailList[0].kebh}" type="text"/></td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>

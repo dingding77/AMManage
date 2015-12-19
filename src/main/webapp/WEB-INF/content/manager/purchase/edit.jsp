@@ -242,7 +242,7 @@
             </td>
             <th>单位名称</th>
             <td>
-                <input name="supplierName"  class="easyui-textbox" value="${purchaseOrder.supplierName}" required="true"/>
+                <input name="supplierName"  class="easyui-textbox" value="${purchaseOrder.supplierName}" />
             </td>
         </tr>
 
@@ -253,7 +253,7 @@
             </td>
             <th>联系人</th>
             <td>
-                <input name="supplierContract" value="${purchaseOrder.supplierContract}" class="easyui-textbox" required="true"/>
+                <input name="supplierContract" value="${purchaseOrder.supplierContract}" class="easyui-textbox"/>
             </td>
         </tr>
 
@@ -265,29 +265,29 @@
             </td>
             <th>日期</th>
             <td>
-                <input name="supplierDate" value='<s:date name="companyInfo.supplierDate"   format="yyyy-MM-dd"/>' onfocus="WdatePicker()"   class="Wdate" style="cursor: pointer"/>
+                <input name="supplierDate" value='${purchaseOrder.supplierDate}'   onfocus="WdatePicker()"   class="Wdate" style="cursor: pointer"/>
             </td>
         </tr>
         <tr>
             <th>日期</th>
             <td>
-                <input name="companyDate" value='<s:date name="companyInfo.companyDate"   format="yyyy-MM-dd"/>' value="" onfocus="WdatePicker()"  class="Wdate" style="cursor: pointer"/>
+                <input name="companyDate" value='${purchaseOrder.companyDate}' onfocus="WdatePicker()"  class="Wdate" style="cursor: pointer"/>
             </td>
             <th>电话</th>
             <td>
-                <input name="supplierPhone" value="${purchaseOrder.supplierPhone}" required="true" class="easyui-textbox"/>
+                <input name="supplierPhone" value="${purchaseOrder.supplierPhone}"  class="easyui-textbox"/>
             </td>
         </tr>
         <tr>
             <th>备注</th>
             <td colspan="3">
-                <textarea cols="100" name="companyRemark" value="${companyInfo.remark}"></textarea>
+                <textarea cols="100" name="companyRemark" value="${purchaseOrder.remark}"></textarea>
             </td>
         </tr>
         <tr>
             <th>收货人员</th>
             <td colspan="3">
-                <input name="receiver"/>
+                <input name="receiver" value="${purchaseOrder.receiver}" />
             </td>
         </tr>
         <tr>
@@ -394,7 +394,7 @@
         $("#product-subtotal").parents('td').find('input:eq(1)').css('background-color','white').val(prodSubTotal);
     };
     function addSave(){
-        var fields=$('form>table[id="PURCHASE_ORDER"] input[name!="purchaseOrder.extInfo"]').serializeArray();
+        var fields=$('form>table[id="PURCHASE_ORDER"] textarea,input[name!="purchaseOrder.extInfo"]').serializeArray();
         var data = "{";//构建的json数据
         $.each( fields, function( i, field ) {
             if(i!==fields.length-1){

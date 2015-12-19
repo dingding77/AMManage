@@ -68,7 +68,9 @@
         from t_purchase_order
         where 1=1
         <include refid="doQueryParams"/>
-        limit #{limitStart},#{limitEnd}
+        <if test="limitStart>=0 and limitEnd>0">
+            limit #{limitStart},#{limitEnd}
+        </if>
     </select>
     <!--记录数查询-->
     <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">

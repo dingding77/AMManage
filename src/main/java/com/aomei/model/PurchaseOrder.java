@@ -33,6 +33,10 @@ public class PurchaseOrder implements Serializable {
     private String purchaseNo;
     private String extInfo;//拓展信息
     private Date createTime;
+    private String companyDate;
+    private String supplierDate;
+    private String companyRemark;
+    private String receiver;
     public List<PurchaseDetail> detailList;
     private static final long serialVersionUID = 1L;
 

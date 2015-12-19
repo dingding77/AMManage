@@ -172,9 +172,12 @@
                             type:'POST',
                             dataType:'json',
                             success:function(data){
-                                var proInfo=eval(data);
+                                var proInfo=(data);
 
-                                var _styleNo=proInfo.styleNo;
+                                var _styleNo='';
+                                if(proInfo.styleNo){
+                                    _styleNo=proInfo.styleNo
+                                }
                                 var _pantoneNo=proInfo.pantoneNo;
                                 var _size=proInfo.size;
                                 var _price=proInfo.price;
@@ -390,7 +393,7 @@
         $("#product-subtotal").parents('td').find('input:eq(1)').css('background-color','white').val(prodSubTotal);
     };
     function addSave(){
-        var fields=$('form>table[id="PURCHASE_ORDER"] input[name!="purchaseOrder.extInfo"]').serializeArray();
+        var fields=$('form>table[id="PURCHASE_ORDER"] textarea input[name!="purchaseOrder.extInfo"]').serializeArray();
         var data = "{";//构建的json数据
         $.each( fields, function( i, field ) {
             if(i!==fields.length-1){

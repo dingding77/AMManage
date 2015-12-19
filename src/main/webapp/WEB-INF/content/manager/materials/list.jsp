@@ -11,7 +11,7 @@
 <table id="dg" title="订单列表" class="easyui-datagrid"
        url="getListJson.htm"
        toolbar="#toolbar" pagination="true"
-       rownumbers="true" fitColumns="true" singleSelect="false">
+       rownumbers="true" fitColumns="true" style="width: 100%" singleSelect="false">
     <thead>
     <tr>
         <th field="id" checkbox="true"   width="50">ID</th>

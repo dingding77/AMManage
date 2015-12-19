@@ -1,8 +1,11 @@
 package com.aomei.struts2.manager;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aomei.dao.CompanyInfoDao;
+import com.aomei.dao.ProductInfoDao;
 import com.aomei.dao.PurchaseDetailDao;
 import com.aomei.model.CompanyInfo;
+import com.aomei.model.ProductInfo;
 import com.aomei.model.PurchaseDetail;
 import com.aomei.model.PurchaseOrder;
 import com.aomei.service.PurchaseOrderService;
@@ -11,7 +14,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -25,6 +27,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Administrator on 2015/8/16.
@@ -32,7 +36,7 @@ import java.util.Map;
 @Slf4j
 @ParentPackage("common")
 @Namespace("/manager/purchase")
-@Component
+@Component("purchaseOrderAction")
 public class PurchaseOrderAction extends ActionSupport {
     @Getter
     @Setter
@@ -51,12 +55,16 @@ public class PurchaseOrderAction extends ActionSupport {
     public PurchaseDetailDao purchaseDetailDao;
     @Getter @Setter
     CompanyInfo companyInfo;
+    @Autowired
+    ProductInfoDao productInfoDao;
     @Getter @Setter
     String relation;
     @Autowired
     private PurchaseOrderService purchaseOrderService;
     @Autowired
     CompanyInfoDao companyInfoDao;
+
+    ExecutorService executor= Executors.newFixedThreadPool(3);
 
     /********************进入页面***********************/
     @Action(value="add")
@@ -73,7 +81,7 @@ public class PurchaseOrderAction extends ActionSupport {
             String extInfo=purchaseOrder.getExtInfo();
             companyInfo=new CompanyInfo();
             if(StringUtils.isNotEmpty(extInfo)){
-                JSONObject jsonObject=JSONObject.fromObject(extInfo);
+                JSONObject jsonObject=JSONObject.parseObject(extInfo);
                 String supplierName=jsonObject.getString("supplierName");
                 if(StringUtils.isNotEmpty(supplierName)){
                     purchaseOrder.setSupplierName(supplierName);
@@ -98,9 +106,25 @@ public class PurchaseOrderAction extends ActionSupport {
                 if(StringUtils.isNotEmpty(companyContract)){
                     companyInfo.setContract(companyContract);
                 }
+                String supplierDate=jsonObject.getString("supplierDate");
+                String companyDate=jsonObject.getString("companyDate");
+                if(StringUtils.isNotEmpty(supplierDate)){
+                    purchaseOrder.setSupplierDate(supplierDate);
+                }
+                if(StringUtils.isNotEmpty(companyDate)){
+                    purchaseOrder.setCompanyDate(companyDate);
+                }
+
+                String companyRemark=jsonObject.getString("companyRemark");
+                String receiver=jsonObject.getString("receiver");
+                if(StringUtils.isNotEmpty(companyRemark)){
+                    purchaseOrder.setCompanyRemark(companyRemark);
+                }
+                if(StringUtils.isNotEmpty(receiver)){
+                    purchaseOrder.setReceiver(receiver);
+                }
 
             }
-            log.info("订单{}共包含{}个产品",id,purchaseOrder.getDetailList().size());
         }catch (Exception e){
             log.error("获取数据异常{}",e);
         }
@@ -142,6 +166,42 @@ public class PurchaseOrderAction extends ActionSupport {
         return SUCCESS;
     }
 
+    /**
+     * 异步添加产品信息
+     * @param detailList
+     */
+    private void addProductInfo(final List<PurchaseDetail> detailList){
+        if(detailList!=null&&detailList.size()>0){
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    for(PurchaseDetail detail:detailList){
+                        String name=detail.getName();
+
+                        String styleNo=detail.getStyleNo();
+
+                        String colorNo=detail.getColorNo();
+
+                        String size=detail.getSize();
+
+                        double price=detail.getPrice();
+                        ProductInfo productInfo=new ProductInfo();
+                        productInfo.setName(name);
+                        productInfo.setCode(name);
+                        productInfo.setPantoneNo(colorNo);
+                        productInfo.setStyleNo(styleNo);
+                        productInfo.setSize(Double.valueOf(size).toString());
+                        productInfo.setPrice(Double.valueOf(price).toString());
+                        try{
+                            productInfoDao.insertProductNotExists(productInfo);
+                        }catch (Exception e){
+                            log.error("插入产品信息异常{}",e);
+                        }
+                    }
+                }
+            });
+        }
+    }
     /**********************保存**********************/
 
     @Action(value = "addSave", results = { @Result(name = "success", type = "json", params = {
@@ -153,7 +213,7 @@ public class PurchaseOrderAction extends ActionSupport {
         try {
             String extInfo=purchaseOrder.getExtInfo();
             if(StringUtils.isNotEmpty(extInfo)){
-                JSONObject jsonObject=JSONObject.fromObject(extInfo);
+                JSONObject jsonObject=JSONObject.parseObject(extInfo);
                 String supplierName=jsonObject.getString("supplierName");
                 if(StringUtils.isNotEmpty(supplierName)){
                     purchaseOrder.setSupplierName(supplierName);
@@ -168,7 +228,7 @@ public class PurchaseOrderAction extends ActionSupport {
                 }
             }
             this.purchaseOrderService.add(purchaseOrder);
-
+            addProductInfo(purchaseOrder.getDetailList());
         }catch (Exception e){
             dataMap.put("errorMsg","添加失败");
             e.printStackTrace();
@@ -185,7 +245,7 @@ public class PurchaseOrderAction extends ActionSupport {
         try {
             String extInfo=purchaseOrder.getExtInfo();
             if(StringUtils.isNotEmpty(extInfo)){
-                JSONObject jsonObject=JSONObject.fromObject(extInfo);
+                JSONObject jsonObject=JSONObject.parseObject(extInfo);
                 String supplierName=jsonObject.getString("supplierName");
                 if(StringUtils.isNotEmpty(supplierName)){
                     purchaseOrder.setSupplierName(supplierName);
@@ -200,6 +260,7 @@ public class PurchaseOrderAction extends ActionSupport {
                 }
             }
             this.purchaseOrderService.updateById(purchaseOrder);
+            addProductInfo(purchaseOrder.getDetailList());
         }catch (Exception e){
             dataMap.put("errorMsg","修改失败");
             e.printStackTrace();
@@ -252,7 +313,7 @@ public class PurchaseOrderAction extends ActionSupport {
         templateData.put("purchaseDetailList",purchaseOrder.getDetailList());
         String extInfo=purchaseOrder.getExtInfo();
         if(StringUtils.isNotEmpty(extInfo)){
-            JSONObject jsonObject=JSONObject.fromObject(extInfo);
+            JSONObject jsonObject=JSONObject.parseObject(extInfo);
             String supplierName=jsonObject.getString("supplierName");
             if(StringUtils.isNotEmpty(supplierName)){
                 purchaseOrder.setSupplierName(supplierName);
@@ -306,3 +367,4 @@ public class PurchaseOrderAction extends ActionSupport {
         }
     }
 }
+

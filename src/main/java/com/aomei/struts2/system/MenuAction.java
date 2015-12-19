@@ -102,6 +102,7 @@ public class MenuAction extends BaseAction<Menu> {
         MenuQuery query=new MenuQuery();
         query.setIsDelete("N");
         query.setMenuType("0");
+        query.setLimit(0);
         listMenu=menuMapper.selectByExample(query);
         return SUCCESS;
     }

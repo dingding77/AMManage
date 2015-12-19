@@ -2,6 +2,7 @@ package com.aomei.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,12 +34,39 @@ public class EnCommercialInvoice implements Serializable {
     private String shipmentDate;
     @Getter @Setter
     private String relationOrderType;
+
+    public String getPaymentShow() {
+        if(StringUtils.isNotEmpty(payment)&&StringUtils.isNotEmpty(paymentType)){
+            return payment+"%"+paymentType;
+        }
+        return paymentShow;
+    }
+
+    public void setPaymentShow(String paymentShow) {
+        this.paymentShow = paymentShow;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        if(StringUtils.isNotEmpty(payment)&&StringUtils.isNotEmpty(paymentType)){
+            this.paymentShow= payment+"%"+paymentType;
+        }
+        this.paymentType = paymentType;
+    }
+
     @Getter @Setter
+
+
     private String orderNo;
     @Getter @Setter
     private List<EnciOrder> enciOrders;
-    @Getter @Setter
+
     private String paymentType;
+
+    private String paymentShow;
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -110,6 +138,9 @@ public class EnCommercialInvoice implements Serializable {
     }
 
     public void setPayment(String payment) {
+        if(StringUtils.isNotEmpty(payment)&&StringUtils.isNotEmpty(paymentType)){
+            this.paymentShow= payment+"%"+paymentType;
+        }
         this.payment = payment == null ? null : payment.trim();
     }
 

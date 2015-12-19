@@ -6,7 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="style_no" property="styleNo" jdbcType="VARCHAR" />
     <result column="color_no" property="colorNo" jdbcType="VARCHAR" />
-    <result column="size" property="size" jdbcType="DOUBLE" />
+    <result column="size" property="size" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="buy_num" property="buyNum" jdbcType="INTEGER" />
     <result column="total_amt" property="totalAmt" jdbcType="VARCHAR" />
@@ -15,7 +15,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, style_no, size, price, buy_num, total_amt, purchase_id, is_delete, remark
+    id, name, style_no, size, price, buy_num, total_amt, purchase_id, is_delete, remark,color_no
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -37,7 +37,7 @@
          and style_no = #{styleNo,jdbcType=INTEGER}
       </if>
       <if test="size != null" >
-          and size = #{size,jdbcType=DOUBLE}
+          and size = #{size,jdbcType=VARCHAR}
       </if>
       <if test="price != null and price>0" >
           and price = #{price,jdbcType=DECIMAL}
@@ -66,7 +66,7 @@
       remark)
     values
     (#{name,jdbcType=VARCHAR}, #{styleNo,jdbcType=INTEGER},
-      #{size,jdbcType=DOUBLE}, #{price,jdbcType=DECIMAL}, #{buyNum,jdbcType=INTEGER}, 
+      #{size,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{buyNum,jdbcType=INTEGER}, 
       #{totalAmt,jdbcType=VARCHAR}, #{purchaseId,jdbcType=INTEGER}, #{isDelete,jdbcType=CHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
@@ -79,7 +79,7 @@
         values
         <foreach collection="list" item="item" index="index" separator="," >
             (#{item.name,jdbcType=VARCHAR}, #{item.styleNo,jdbcType=INTEGER},
-            #{item.size,jdbcType=DOUBLE}, #{item.price,jdbcType=DECIMAL}, #{item.buyNum,jdbcType=INTEGER},
+            #{item.size,jdbcType=VARCHAR}, #{item.price,jdbcType=DECIMAL}, #{item.buyNum,jdbcType=INTEGER},
             #{item.totalAmt,jdbcType=VARCHAR}, #{item.purchaseId,jdbcType=INTEGER}, #{item.isDelete,jdbcType=CHAR},
             #{item.remark,jdbcType=VARCHAR})
         </foreach>
@@ -130,7 +130,7 @@
         #{styleNo,jdbcType=INTEGER},
       </if>
       <if test="size != null" >
-        #{size,jdbcType=DOUBLE},
+        #{size,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
@@ -162,7 +162,7 @@
         style_no = #{styleNo,jdbcType=INTEGER},
       </if>
       <if test="size != null" >
-        size = #{size,jdbcType=DOUBLE},
+        size = #{size,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
@@ -190,7 +190,7 @@
     set name = #{name,jdbcType=VARCHAR},
       style_no = #{styleNo,jdbcType=VARCHAR},
       color_no = #{colorNo,jdbcType=VARCHAR},
-      size = #{size,jdbcType=DOUBLE},
+      size = #{size,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       buy_num = #{buyNum,jdbcType=INTEGER},
       total_amt = #{totalAmt,jdbcType=VARCHAR},
@@ -215,7 +215,7 @@
                     color_no = #{item.colorNo,jdbcType=VARCHAR},
                 </if>
                 <if test="item.size != null" >
-                    size = #{item.size,jdbcType=DOUBLE},
+                    size = #{item.size,jdbcType=VARCHAR},
                 </if>
                 <if test="item.price != null" >
                     price = #{item.price,jdbcType=DECIMAL},

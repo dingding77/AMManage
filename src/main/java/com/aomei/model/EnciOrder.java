@@ -1,5 +1,7 @@
 package com.aomei.model;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.Serializable;
 
 public class EnciOrder implements Serializable {
@@ -16,11 +18,23 @@ public class EnciOrder implements Serializable {
     private String totalAmount;
 
     private Integer enciId;
-
+    private String priceUnit;
+    private String priceShow;
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
+    }
+
+    public String getPriceShow() {
+        if(StringUtils.isNotEmpty(priceUnit)&&price!=null){
+            return price+priceUnit;
+        }
+        return priceShow;
+    }
+
+    public void setPriceShow(String priceShow) {
+        this.priceShow = priceShow;
     }
 
     public void setId(Integer id) {
@@ -48,6 +62,9 @@ public class EnciOrder implements Serializable {
     }
 
     public void setPrice(Long price) {
+        if(StringUtils.isNotEmpty(priceUnit)&&price!=null){
+            this.priceShow= price+priceUnit;
+        }
         this.price = price;
     }
 
@@ -69,6 +86,17 @@ public class EnciOrder implements Serializable {
 
     public Integer getEnciId() {
         return enciId;
+    }
+
+    public String getPriceUnit() {
+        return priceUnit;
+    }
+
+    public void setPriceUnit(String priceUnit) {
+        if(StringUtils.isNotEmpty(priceUnit)&&price!=null){
+            this.priceShow= price+priceUnit;
+        }
+        this.priceUnit = priceUnit;
     }
 
     public void setEnciId(Integer enciId) {

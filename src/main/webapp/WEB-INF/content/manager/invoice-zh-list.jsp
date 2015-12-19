@@ -4,7 +4,7 @@
 <body>
 <table id="dg" title="送货单列表" class="easyui-datagrid"
        toolbar="#toolbar" pagination="true"
-       rownumbers="true" fitColumns="true" singleSelect="false" fit="true">
+       rownumbers="true" fitColumns="true" style="width: 100%" singleSelect="false">
 </table>
 <div id="toolbar" align="left" style="height: auto">
     <div id="showMenu"></div>
@@ -33,7 +33,7 @@
             {field:'customerName',title:'客户名称',width:"20%"},
             {field:'deliverNo',title:'送货单号',width:"20%"},
             {field:'relationOrderType',title:'对应订单类型',width:"20%",formatter:formatterRelationOrderType},
-            {field:'deliverDate',title:'制单日期',width:"20%",formatter:formatterdate},
+            {field:'deliverDate',title:'制单日期',width:"10%",formatter:formatterdate},
             {field:'deliverNo',title:'关联订单操作',width:"20%",formatter:relationOperation}
         ]]
     });
@@ -77,9 +77,6 @@
         }else{
             return '<font color="red">未知</font>';
         }
-    }
-    function relationOrder(id){
-
     }
     function relationOperation(id,row){
         var orderNo=row.orderNo;
