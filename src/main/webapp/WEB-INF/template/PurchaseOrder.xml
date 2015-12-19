@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+    <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+        <Author>Administrator</Author>
+        <Created>2015-10-16T13:40:49Z</Created>
+        <LastSaved>2015-10-16T15:09:22Z</LastSaved>
+    </DocumentProperties>
+    <CustomDocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+        <KSOProductBuildVer dt:dt="string">2052-9.1.0.5218</KSOProductBuildVer>
+    </CustomDocumentProperties>
+    <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+        <WindowWidth>20400</WindowWidth>
+        <WindowHeight>8370</WindowHeight>
+        <ProtectStructure>False</ProtectStructure>
+        <ProtectWindows>False</ProtectWindows>
+    </ExcelWorkbook>
+    <Styles>
+        <Style ss:ID="s5" ss:Name="货币[0]">
+            <NumberFormat
+                    ss:Format="_ &quot;￥&quot;* #,##0_ ;_ &quot;￥&quot;* \-#,##0_ ;_ &quot;￥&quot;* &quot;-&quot;_ ;_ @_ "/>
+        </Style>
+        <Style ss:ID="s4" ss:Name="百分比">
+            <NumberFormat ss:Format="0%"/>
+        </Style>
+        <Style ss:ID="s3" ss:Name="千位分隔[0]">
+            <NumberFormat ss:Format="_ * #,##0_ ;_ * \-#,##0_ ;_ * &quot;-&quot;_ ;_ @_ "/>
+        </Style>
+        <Style ss:ID="s2" ss:Name="货币">
+            <NumberFormat
+                    ss:Format="_ &quot;￥&quot;* #,##0.00_ ;_ &quot;￥&quot;* \-#,##0.00_ ;_ &quot;￥&quot;* &quot;-&quot;??_ ;_ @_ "/>
+        </Style>
+        <Style ss:ID="s1" ss:Name="千位分隔">
+            <NumberFormat ss:Format="_ * #,##0.00_ ;_ * \-#,##0.00_ ;_ * &quot;-&quot;??_ ;_ @_ "/>
+        </Style>
+        <Style ss:ID="Default" ss:Name="Normal">
+            <Alignment/>
+            <Borders/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+            <Interior/>
+            <NumberFormat/>
+            <Protection/>
+        </Style>
+        <Style ss:ID="s6"/>
+        <Style ss:ID="s7">
+            <Alignment ss:Horizontal="Center"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1" ss:Underline="Single"/>
+        </Style>
+        <Style ss:ID="s8">
+            <Alignment ss:Horizontal="Center"/>
+        </Style>
+        <Style ss:ID="s9">
+            <Alignment ss:Horizontal="Center"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Bold="1" ss:Underline="Single"/>
+        </Style>
+        <Style ss:ID="s10">
+            <Alignment ss:Horizontal="Left"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s11">
+            <Alignment ss:Horizontal="Left"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s12">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s13">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s14">
+            <Alignment/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s15">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s16">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s17">
+            <Alignment ss:Horizontal="CenterAcrossSelection"/>
+            <Borders>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s18">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s19">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s20">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s21">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s22">
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s23">
+            <Alignment ss:Vertical="Top" ss:WrapText="1"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s24">
+            <Alignment ss:Vertical="Top"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s25">
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s26">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s27">
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s28">
+            <Alignment ss:Horizontal="Center"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1" ss:Underline="Single"/>
+        </Style>
+        <Style ss:ID="s29">
+            <Alignment ss:Horizontal="Center"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Bold="1" ss:Underline="Single"/>
+        </Style>
+        <Style ss:ID="s30">
+            <Alignment ss:Horizontal="Left"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s31">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s32">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s33">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s34">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s35">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s36">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s37">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s38">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s39">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s40">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s41">
+            <Alignment/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s42">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s43">
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11"/>
+        </Style>
+        <Style ss:ID="s44">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s45">
+            <Alignment ss:Horizontal="CenterAcrossSelection"/>
+            <Borders>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s46">
+            <Alignment ss:Horizontal="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s47">
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s48">
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s49">
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s50">
+            <Alignment ss:Vertical="Top" ss:WrapText="1"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+        <Style ss:ID="s51">
+            <Alignment ss:Vertical="Top" ss:WrapText="1"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="10"/>
+            <NumberFormat/>
+        </Style>
+    </Styles>
+    <Worksheet ss:Name="傲美采购单信息">
+        <Table ss:ExpandedColumnCount="9" ss:ExpandedRowCount="27" x:FullColumns="1" x:FullRows="1"
+               ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+            <Column ss:Index="1" ss:StyleID="Default" ss:AutoFitWidth="0" ss:Width="87"/>
+            <Column ss:Index="7" ss:StyleID="Default" ss:AutoFitWidth="0" ss:Width="75"/>
+            <Row>
+                <Cell ss:StyleID="s28" ss:MergeAcross="8">
+                    <Data ss:Type="String">采 购 订 单</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s29" ss:MergeAcross="5"/>
+                <Cell ss:StyleID="s30" ss:MergeAcross="2">
+                    <Data ss:Type="String">生产单号:${purchaseOrder.purchaseNo}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s31" ss:MergeAcross="5">
+                    <Data ss:Type="String">采购方</Data>
+                </Cell>
+                <Cell ss:StyleID="s32" ss:MergeAcross="2">
+                    <Data ss:Type="String">供应方</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s33" ss:MergeAcross="5">
+                    <Data ss:Type="String">单位名称:${companyName!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s34" ss:MergeAcross="2">
+                    <Data ss:Type="String">单位名称:${purchaseOrder.supplierName!}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s35" ss:MergeAcross="5">
+                    <Data ss:Type="String">联系人:${companyContract!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s36" ss:MergeAcross="2">
+                    <Data ss:Type="String">联系人:${purchaseOrder.supplierContract!}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s37" ss:MergeAcross="5">
+                    <Data ss:Type="String">电话:${companyPhone!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s38" ss:MergeAcross="2">
+                    <Data ss:Type="String">日期:${purchaseOrder.purchaseDate!}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s39" ss:MergeAcross="5">
+                    <Data ss:Type="String">日期:${companyDate!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s40" ss:MergeAcross="2">
+                    <Data ss:Type="String">电话:${purchaseOrder.supplierPhone!}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s41" ss:MergeAcross="8">
+                    <Data ss:Type="String">备注:${companyRemark!}</Data>
+                </Cell>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s42" ss:MergeAcross="5">
+                    <Data ss:Type="String">收货人员:${receiver}</Data>
+                </Cell>
+                <Cell ss:StyleID="s13"/>
+                <Cell ss:StyleID="s13"/>
+                <Cell ss:StyleID="s13"/>
+            </Row>
+            <Row>
+                <Cell ss:StyleID="s43" ss:MergeAcross="8"/>
+            </Row>
+            <Row ss:Height="25">
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">品名</Data>
+                </Cell>
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">款号</Data>
+                </Cell>
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">色号</Data>
+                </Cell>
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">尺码</Data>
+                </Cell>
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">单价</Data>
+                </Cell>
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">数量</Data>
+                </Cell>
+                <Cell ss:StyleID="s15">
+                    <Data ss:Type="String">金额</Data>
+                </Cell>
+                <Cell ss:StyleID="s44" ss:MergeAcross="1">
+                    <Data ss:Type="String">备注</Data>
+                </Cell>
+            </Row>
+            <#list purchaseDetailList?sort_by("id") as item>
+            <Row ss:Height="20">
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.name!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.styleNo!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.colorNo!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.size!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.price!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.buyNum!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s16">
+                    <Data ss:Type="String">${item.totalAmt!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s45" ss:MergeAcross="1">
+                    <Data ss:Type="String">${item.remark!}</Data>
+                </Cell>
+            </Row>
+            </#list>
+            <Row ss:Height="20">
+                <Cell ss:StyleID="s46" ss:MergeAcross="4">
+                    <Data ss:Type="String">合计</Data>
+                </Cell>
+                <Cell ss:StyleID="s21">
+                    <Data ss:Type="String">${totalNum!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s21">
+                    <Data ss:Type="String">${totalAmount!}</Data>
+                </Cell>
+                <Cell ss:StyleID="s47" ss:MergeAcross="1"/>
+            </Row>
+            <Row ss:Index="15">
+                <Cell ss:StyleID="s50" ss:MergeAcross="8" ss:MergeDown="2">
+                    <Data ss:Type="String">一、技术指导&#10;1、按国家一等品标准，采购方确认样和意见及采购方订单具体要求验收&#10;2、原料中不使用禁用的偶氮染料、邻苯二甲酸盐和欧盟禁止的其他有害成分，需经测试合格&#10;3、产品需要无镍过检针，检针需过六级&#10;4、每批次之间的颜色差异不得低于4级&#10;5、色牢度要经测试机构合格</Data>
+                </Cell>
+            </Row>
+            <Row/>
+            <Row ss:Height="45"/>
+            <Row>
+                <Cell ss:StyleID="s51" ss:MergeAcross="8" ss:MergeDown="7">
+                    <Data ss:Type="String">二、合同条款&#10;1、供方需提供大货样给需方确认，采购方确认后方可送货。供应方送货到需方指定仓库，运费供方负责。运输过程中的交通安全及风险责任由供方负责&#10;2、包装要求:包装要防破损防水防潮。每箱必须注明采购单号、备注合同号、款号、品名、颜色、数量、备次数量。送货后供方必须将送货单明细给到采购方，最迟不得超过24小时后提供&#10;3、供方要对每个尺码和颜色方备次数量至少3%，备次不予结算&#10;4、供方需免费提供给采购方测试，确认和打样用品样。供方同一委托采购方安排样品送客人指定测试机构测试，并同一承担所有测试费用(供方承担的测试费用不超过货物价值的5%)&#10;5、供方如不能按时按质量要求交货，负责赔偿采购方由此引起的一切损失&#10;6、在出货后，如因供方产品质量问题导致客户索赔，有供方承担&#10;7、纠纷解决方法:友好协商解决，协商不成的，则向采购方所在地有管辖权的人民法院提起诉讼</Data>
+                </Cell>
+            </Row>
+            <Row/>
+            <Row/>
+            <Row/>
+            <Row/>
+            <Row/>
+            <Row/>
+            <Row ss:Height="39"/>
+            <Row ss:Height="17">
+                <Cell ss:StyleID="s48" ss:MergeAcross="8">
+                    <Data ss:Type="String">三、付款方式:${purchaseOrder.payment!}</Data>
+                </Cell>
+            </Row>
+            <Row ss:Height="17">
+                <Cell ss:StyleID="s49" ss:MergeAcross="8">
+                    <Data ss:Type="String">四、我司交期:${purchaseOrder.deliveryTime!}</Data>
+                </Cell>
+            </Row>
+        </Table>
+        <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+            <PageSetup>
+                <Header x:Margin="0.511111111111111"/>
+                <Footer x:Margin="0.511111111111111"/>
+            </PageSetup>
+            <Selected/>
+            <TopRowVisible>10</TopRowVisible>
+            <LeftColumnVisible>0</LeftColumnVisible>
+            <PageBreakZoom>100</PageBreakZoom>
+            <Panes>
+                <Pane>
+                    <Number>3</Number>
+                    <ActiveRow>25</ActiveRow>
+                    <ActiveCol>10</ActiveCol>
+                    <RangeSelection>R26C11</RangeSelection>
+                </Pane>
+            </Panes>
+            <ProtectObjects>False</ProtectObjects>
+            <ProtectScenarios>False</ProtectScenarios>
+        </WorksheetOptions>
+    </Worksheet>
+</Workbook>
