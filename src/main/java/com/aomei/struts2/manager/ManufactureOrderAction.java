@@ -4,6 +4,7 @@ import com.aomei.dao.ManufactureOrderDao;
 import com.aomei.dao.ManufactureOrderDetailMapper;
 import com.aomei.model.ManufactureOrder;
 import com.aomei.model.ManufactureOrderDetail;
+import com.aomei.util.ColumnToPropertyUtil;
 import com.aomei.util.DateUtil;
 import com.aomei.util.ExcelUtil;
 import com.opensymphony.xwork2.ActionSupport;
@@ -53,6 +54,10 @@ public class ManufactureOrderAction extends ActionSupport {
     @Getter
     @Setter
     private int rows;
+    @Getter @Setter
+    private String sort;
+    @Getter @Setter
+    private String order;
     @Getter
     @Setter
     private String ids;
@@ -83,6 +88,10 @@ public class ManufactureOrderAction extends ActionSupport {
             dataMap.put("limitStart",(page-1)*rows);
             dataMap.put("limitEnd",rows);
             dataMap.put("manufactureOrder",manufactureOrder);
+            if(StringUtils.isNotEmpty(sort)){
+                dataMap.put("sortName", ColumnToPropertyUtil.propertyToColumn(sort));
+                dataMap.put("sortOrder",order);
+            }
             List<ManufactureOrder> list=manufactureOrderDao.selectPages(dataMap);
             int total=manufactureOrderDao.selectCount(dataMap);
             log.info("获取订单第【{}】页数据，每页显示【{}】条数据",page,rows);
@@ -199,6 +208,49 @@ public class ManufactureOrderAction extends ActionSupport {
     public void  excel(){
         request = ServletActionContext.getRequest();
         this.manufactureOrder=this.manufactureOrderDao.selectByPrimaryKey(this.manufactureOrder.getId());
+        try{
+            ManufactureOrderDetail detail= manufactureOrderDetailMapper.selectByOrderId(manufactureOrder.getId());
+            if(detail!=null){
+                String num=detail.getNum();
+                if(StringUtils.isNotEmpty(num)){
+                    manufactureOrder.setProNum(Integer.parseInt(num));
+                }
+
+                StringBuffer sb=new StringBuffer();
+                //品名
+                String name= detail.getName();
+                //尺码
+                String size=detail.getSize();
+                //款号
+                String kh=detail.getKh();
+                //色号
+                String colorSize=detail.getColorSize();
+                //货物编号
+                String hwbh=detail.getHwbh();
+                //客户编号
+                String kebh=detail.getKebh();
+                if(StringUtils.isNotEmpty(name)){
+                    sb.append("品名:"+name+"\r\n");
+                }
+                if(StringUtils.isNotEmpty(size)){
+                    sb.append("尺码:"+size+"\r\n");
+                }
+                if(StringUtils.isNotEmpty(colorSize)){
+                    sb.append("色号:"+colorSize+"\r\n");
+                }
+                if(StringUtils.isNotEmpty(hwbh)){
+                    sb.append("货物编号:"+hwbh+"\r\n");
+                }
+                if(StringUtils.isNotEmpty(kebh)){
+                    sb.append("客户编号:"+kebh+"\r\n");
+                }
+                manufactureOrder.setProDesc(sb.toString());
+                manufactureOrder.setStyleNo(kh);
+            }
+        }catch (Exception e){
+            log.error("获取订单明细失败{}",e);
+        }
+
         generatorExcel(this.manufactureOrder);
     }
 
@@ -375,6 +427,12 @@ public class ManufactureOrderAction extends ActionSupport {
             style10.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
             style10.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
             style10.setFont(font10);
+
+            HSSFCellStyle style1 = wb.createCellStyle();
+            style1.setAlignment(HSSFCellStyle.ALIGN_LEFT); // 创建一个居中格式
+            style1.setFont(commonFont);
+            style1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
+
             ExcelUtil.setRowBorder(row10, 7, style10);
             row10.getCell(0).setCellValue("数量（个）");
             row10.getCell(1).setCellValue("生 产 描 述");
@@ -391,8 +449,9 @@ public class ManufactureOrderAction extends ActionSupport {
             }
             HSSFRow row11=sheet.getRow(10);
             row11.getCell(0).setCellValue(manufactureOrder.getProNum()==null?"":manufactureOrder.getProNum().toString());
-            row11.getCell(1).setCellValue(manufactureOrder.getProDesc());
+            row11.getCell(1).setCellValue(new HSSFRichTextString(manufactureOrder.getProDesc()));
             row11.getCell(5).setCellValue(manufactureOrder.getStyleNo());
+            row11.getCell(1).setCellStyle(style1);
             CellRangeAddress cra110=new CellRangeAddress(10, 14, 0, 0);
             sheet.addMergedRegion(cra110);
             CellRangeAddress cra111=new CellRangeAddress(10, 14, 1, 4);
@@ -576,10 +635,6 @@ public class ManufactureOrderAction extends ActionSupport {
             }
             {
                 HSSFRow curRow = sheet.createRow(36);
-                HSSFCellStyle style1 = wb.createCellStyle();
-                style1.setAlignment(HSSFCellStyle.ALIGN_LEFT); // 创建一个居中格式
-                style1.setFont(commonFont);
-                style1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
                 ExcelUtil.setRowBorder(curRow, 7, null);
                 curRow.getCell(0).setCellValue("产品计划："+manufactureOrder.getProPlanning());
                 curRow.getCell(5).setCellValue("产品跟单："+manufactureOrder.getProDocumentary());

@@ -17,11 +17,15 @@
     <result column="shipment_Date" jdbcType="VARCHAR" property="shipmentDate" />
     <result column="relation_order_type" jdbcType="VARCHAR" property="relationOrderType" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="is_ok" property="isOk" jdbcType="CHAR" />
+      <result column="is_delete" property="isDelete" jdbcType="CHAR" />
     <collection property="enciOrders" column="id" select="EnciOrderMapper.selectEnciOrdersByEnciId"/>
   </resultMap>
   <sql id="Base_Column_List">
     id, TO_COMPANY, Invoice_Number, FROM_COMPANY, RE_INFO, DOC_Trade, seaport_from, destination_to, 
-    payment, issued_by, create_userId,shipment_Date,payment_type,relation_order_type,order_no
+    payment, issued_by, create_userId,shipment_Date,payment_type,relation_order_type,order_no,create_time,
+    is_delete,is_ok
   </sql>
   <sql id="doQueryParams">
       where 1=1
@@ -65,7 +69,9 @@
       <if test="shipmentDate != null">
           AND  shipment_Date=#{shipmentDate,jdbcType=VARCHAR}
       </if>
-
+      <if test="sortName!=null and sortName!=''">
+          order by ${sortName} ${sortOrder}
+      </if>
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -249,6 +255,12 @@
         <if test="orderNo != null">
             order_No=#{orderNo,jdbcType=VARCHAR},
         </if>
+        <if test="isOk !=null">
+            is_ok=#{isOk,jdbcType=CHAR},
+        </if>
+        <if test="isDelete != null">
+            is_delete=#{isDelete,jdbcType=CHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -267,7 +279,9 @@
       create_userId = #{createUserid,jdbcType=INTEGER},
       relation_order_type=#{relationOrderType,jdbcType=VARCHAR},
       order_No=#{orderNo,jdbcType=VARCHAR},
-      shipment_Date=#{shipmentDate,jdbcType=VARCHAR}
+      shipment_Date=#{shipmentDate,jdbcType=VARCHAR},
+      is_ok=#{isOk,jdbcType=CHAR},
+      is_delete=#{isDelete,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

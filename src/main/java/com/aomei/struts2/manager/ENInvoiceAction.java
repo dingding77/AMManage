@@ -4,6 +4,7 @@ import com.aomei.dao.EnCommercialInvoiceDao;
 import com.aomei.dao.EnciOrderDao;
 import com.aomei.model.EnCommercialInvoice;
 import com.aomei.model.EnciOrder;
+import com.aomei.util.ColumnToPropertyUtil;
 import com.aomei.util.FreeMakerStreamUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
@@ -37,12 +38,17 @@ public class ENInvoiceAction extends ActionSupport {
     EnCommercialInvoice enCommercialInvoice;
     @Autowired
     EnCommercialInvoiceDao enCommercialInvoiceDao;
+
     @Autowired
     EnciOrderDao enciOrderDao;
     @Getter @Setter
     private int page;
     @Getter @Setter
     private int rows;
+    @Getter @Setter
+    private String sort;
+    @Getter @Setter
+    private String order;
     @Getter @Setter
     private String ids;
     @Getter @Setter
@@ -61,6 +67,10 @@ public class ENInvoiceAction extends ActionSupport {
         }
         dataMap.put("limitStart",(page-1)*rows);
         dataMap.put("limitEnd",rows);
+        if(StringUtils.isNotEmpty(sort)){
+            dataMap.put("sortName", ColumnToPropertyUtil.propertyToColumn(sort));
+            dataMap.put("sortOrder",order);
+        }
         List<EnCommercialInvoice> list=enCommercialInvoiceDao.selectPages(dataMap);
         int total=enCommercialInvoiceDao.selectCount(dataMap);
         log.info("获取商业合同第【{}】页数据，每页显示【{}】条数据",page,rows);
@@ -140,7 +150,20 @@ public class ENInvoiceAction extends ActionSupport {
         }
         return SUCCESS;
     }
-
+    @Action(value="doFinish-en", results = { @Result(name = "success", type = "json", params = {
+            "root", "dataMap" }) })
+    public String finish(){
+          try{
+              if(dataMap==null){
+                  dataMap=new HashMap<String, Object>();
+              }
+              boolean result=enCommercialInvoiceDao.doFinish(id);
+              dataMap.put("success",result);
+          }catch (Exception e){
+              dataMap.put("success",false);
+          }
+        return SUCCESS;
+    }
     /***
      * 删除数据
      * @return

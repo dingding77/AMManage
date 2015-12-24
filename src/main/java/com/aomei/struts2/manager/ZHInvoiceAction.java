@@ -6,6 +6,7 @@ import com.aomei.dao.NumberRecordMapper;
 import com.aomei.model.DeliveryGoods;
 import com.aomei.model.DeliveryNote;
 import com.aomei.model.NumberRecord;
+import com.aomei.util.ColumnToPropertyUtil;
 import com.aomei.util.FreeMakerStreamUtil;
 import com.aomei.util.PrefixUtil;
 import com.opensymphony.xwork2.ActionSupport;
@@ -50,6 +51,10 @@ public class ZHInvoiceAction extends ActionSupport {
     @Getter @Setter
     private int rows;
     @Getter @Setter
+    private String sort;
+    @Getter @Setter
+    private String order;
+    @Getter @Setter
     private String ids;
     @Getter @Setter
     private Integer id;
@@ -69,6 +74,10 @@ public class ZHInvoiceAction extends ActionSupport {
             dataMap.put("limitStart",(page-1)*rows);
             dataMap.put("limitEnd",rows);
             dataMap.put("deliveryNote",deliveryNote);
+            if(StringUtils.isNotEmpty(sort)){
+                dataMap.put("sortName", ColumnToPropertyUtil.propertyToColumn(sort));
+                dataMap.put("sortOrder",order);
+            }
             List<DeliveryNote> list=deliveryNoteDao.selectPages(dataMap);
             log.info("获取送货单合同第【{}】页数据，每页显示【{}】条数据",page,rows);
             int total=deliveryNoteDao.selectCount(dataMap);
@@ -156,6 +165,21 @@ public class ZHInvoiceAction extends ActionSupport {
         }catch (Exception e){
             dataMap.put("errorMsg","修改失败");
             e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    @Action(value="doFinish-zh", results = { @Result(name = "success", type = "json", params = {
+            "root", "dataMap" }) })
+    public String finish(){
+        try{
+            if(dataMap==null){
+                dataMap=new HashMap<String, Object>();
+            }
+            boolean result=deliveryNoteDao.doFinish(id);
+            dataMap.put("success",result);
+        }catch (Exception e){
+            dataMap.put("success",false);
         }
         return SUCCESS;
     }

@@ -2,8 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@include file="../../common/header.jspf"%>
 <link rel="stylesheet" type="text/css" href="<%=contextPath %>/css/newtable.css" />
-<script type="text/javascript" src="<%=contextPath %>/js/order.js"></script>
-
+<script type="text/javascript" src="<%=contextPath %>/js/calculate.js"></script>
 <style>
     th,td{ line-height: 30px; padding-left: 5px;}
     .customerTab{ margin: 10px auto;}
@@ -18,6 +17,12 @@
     var _index=1;
     $(function(){
         $('input[type=text][required=true]').validatebox();
+        var tableRow=$('#PURCHASE_DETAIL tr').length;
+        for(var i=0;i<tableRow-2;i++){
+            addEventForInput(i);
+        }
+        _index=tableRow-2;
+        caclTotalAmt();
     });
     function saveCustomer(){
         var url='addSave.htm';
@@ -104,19 +109,20 @@
         var targetRow=$('#PURCHASE_DETAIL tbody tr:eq(-2)');
         targetRow.after('<tr>'+$('#detailList').tpl(json).html()+'</tr>');
         $.parser.parse($('#PURCHASE_DETAIL tbody tr:eq(-2)'));
-        _index=_index+1;
-        addEventForInput();
+
+        addEventForInput(_index);
         addComBoboxEvent();
+        _index=_index+1;
     }
     function caclTotalAmt(){
         var productSubtotal=0;
         $('input[id*="totalAmt_"]').each(function(){
             var totalAmt=$(this).val();
             if(totalAmt!=null&&totalAmt!=''){
-                productSubtotal=add(productSubtotal,totalAmt);
+                productSubtotal=add(productSubtotal,parseFloat(totalAmt));
             }
         });
-        $('#product-subtotal').text(productSubtotal);
+        $('#product-subtotal').textbox('setValue', productSubtotal);
     }
     function addEventForInput(i){
         $('#buyNum_'+i).numberbox({
@@ -173,8 +179,10 @@
                             dataType:'json',
                             success:function(data){
                                 var proInfo=eval(data);
-
-                                var _styleNo=proInfo.styleNo;
+                                var _styleNo='';
+                                if(proInfo.styleNo){
+                                    _styleNo=proInfo.styleNo
+                                }
                                 var _pantoneNo=proInfo.pantoneNo;
                                 var _size=proInfo.size;
                                 var _price=proInfo.price;
@@ -228,6 +236,7 @@
       scroll=yes>
 
 <form  id="FORM" method="post">
+    <input type="hidden" name="purchaseOrder.id" value="${purchaseOrder.id}">
     <TABLE id="PURCHASE_ORDER" class="customerTab" WIDTH="100%" BORDER="0" ALIGN="CENTER" CELLPADDING="0" CELLSPACING="0" BGCOLOR="#fff">
         <tr>
             <th colspan="2">采购方</th>
@@ -236,7 +245,6 @@
         <tr>
             <th>单位名称</th>
             <td>
-                <input type="hidden" name="purchaseOrder.id" value="${purchaseOrder.id}">
                 <input name="companyName"  value="${companyInfo.name}"/>
                 <input type="hidden" name="purchaseOrder.extInfo" id="extInfo">
             </td>
@@ -281,7 +289,7 @@
         <tr>
             <th>备注</th>
             <td colspan="3">
-                <textarea cols="100" name="companyRemark" value="${purchaseOrder.remark}"></textarea>
+                <textarea cols="100" name="companyRemark" value="${purchaseOrder.companyRemark}"></textarea>
             </td>
         </tr>
         <tr>
@@ -336,16 +344,16 @@
                 <input type="text" value="<s:property value='#detail.size'/>" name="purchaseOrder.detailList[<s:property value='#status.index'/>].size"/>
             </td>
             <td>
-                <input type="text" id="price_0" value="<s:property value='#detail.price'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].price"  class="easyui-numberbox"  precision="4" required="true"/>
+                <input type="text" id="price_<s:property value='#status.index'/>" value="<s:property value='#detail.price'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].price"  class="easyui-numberbox"  precision="4" required="true"/>
             </td>
             <td>
-                <input type="text" id="buyNum_0" value="<s:property value='#detail.buyNum'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].buyNum" class="easyui-numberbox" required="true"/>
+                <input type="text" id="buyNum_<s:property value='#status.index'/>" value="<s:property value='#detail.buyNum'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].buyNum" class="easyui-numberbox" required="true"/>
             </td>
             <td>
-                <input type="text" id="totalAmt_0" value="<s:property value='#detail.totalAmt'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].totalAmt" style="background-color:white;"  />
+                <input type="text" id="totalAmt_<s:property value='#status.index'/>" readonly="readonly" value="<s:property value='#detail.totalAmt'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].totalAmt"  style="background-color:white;"  />
             </td>
             <td>
-                <input type="text" value="<s:property value='#detail.remark'/>"  name="purchaseOrder.detailList[<s:property value='#status.index'/>].remark"/>
+                <input type="text" value="<s:property value='#detail.remark'/>"   name="purchaseOrder.detailList[<s:property value='#status.index'/>].remark"/>
             </td>
             <td style="width: 100px; text-align: center;">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="addRowForDetail()">添加</a>
@@ -354,7 +362,7 @@
         </s:iterator>
         <tr>
             <td colspan="9" style="text-align: right;">产品小计:
-                <input type="text" class="total-box easyui-numberbox" id="product-subtotal" style="background-color: white; width: 200px;" >
+                <input type="text" class="total-box easyui-textbox"  readonly="readonly" id="product-subtotal" style="background-color: white; width: 200px;" >
             </td>
         </tr>
     </TABLE>
@@ -398,9 +406,9 @@
         var data = "{";//构建的json数据
         $.each( fields, function( i, field ) {
             if(i!==fields.length-1){
-                data=data+( field.name+':\"'+field.value + '\",' );
+                data=data+('\"'+ field.name+'\":\"'+field.value + '\",' );
             }else{
-                data=data+( field.name+':\"'+field.value + '\"' );
+                data=data+('\"'+ field.name+'\":\"'+field.value + '\"' );
             }
         });
         data=data+'}';

@@ -117,10 +117,10 @@
             $('input[id*="totalAmt_"]').each(function(){
                 var totalAmt=$(this).val();
                 if(totalAmt!=null&&totalAmt!=''){
-                    productSubtotal=add(productSubtotal,totalAmt);
+                    productSubtotal=add(productSubtotal,parseFloat(totalAmt));
                 }
             });
-            $('#product-subtotal').text(productSubtotal);
+            $('#product-subtotal').textbox('setValue',productSubtotal);
         }
         function addEventForInput(i){
             $('#buyNum_'+i).numberbox({
@@ -198,29 +198,29 @@
 <script id="detailList" type="text/x-jquery-tmpl">
         <tr>
             <td>
-                <input class="easyui-combobox purchaseOrderSelName"  required="true" name="purchaseOrder.detailList[0].name"
+                <input class="easyui-combobox purchaseOrderSelName"  required="true" name="purchaseOrder.detailList[@{detailIndex}].name"
                        data-options="valueField:'code',textField:'name',url:'../product/getListJonsBuQuery.htm'">
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[@{detailIndex}].styleNo"/>
+                <input type="text"  autocomplete="off"  name="purchaseOrder.detailList[@{detailIndex}].styleNo"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[@{detailIndex}].colorNo"/>
+                <input type="text"  autocomplete="off" name="purchaseOrder.detailList[@{detailIndex}].colorNo"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[@{detailIndex}].size"/>
+                <input type="text"  autocomplete="off" name="purchaseOrder.detailList[@{detailIndex}].size"/>
             </td>
             <td>
-                <input type="text" id="price_@{detailIndex}"  name="purchaseOrder.detailList[@{detailIndex}].price"  class="easyui-numberbox"  precision="4" required="true"/>
+                <input type="text"  autocomplete="off" id="price_@{detailIndex}"  name="purchaseOrder.detailList[@{detailIndex}].price"  class="easyui-numberbox"  precision="4" required="true"/>
             </td>
             <td>
-                <input type="text" id="buyNum_@{detailIndex}" name="purchaseOrder.detailList[@{detailIndex}].buyNum" class="easyui-numberbox" required="true"/>
+                <input type="text"  autocomplete="off" id="buyNum_@{detailIndex}" name="purchaseOrder.detailList[@{detailIndex}].buyNum" class="easyui-numberbox" required="true"/>
             </td>
             <td>
-                <input type="text" id="totalAmt_@{detailIndex}" name="purchaseOrder.detailList[@{detailIndex}].totalAmt" style="background-color:white;"  />
+                <input type="text"  autocomplete="off" id="totalAmt_@{detailIndex}" readonly="readonly" name="purchaseOrder.detailList[@{detailIndex}].totalAmt" style="background-color:white;"  />
             </td>
             <td>
-                <input type="text"name="purchaseOrder.detailList[@{detailIndex}].remark"/>
+                <input type="text"  autocomplete="off"name="purchaseOrder.detailList[@{detailIndex}].remark"/>
             </td>
             <td style="width: 100px; text-align: center;">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteRowForDetail($(this))">删除</a>
@@ -327,25 +327,25 @@
                        data-options="valueField:'code',textField:'name',url:'../product/getListJonsBuQuery.htm'">
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].styleNo"/>
+                <input type="text"  autocomplete="off" name="purchaseOrder.detailList[0].styleNo"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].colorNo"/>
+                <input type="text"  autocomplete="off" name="purchaseOrder.detailList[0].colorNo"/>
             </td>
             <td>
-                <input type="text" name="purchaseOrder.detailList[0].size"/>
+                <input type="text"  autocomplete="off" name="purchaseOrder.detailList[0].size"/>
             </td>
             <td>
-                <input type="text" id="price_0"  name="purchaseOrder.detailList[0].price"  class="easyui-numberbox"  precision="4" required="true"/>
+                <input type="text"  autocomplete="off" id="price_0"  name="purchaseOrder.detailList[0].price"  class="easyui-numberbox"  precision="4" required="true"/>
             </td>
             <td>
-                <input type="text" id="buyNum_0" name="purchaseOrder.detailList[0].buyNum" class="easyui-numberbox" required="true"/>
+                <input type="text"  autocomplete="off" id="buyNum_0" name="purchaseOrder.detailList[0].buyNum" class="easyui-numberbox" required="true"/>
             </td>
             <td>
-                <input type="text" id="totalAmt_0" name="purchaseOrder.detailList[0].totalAmt" style="background-color:white;"  />
+                <input type="text"  autocomplete="off" id="totalAmt_0" name="purchaseOrder.detailList[0].totalAmt" readonly="readonly" style="background-color:white;"  />
             </td>
             <td>
-                <input type="text"name="purchaseOrder.detailList[0].remark"/>
+                <input type="text"  autocomplete="off"name="purchaseOrder.detailList[0].remark"/>
             </td>
             <td style="width: 100px; text-align: center;">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="addRowForDetail()">添加</a>
@@ -353,26 +353,26 @@
         </tr>
         <tr>
             <td colspan="9" style="text-align: right;">产品小计:
-                <span id="product-subtotal" style="background-color: white; width: 200px;" ></span>
+                <input type="text"  autocomplete="off" class="total-box easyui-textbox"  readonly="readonly" id="product-subtotal" style="background-color: white; width: 200px;" >
             </td>
         </tr>
     </TABLE>
     <TABLE class="customerTab detail" WIDTH="100%" BORDER="0" ALIGN="CENTER" CELLPADDING="0" CELLSPACING="0" BGCOLOR="#fff">
     <tr>
         <td>
-            审核:<input type="text" id="auditor" name="purchaseOrder.auditor"/>
+            审核:<input type="text"  autocomplete="off" id="auditor" name="purchaseOrder.auditor"/>
         </td>
         <td>
-            主管:<input type="text" id="director" name="purchaseOrder.director"/>
+            主管:<input type="text"  autocomplete="off" id="director" name="purchaseOrder.director"/>
         </td>
         <td>
-            部门:<input type="text" id="department" name="purchaseOrder.department"/>
+            部门:<input type="text"  autocomplete="off" id="department" name="purchaseOrder.department"/>
         </td>
         <td>
-            业务员:<input type="text" id="salesman" name="purchaseOrder.salesman"/>
+            业务员:<input type="text"  autocomplete="off" id="salesman" name="purchaseOrder.salesman"/>
         </td>
         <td>
-            制单:<input type="text" id="touching" name="purchaseOrder.touching"/>
+            制单:<input type="text"  autocomplete="off" id="touching" name="purchaseOrder.touching"/>
         </td>
     </tr>
     </TABLE>

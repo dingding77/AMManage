@@ -29,12 +29,15 @@
         pageSize:8,
         pageList:[8,16,32],
         pagination:true,
+        sortName:'createTime',
+        sortOrder:'desc',
         queryParams:{'manufactureOrder.beginOrderDate':$('#beginOrderDate').val(),'manufactureOrder.endOrderDate':$('#endOrderDate').val()},
         columns:[[
             {field:'id',checkbox:'true'},
             {field:'proNo',title:'订单编号',width:50},
             {field:'cstmCode',title:'客户编号',width:50},
-            {field:'orderDate',title:'订单日期',width:50,formatter:formatterdate}
+            {field:'orderDate',title:'订单日期',width:50,sortable:true,formatter:formatterdate},
+            {field:'createTime',title:'创建时间',width:50,sortable:true,formatter:formatterdate}
         ]]
     });
     showMenu('11')

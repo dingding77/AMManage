@@ -34,6 +34,8 @@
             pageNumber:1,//当前页码
             pageSize:8,
             pageList:[8,16,32],
+            sortName:'createTime',
+            sortOrder:'desc',
             queryParams:{'purchaseOrder.supplierName':$('#supplierName').val(),'purchaseOrder.supplierPhone':$('#supplierPhone').val(),'purchaseOrder.supplierContract':$('#supplierContract').val()},
             pagination:true,
             columns:[[
@@ -41,7 +43,8 @@
                 {field:'purchaseNo',title:'订单号',width:50},
                 {field:'supplierName',title:'供应商单位',width:50},
                 {field:'supplierContract',title:'供应商联系人',width:50},
-                {field:'supplierPhone',title:'供应商联系电话',width:50}
+                {field:'supplierPhone',title:'供应商联系电话',width:50},
+                {field:'createTime',title:'创建时间',width:50,sortable:true,formatter:formatterdate}
             ]]
         });
     });

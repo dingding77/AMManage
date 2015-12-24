@@ -35,6 +35,9 @@
     <result column="pro_Documentary" property="proDocumentary" jdbcType="VARCHAR" />
     <result column="extend_Info" property="extendInfo" jdbcType="VARCHAR" />
     <result column="fss_Time_Consuming" property="fssTimeConsuming" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="is_ok" property="isOk" jdbcType="CHAR" />
+      <result column="is_delete" property="isDelete" jdbcType="CHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.aomei.model.ManufactureOrder" extends="BaseResultMap" >
     <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
@@ -44,7 +47,8 @@
     pro_Desc, style_No, callslip_Date, material_No, need_Num, real_Num, revert_Date, 
     revert_Num, repeat_Order, new_Edition, pro_Operator, pro_Paste_Like, pro_Time_Consuming, 
     pro_Date, fss_Operator, fss_Date, QC_Operator, QC_Time_Consuming, goods_Paste_Like, 
-    pack_Detail, QC_Date, pro_Planning, pro_Documentary,fss_Time_Consuming,extend_Info
+    pack_Detail, QC_Date, pro_Planning, pro_Documentary,fss_Time_Consuming,extend_Info,create_time,
+    is_delete,is_ok
   </sql>
   <sql id="Blob_Column_List" >
     remark
@@ -163,6 +167,9 @@
             <if test="manufactureOrder.beginOrderDate !=null and manufactureOrder.beginOrderDate !='' and manufactureOrder.endOrderDate !=null">
                 AND str_to_date(order_Date,'%Y-%m-%d') between #{manufactureOrder.beginOrderDate}
                 AND #{manufactureOrder.endOrderDate}
+            </if>
+            <if test="sortName!=null and sortName!=''">
+                order by ${sortName} ${sortOrder}
             </if>
         </if>
 
@@ -530,6 +537,12 @@
         <if test="extendInfo != null" >
             extend_Info=#{extendInfo,jdbcType=VARCHAR},
         </if>
+        <if test="isOk !=null">
+            is_ok=#{isOk,jdbcType=CHAR},
+        </if>
+        <if test="isDelete != null">
+            is_delete=#{isDelete,jdbcType=CHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -603,7 +616,9 @@
       QC_Date = #{qcDate,jdbcType=DATE},
       pro_Planning = #{proPlanning,jdbcType=VARCHAR},
       extend_Info=#{extendInfo,jdbcType=VARCHAR},
-      pro_Documentary = #{proDocumentary,jdbcType=VARCHAR}
+      pro_Documentary = #{proDocumentary,jdbcType=VARCHAR},
+      is_ok=#{isOk,jdbcType=CHAR},
+      is_delete=#{isDelete,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

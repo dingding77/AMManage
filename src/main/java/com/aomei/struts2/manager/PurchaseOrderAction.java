@@ -9,6 +9,7 @@ import com.aomei.model.ProductInfo;
 import com.aomei.model.PurchaseDetail;
 import com.aomei.model.PurchaseOrder;
 import com.aomei.service.PurchaseOrderService;
+import com.aomei.util.ColumnToPropertyUtil;
 import com.aomei.util.FreeMakerStreamUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
@@ -45,6 +46,10 @@ public class PurchaseOrderAction extends ActionSupport {
     public int page;               //分页参数(页数)
     @Getter @Setter
     public int rows;               //分页参数(行数)
+    @Getter @Setter
+    private String sort;
+    @Getter @Setter
+    private String order;
     @Getter @Setter
     public String ids;             //操作参数 主键
     @Getter @Setter
@@ -125,6 +130,7 @@ public class PurchaseOrderAction extends ActionSupport {
                 }
 
             }
+            log.info("purchaseOrder={}",purchaseOrder);
         }catch (Exception e){
             log.error("获取数据异常{}",e);
         }
@@ -155,6 +161,10 @@ public class PurchaseOrderAction extends ActionSupport {
             dataMap.put("purchaseOrder",purchaseOrder);
             dataMap.put("limitStart",(page-1)*rows);
             dataMap.put("limitEnd",rows);
+            if(StringUtils.isNotEmpty(sort)){
+                dataMap.put("sortName", ColumnToPropertyUtil.propertyToColumn(sort));
+                dataMap.put("sortOrder",order);
+            }
             List<PurchaseOrder> list=purchaseOrderService.selectPages(dataMap);
             log.info("获取采购单第【{}】页数据，每页显示【{}】条数据",page,rows);
             int total=purchaseOrderService.selectCount(dataMap);
@@ -190,7 +200,7 @@ public class PurchaseOrderAction extends ActionSupport {
                         productInfo.setCode(name);
                         productInfo.setPantoneNo(colorNo);
                         productInfo.setStyleNo(styleNo);
-                        productInfo.setSize(Double.valueOf(size).toString());
+                        productInfo.setSize(size);
                         productInfo.setPrice(Double.valueOf(price).toString());
                         try{
                             productInfoDao.insertProductNotExists(productInfo);

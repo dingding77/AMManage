@@ -34,6 +34,12 @@ public class EnCommercialInvoice implements Serializable {
     private String shipmentDate;
     @Getter @Setter
     private String relationOrderType;
+    @Getter @Setter
+    private Date createTime;
+    @Getter @Setter
+    private String isOk;
+    @Getter @Setter
+    private String isDelete;
 
     public String getPaymentShow() {
         if(StringUtils.isNotEmpty(payment)&&StringUtils.isNotEmpty(paymentType)){

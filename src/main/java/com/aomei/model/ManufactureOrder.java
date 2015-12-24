@@ -76,7 +76,12 @@ public class ManufactureOrder {
 
     private String remark;
     private String extendInfo;
-
+    @Getter @Setter
+    private Date createTime;
+    @Getter @Setter
+    private String isOk;
+    @Getter @Setter
+    private String isDelete;
     @Getter @Setter
     List<ManufactureOrderDetail> detailList;
     /**新增其它查询条件**/

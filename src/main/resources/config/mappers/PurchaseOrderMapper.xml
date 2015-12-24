@@ -15,6 +15,7 @@
     <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
     <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
     <result column="payment" property="payment" jdbcType="VARCHAR" />
+      <result column="is_ok" property="isOk" jdbcType="CHAR" />
       <result column="touching" property="touching" jdbcType="VARCHAR" />
       <result column="auditor" property="auditor" jdbcType="VARCHAR" />
       <result column="director" property="director" jdbcType="VARCHAR" />
@@ -24,7 +25,7 @@
   <sql id="Base_Column_List" >
     id, buyer_id, supplier_name, supplier_contract, supplier_phone, purchase_date, is_delete, 
     creator, create_time,purchase_no,delivery_time,payment,ext_info,touching,auditor,director,
-    department,salesman
+    department,salesman,is_ok
   </sql>
     <sql id="doQueryParams">
         <if test="purchaseOrder.buyerId != null" >
@@ -53,6 +54,9 @@
         </if>
         <if test="purchaseOrder.purchaseNo != null">
             and purchase_no = #{purchaseOrder.purchaseNo,jdbcType=VARCHAR}
+        </if>
+        <if test="sortName!=null and sortName!=''">
+        order by ${sortName} ${sortOrder}
         </if>
     </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -264,8 +268,19 @@
         <if test="salesman != null">
             salesman=#{salesman,jdbcType=VARCHAR},
         </if>
+        <if test="isOk !=null">
+            is_ok=#{isOk,jdbcType=CHAR},
+        </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where
+      <choose>
+          <when test="id!=null">
+              id = #{id,jdbcType=INTEGER}
+          </when>
+          <otherwise>
+              purchase_no=#{purchaseNo,jdbcType=VARCHAR}
+          </otherwise>
+      </choose>
   </update>
   <update id="updateByPrimaryKey" parameterType="com.aomei.model.PurchaseOrder" >
     update t_purchase_order
@@ -280,7 +295,9 @@
         auditor=#{auditor,jdbcType=VARCHAR},
         director=#{director,jdbcType=VARCHAR},
         department=#{department,jdbcType=VARCHAR},
-        salesman=#{salesman,jdbcType=VARCHAR}
+        salesman=#{salesman,jdbcType=VARCHAR},
+      is_ok=#{isOk,jdbcType=CHAR},
+      is_delete=#{isDelete,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <delete id="deleteByPrimaryKeyArray" parameterType="java.util.ArrayList">

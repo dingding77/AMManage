@@ -15,6 +15,7 @@
     <script type="text/javascript" src="<%=contextPath %>/js/easyui/jquery.min.js"></script>
 
     <script type="text/javascript" src="<%=contextPath %>/js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=contextPath %>/js/easyui/extend/jquery.easyui.mask.extend.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/js/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/js/ajaxfileupload.js"></script>
     <script type="text/javascript" src="<%=contextPath %>/js/aomei.js"></script>
@@ -36,7 +37,8 @@
     function formatterdate(val, row) {
         var date = new Date(val);
         var month=(date.getMonth() + 1)>9?(date.getMonth() + 1):'0'+(date.getMonth() + 1);
-        return date.getFullYear() + '-' + month + '-' + date.getDate();
+        var day=(date.getDate())>9?(date.getDate()):'0'+date.getDate();
+        return date.getFullYear() + '-' + month + '-' + day;
     }
     $.ajaxSetup({
         "error" : myfunc

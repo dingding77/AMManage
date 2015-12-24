@@ -1,10 +1,12 @@
 package com.aomei.struts2.manager;
 
 import com.aomei.dao.MBaseDao;
+import com.aomei.util.ColumnToPropertyUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
@@ -26,6 +28,10 @@ public abstract   class BaseAction<T> extends ActionSupport {
     @Getter @Setter
     public int rows;               //分页参数(行数)
     @Getter @Setter
+    private String sort;
+    @Getter @Setter
+    private String order;
+    @Getter @Setter
     public String ids;             //操作参数 主键
     @Getter @Setter
     public Integer id;             //操作参数 单一主键
@@ -46,6 +52,10 @@ public abstract   class BaseAction<T> extends ActionSupport {
             initDataMap();
             dataMap.put("limitStart",(page-1)*rows);
             dataMap.put("limitEnd",rows);
+            if(StringUtils.isNotEmpty(sort)){
+                dataMap.put("sortName", ColumnToPropertyUtil.propertyToColumn(sort));
+                dataMap.put("sortOrder",order);
+            }
             dealDataMap();
             List<T> list=baseDao.selectPages(dataMap);
             int total=baseDao.selectCount(dataMap);

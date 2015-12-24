@@ -47,17 +47,20 @@ function toolDestroy(url,idKey) {
         ids.push(rows[i][idKey]);
     }
     if (rows){
+        var body=$('#dg').parent();
         $.messager.confirm('Confirm','您确定要删除选择项么?',function(r) {
             if (r) {
+                $.mask({loadMsg: '正在提交数据....', target: body});
                 $.post(url+'?ids='+ids, function (result) {
                     if (result.success) {
                         $('#dg').datagrid('reload');    // reload the user data
                     } else {
                         $.messager.show({    // show error message
                             title: 'Error',
-                            msg: result.errorMsg
+                            msg: '删除失败'
                         });
                     }
+                    $.unmask({target: body});
                 }, 'json')
             }
         });

@@ -19,7 +19,7 @@ public class PurchaseOrder implements Serializable {
     private String supplierPhone;
 
     private Date purchaseDate;
-
+    private String isOk;
     private String isDelete;
     private String payment;
     private Date deliveryTime;

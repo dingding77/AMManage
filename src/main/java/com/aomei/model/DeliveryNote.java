@@ -34,6 +34,12 @@ public class DeliveryNote implements Serializable {
     @Getter @Setter
     private String receiver;
     @Getter @Setter
+    private Date createTime;
+    @Getter @Setter
+    private String isOk;
+    @Getter @Setter
+    private String isDelete;
+    @Getter @Setter
     private List<DeliveryGoods> deliveryGoodsList;
     private static final long serialVersionUID = 1L;
 

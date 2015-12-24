@@ -13,6 +13,9 @@
     <result column="busi_user" property="busiUser" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="create_userId" property="createUserid" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="is_ok" property="isOk" jdbcType="CHAR" />
+      <result column="is_delete" property="isDelete" jdbcType="CHAR" />
       <result column="relation_order_type" jdbcType="VARCHAR" property="relationOrderType" />
       <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
       <collection property="deliveryGoodsList" column="id" select="DeliveryGoodsMapper.selectDeliveryGoodsByDnId"/>
@@ -54,11 +57,14 @@
               AND  order_No=#{orderNo,jdbcType=VARCHAR}
           </if>
       </if>
-
+      <if test="sortName!=null and sortName!=''">
+          order by ${sortName} ${sortOrder}
+      </if>
   </sql>
   <sql id="Base_Column_List" >
     id, customer_name, deliver_no, deliver_way, deliver_date, payment_way, docTrade_user, 
-    docTrade_date, busi_user, create_userId,receiver,relation_order_type,order_no
+    docTrade_date, busi_user, create_userId,receiver,relation_order_type,order_no,create_time,
+    is_delete,is_ok
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -212,6 +218,12 @@
         <if test="orderNo != null">
             order_No=#{orderNo,jdbcType=VARCHAR},
         </if>
+        <if test="isOk !=null">
+            is_ok=#{isOk,jdbcType=CHAR},
+        </if>
+        <if test="isDelete != null">
+            is_delete=#{isDelete,jdbcType=CHAR},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -226,7 +238,9 @@
       docTrade_date = #{doctradeDate,jdbcType=DATE},
       relation_order_type=#{relationOrderType,jdbcType=VARCHAR},
       order_No=#{orderNo,jdbcType=VARCHAR},
-      busi_user = #{busiUser,jdbcType=VARCHAR}
+      busi_user = #{busiUser,jdbcType=VARCHAR},
+      is_ok=#{isOk,jdbcType=CHAR},
+      is_delete=#{isDelete,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -49,6 +49,7 @@
 		<tx:attributes>
 			<tx:method name="query*" propagation="REQUIRED" read-only="true"/>
 			<tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
             <tx:method name="select*" propagation="REQUIRED" read-only="true"/>
             <tx:method name="insert*" propagation="REQUIRED"/>
 			<tx:method name="save*" propagation="REQUIRED"/>
@@ -64,4 +65,6 @@
         <constructor-arg index="0" ref="sqlSessionFactory" />
         <constructor-arg index="1" value="REUSE" />
     </bean>
+    <!-- 开启事务支持 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
