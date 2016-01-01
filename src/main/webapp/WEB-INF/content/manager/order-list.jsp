@@ -37,6 +37,7 @@
             {field:'proNo',title:'订单编号',width:50},
             {field:'cstmCode',title:'客户编号',width:50},
             {field:'orderDate',title:'订单日期',width:50,sortable:true,formatter:formatterdate},
+            {field:'isOk',title:'是否完结',width:"10%",formatter:formatterStatus},
             {field:'createTime',title:'创建时间',width:50,sortable:true,formatter:formatterdate}
         ]]
     });
@@ -45,18 +46,55 @@
     function add(){
         toolsAdd('新增订单','/manager/order-add.htm');
     }
+
     function edit(){
-        toolsEdit('编辑订单','/manager/order-edit.htm','id')
+        var rows= $('#dg').datagrid('getSelections');
+        if(rows.length>1){
+            toolsEdit('编辑订单','/manager/order-edit.htm','id')
+        }else{
+            var isOK= rows[0]['isOk'];
+            if(isOK=='Y'){
+                $.messager.alert("操作提示", "您选中的数据已完结不可修改！","info");
+            }else{
+                toolsEdit('编辑订单','/manager/order-edit.htm','id')
+            }
+        }
     }
+
     function show(){
         toolsShow('查看订单','/manager/order-show.htm','id')
     }
-
     function destroy(){
-        toolDestroy('order-delete.htm','id')
+        var rows= $('#dg').datagrid('getSelections');
+        if(rows.length==0){
+            toolDestroy('order-delete.htm','id');
+        }else{
+            var flag=false;
+            for(var i=0;i<rows.length;i++){
+                if(flag){
+                    break;
+                }
+                var isOK= rows[i]['isOk'];
+                if(isOK=='Y'){
+                    $.messager.alert("操作提示", "您选中的数据包含已完结信息不可删除！","info");
+                    flag=true;
+                }
+            }
+            if(!flag){
+                toolDestroy('delete.htm','id');
+            }
+
+        }
     }
     function exportFile(){
         toolExport('manufactureOrder-exportWord.htm?manufactureOrder.id=','id');
+    }
+    function formatterStatus(val){
+        if(val=='Y'){
+            return '<font style="color:blue;">已完结</font>';
+        }else{
+            return '<font style="color:red;">未完结</font>';
+        }
     }
 </script>
 </body>

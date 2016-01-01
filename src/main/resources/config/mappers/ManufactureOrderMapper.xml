@@ -544,7 +544,15 @@
             is_delete=#{isDelete,jdbcType=CHAR},
         </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where
+      <choose>
+          <when test="id!=null">
+              id = #{id,jdbcType=INTEGER}
+          </when>
+          <otherwise>
+              pro_no=#{proNo,jdbcType=VARCHAR}
+          </otherwise>
+      </choose>
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aomei.model.ManufactureOrder" >
     update t_manufacture_order
